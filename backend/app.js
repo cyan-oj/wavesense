@@ -1,8 +1,14 @@
 const express = require('express');
+// const path = require('path'); //may delete
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+require('./models/User');
+require('./config/passport');
 const csurf = require('csurf');
 const debug = require('debug');
+
+const app = express();
+const passport = require('passport');
 
 
 const cors = require('cors');
@@ -13,7 +19,7 @@ const usersRouter = require('./routes/api/users');
 const csrfRouter = require('./routes/api/csrf');
 
 
-const app = express();
+app.use(passport.initialize());
 
 
 
@@ -36,6 +42,9 @@ app.use(
         }
     })
 );
+    
+app.use('/api/users', usersRouter);
+app.use('/api/csrf', csrfRouter);
 
 app.use((req, res, next) => {
     const err = new Error('Not Found');
@@ -57,8 +66,6 @@ app.use((err, req, res, next) => {
 });
 
 
-app.use('/api/users', usersRouter);
-app.use('/api/csrf', csrfRouter);
 
 
 module.exports = app;
