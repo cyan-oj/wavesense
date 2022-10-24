@@ -1,0 +1,18 @@
+#navHeader {
+    display: flex;
+    justify-content: space-around;
+    border: 3px solid rgb(37, 37, 37);
+    border-radius: 100px;
+    background-color: rgb(37, 37, 37);
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#logo {
+    display: inline-block;
+    border: 3px solid red;
+    color: white;
+    
+}

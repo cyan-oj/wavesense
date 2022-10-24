@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import './NavBar.css';
+import styles from './NavBar.module.css';
 import { logout } from '../../store/session';
 
 function NavBar () {
@@ -33,8 +33,10 @@ function NavBar () {
 
   return (
     <>
-      <h1>WaveSense //:^D</h1>
-      { getLinks() }
+      <header id={styles.navHeader}>
+        <h1 id={styles.logo}>WaveSense //:^D</h1>
+        { getLinks() }
+      </header>
     </>
   );
 }
