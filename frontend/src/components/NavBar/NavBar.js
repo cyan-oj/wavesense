@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './NavBar.module.css';
 import { logout } from '../../store/session';
+import LoginFormModal from '../SessionForms';
+import { SignupFormModal } from '../SessionForms';
 
 function NavBar () {
   const loggedIn = useSelector(state => !!state.session.user);
@@ -22,10 +23,10 @@ function NavBar () {
       );
     } else {
       return (
-        <div className={styles.linksAuth}>
-          <Link id={styles.login} to={'/login'}>Login</Link>
+        <div className="links-auth">
+          <SignupFormModal />
           <br />
-          <Link id={styles.signUp} to={'/signup'}>Signup</Link>
+          <LoginFormModal />
         </div>
       );
     }

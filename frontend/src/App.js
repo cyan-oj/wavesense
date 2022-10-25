@@ -23,8 +23,6 @@ function App() {
       <NavBar />
       <Switch>
         <AuthRoute exact path="/" component={MainPage} />
-        <AuthRoute exact path="/login" component={LoginForm} />
-        <AuthRoute exact path="/signup" component={SignupForm} />
         <Route exact path="/visualizer" component={Visualizer} />
       </Switch>
     </>
