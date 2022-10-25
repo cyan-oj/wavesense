@@ -27,6 +27,14 @@ export const clearSessionErrors = () => ({
     type: CLEAR_SESSION_ERRORS
 });
 
+export const storeSessionUser = (user) => {
+    if (user) {
+        sessionStorage.setItem("currentUser", JSON.stringify(user));
+    } else {
+        sessionStorage.removeItem("currentUser");
+    };
+}
+
 export const signup = user => startSession(user, 'api/users/register');
 export const login = user => startSession(user, 'api/users/login');
 
@@ -38,6 +46,7 @@ const startSession = (userInfo, route) => async dispatch => {
         });
         const { user, token } = await res.json();
         localStorage.setItem('jwtToken', token);
+        storeSessionUser(user);
         return dispatch(receiveCurrentUser(user));
     } catch (err) {
         const res = await err.json();
@@ -50,6 +59,7 @@ const startSession = (userInfo, route) => async dispatch => {
 
 export const logout = () => dispatch => {
     localStorage.removeItem('jwtToken');
+    storeSessionUser();
     dispatch(logoutUser());
 };
 
@@ -60,12 +70,27 @@ export const getCurrentUser = () => async dispatch => {
 };
 
 
-const initialState = {
-    user: undefined
-};
 
 
 const nullErrors = null;
+
+
+export const sessionErrorsReducer = (state = nullErrors, action) => {
+    switch (action.type) {
+        case RECEIVE_SESSION_ERRORS:
+            return action.errors;
+        case CLEAR_SESSION_ERRORS:
+            return nullErrors;
+        default:
+            return state;
+    }
+};
+
+
+
+const initialState = {
+    user: undefined
+};
 
 const sessionReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -80,16 +105,5 @@ const sessionReducer = (state = initialState, action) => {
             
             
 
-export const sessionErrorsReducer = (state = nullErrors, action) => {
-    switch (action.type) {
-        case RECEIVE_SESSION_ERRORS:
-            return action.errors;
-        case RECEIVE_CURRENT_USER:
-        case CLEAR_SESSION_ERRORS:
-            return nullErrors;
-        default:
-            return state;
-    }
-};
 
 export default sessionReducer;

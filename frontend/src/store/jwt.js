@@ -1,10 +1,21 @@
+function getCookie(cookieName) {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const [name, value] = cookie.split('=');
+        if (name.trim() === cookieName) return value;
+    }
+    return null;
+}
+
+
+
 async function jwtFetch(url, options = {}) {
   // Set options.method to 'GET' if there is no method.
   options.method = options.method || "GET";
   // Set options.headers to an empty object if there is no headers.
   options.headers = options.headers || {};
   // Set the "Authorization" header to the value of "jwtToken" in localStorage.
-  options.headers["Authorization"] = localStorage.getItem("jwtToken");
+  options.headers["Authorization"] = "bearer " + localStorage.getItem("jwtToken");;
   
   // If the options.method is not 'GET', then set the "Content-Type" header to
   // "application/json".
@@ -26,13 +37,5 @@ async function jwtFetch(url, options = {}) {
   return res;
 }
 
-function getCookie(cookieName) {
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-        const [name, value] = cookie.split('=');
-        if (name.trim() === cookieName) return value;
-    }
-    return null;
-  }
 
 export default jwtFetch;

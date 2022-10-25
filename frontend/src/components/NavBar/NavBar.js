@@ -16,14 +16,13 @@ function NavBar () {
   const getLinks = () => {
     if (loggedIn) {
       return (
-        <div className="links-nav">
-
+        <div className={styles.login}>
           <button onClick={logoutUser}>Logout</button>
         </div>
       );
     } else {
       return (
-        <div className="links-auth">
+        <div className={styles.linksAuth}>
           <SignupFormModal />
           <br />
           <LoginFormModal />

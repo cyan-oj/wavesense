@@ -1,20 +1,25 @@
 #modal {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 100;
+    inset: 0 0 0 0;
 }
 
 #modal-background {
-    width: 100vw;
-    height: 100vh;
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
+    inset: 0 0 0 0;
+    position:absolute;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 #modal-content {
     position: absolute;
-    background-color: white;
+    z-index: 100;
+    color: white;
+    background-color: rgb(37, 37, 37);
+    width: 25%;
+    border-radius: 5px;
+    padding: 20px;
 }
