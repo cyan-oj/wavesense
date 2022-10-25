@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import './SessionForm.css';
+import styles from './SessionForm.module.css';
 import { signup, clearSessionErrors } from '../../store/session';
 
 function SignupForm() {
@@ -52,12 +52,11 @@ function SignupForm() {
     }
 
     return (
-        <form className="session-form" onSubmit={usernameSubmit}>
-            <h2>Sign Up Form</h2>
+        <form className={styles.sessionForm} onSubmit={usernameSubmit}>
+            <h2 id={styles.header}>Sign Up</h2>
             <div className="errors">{errors?.email}</div>
             <label>
-                <span>Email</span>
-                <input type="text"
+                <input className={styles.inputFields} type="text"
                     value={email}
                     onChange={update('email')}
                     placeholder="Email"
@@ -65,8 +64,7 @@ function SignupForm() {
             </label>
             <div className="errors">{errors?.username}</div>
             <label>
-                <span>Username</span>
-                <input type="text"
+                <input className={styles.inputFields} type="text"
                     value={username}
                     onChange={update('username')}
                     placeholder="Username"
@@ -74,8 +72,7 @@ function SignupForm() {
             </label>
             <div className="errors">{errors?.password}</div>
             <label>
-                <span>Password</span>
-                <input type="password"
+                <input className={styles.inputFields} type="password"
                     value={password}
                     onChange={update('password')}
                     placeholder="Password"
@@ -85,14 +82,14 @@ function SignupForm() {
                 {password !== password2 && 'Confirm Password field must match'}
             </div>
             <label>
-                <span>Confirm Password</span>
-                <input type="password"
+                <input className={styles.inputFields} type="password"
                     value={password2}
                     onChange={update('password2')}
                     placeholder="Confirm Password"
                 />
             </label>
-            <input
+            <br />
+            <input className={styles.sessionStartButton}
                 type="submit"
                 value="Sign Up"
                 disabled={!email || !username || !password || password !== password2}
