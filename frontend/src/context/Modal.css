@@ -9,7 +9,7 @@
 
 #modal-background {
     inset: 0 0 0 0;
-    position: absolute;
+    position:absolute;
     z-index: 100;
     background-color: rgba(0, 0, 0, 0.8);
 }
@@ -17,5 +17,9 @@
 #modal-content {
     position: absolute;
     z-index: 100;
-    background-color: white;
+    color: white;
+    background-color: rgb(37, 37, 37);
+    width: 25%;
+    border-radius: 5px;
+    padding: 20px;
 }

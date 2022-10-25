@@ -2,6 +2,7 @@ import { useState } from "react";
 import LoginForm from "./LoginForm";
 import { Modal } from "../../context/Modal";
 import SignupForm from "./SignupForm";
+import styles from './SessionForm.module.css'
 
 
 const LoginFormModal = () => {
@@ -9,7 +10,7 @@ const LoginFormModal = () => {
 
     return (
         <div id='login-modal'>
-            <button onClick= { () => setShowLoginModal(true) }>Login</button>
+            <button id={styles.login} onClick= { () => setShowLoginModal(true) }>Login</button>
             {showLoginModal && <Modal onClose={ () => setShowLoginModal(false) } ><LoginForm/></Modal>}
         </div>
     )
@@ -20,7 +21,7 @@ export const SignupFormModal = () => {
 
     return (
         <div id='signup-modal'>
-            <button onClick={() => setShowSignupModal(true)}>Sign Up</button>
+            <button id={styles.signUp} onClick={() => setShowSignupModal(true)}>Sign Up</button>
             {showSignupModal && <Modal onClose={() => setShowSignupModal(false)} ><SignupForm /></Modal>}
         </div>
     )

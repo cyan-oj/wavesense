@@ -1,0 +1,67 @@
+.sessionForm {
+    display: flex;
+    flex-direction: column;
+}
+
+#header {
+    display: inline-block;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.inputFields {
+    height: 30px;
+    width: 95%;
+}
+
+.sessionStartButton {
+    width: 98%;
+    height: 40px;
+}
+
+.errors {
+    color: red;
+    font-size: 16px;
+    padding: 10px
+}
+
+#signUp {
+    width: 100px;
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 3px;
+    margin-top: 40%;
+    margin-bottom: 40%;
+    padding: 10%;
+    display: inline-block;
+    transition: 300ms;
+}
+
+#signUp:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+#login {
+    width: 100px;
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 3px;
+    margin-top: 40%;
+    margin-bottom: 40%;
+    padding: 10%;
+    display: inline-block;
+    transition: 300ms;
+}
+
+#login:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
