@@ -1,0 +1,10 @@
+#youTubeContainer {
+    display: inline-block;
+    border: 2px solid blue;
+    border-radius: 20px;
+    height: 550px;
+    width: 50%;
+    margin: 30px;
+    margin-left: 5px;
+    margin-top: 25px;
+}

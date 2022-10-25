@@ -1,0 +1,59 @@
+#navHeader {
+    display: flex;
+    justify-content: space-around;
+    border: 3px solid rgb(37, 37, 37);
+    border-radius: 100px;
+    background-color: rgb(37, 37, 37);
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#logo {
+    display: inline-block;
+    color: white;
+    font-size: 48px;
+    font-weight: 700;
+    padding: 24px;
+    
+}
+
+.linksAuth {
+    display: flex;
+    justify-content: space-around;
+}
+
+#signUp {
+    text-decoration: none;
+    color: white;
+    border: 2px solid white;
+    border-radius: 3px;
+    margin: 5%;
+    margin-top: 40%;
+    margin-bottom: 40%;
+    padding: 10%;
+    display: inline-block;
+}
+
+#login {
+    text-decoration: none;
+    color: white;
+    border: 2px solid white;
+    border-radius: 3px;
+    margin: 5%;
+    margin-top: 40%;
+    margin-bottom: 40%;
+    padding: 10%;
+    display: inline-block;
+}
+
+#signUp:hover {
+    background-color: white;
+    color: black;
+}
+
+#login:hover {
+    background-color: white;
+    color: black;
+}
