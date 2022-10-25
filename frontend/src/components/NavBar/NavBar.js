@@ -17,7 +17,6 @@ function NavBar () {
     if (loggedIn) {
       return (
         <div className={styles.login}>
-
           <button onClick={logoutUser}>Logout</button>
         </div>
       );
