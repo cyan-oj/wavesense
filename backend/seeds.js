@@ -21,17 +21,27 @@ mongoose
     console.log("connected to db in development environment");
   });
 
-User.deleteMany({}, function(err) { 
-    console.log('User collection removed') 
-});
+// User.deleteMany({}, function(err) { 
+//     console.log('User collection removed') 
+// });
 Song.deleteMany({}, function(err) { 
   console.log('Song collection removed') 
 });
 
+const hash = (password) => {
+  bcrypt.genSalt(10, function(err, salt) {
+    bcrypt.hash(password, salt, function(err, hash) {
+    // returns hash
+    console.log(hash, "<<<<<<<<<");
+    return hash;
+    });
+  });
+}
+
 const demoUser = {
     'username': 'Demo',
     'email': 'demo1@user.io',
-    'hashedPassword': '$2y$10$6wAx2vEmBtBF8okhyJslYeA18tNuxpiRWnMtMUGh863mfNtNZZaAS'
+    'hashedPassword': "$2a$10$mQt8m7cdDv8zQ/2q81YvS.pFHp5gSBOYNoQL1lEVnWQwlGmvAyCgG"
 };
 
 const brian = {
@@ -85,4 +95,4 @@ const songs = [
 
 Song.insertMany(songs);
 
-// mongoose.connection.close();
+mongoose.connection.close();
