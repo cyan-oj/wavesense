@@ -1,7 +1,7 @@
 import Playlist from "../Playlist/Playlist";
 import YouTubeBox from "../YouTubeBox/YouTubeBox";
 import Visualizer from "../Visualizer/Visualizer";
-import styles from './MainPage.module.css'
+import styles from './MainPage.module.css';
 import VisualizerSettings from "../VisualizerSettings/VisualizerSettings";
 
 
