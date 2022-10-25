@@ -8,7 +8,7 @@ const LoginFormModal = () => {
     const [showLoginModal, setShowLoginModal] = useState(false);
 
     return (
-        <div>
+        <div id='login-modal'>
             <button onClick= { () => setShowLoginModal(true) }>Login</button>
             {showLoginModal && <Modal onClose={ () => setShowLoginModal(false) } ><LoginForm/></Modal>}
         </div>
@@ -19,7 +19,7 @@ export const SignupFormModal = () => {
     const [showSignupModal, setShowSignupModal] = useState(false);
 
     return (
-        <div>
+        <div id='signup-modal'>
             <button onClick={() => setShowSignupModal(true)}>Sign Up</button>
             {showSignupModal && <Modal onClose={() => setShowSignupModal(false)} ><SignupForm /></Modal>}
         </div>
