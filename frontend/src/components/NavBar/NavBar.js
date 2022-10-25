@@ -22,10 +22,10 @@ function NavBar () {
       );
     } else {
       return (
-        <div className="links-auth">
-          <Link to={'/signup'}>Signup</Link>
+        <div className={styles.linksAuth}>
+          <Link id={styles.login} to={'/login'}>Login</Link>
           <br />
-          <Link to={'/login'}>Login</Link>
+          <Link id={styles.signUp} to={'/signup'}>Signup</Link>
         </div>
       );
     }
