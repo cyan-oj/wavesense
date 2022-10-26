@@ -10,12 +10,13 @@ import {
 } from 'three';
 
 const Visualizer = () => {
-
+    const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
     const audioRef = useRef(null) // will be used to hold reference to audio element
     const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
     const [dataArray, setDataArray] = useState(new Uint8Array(fourierSize/2)); // used to store raw audio data
 
-    // predeclaring variables that multiple functions
+    // predeclaring variables that multiple functions need to use
+    // todo: properly react-ify these
     let audioSource;
     let analyser;
     let renderer;
@@ -27,44 +28,40 @@ const Visualizer = () => {
     let scaleZ;
 
     useEffect(() => {
-        const container = document.getElementById("3Dcontainer")
+        const container = containerRef.current // grab DOM container to hold 3D canvas
+        // set up Three.js scene, camera and renderer element
         scene = new Scene();
-        camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        camera = new PerspectiveCamera( 75, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
         renderer = new WebGLRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.setSize( container.offsetWidth, container.offsetHeight );
         container.appendChild( renderer.domElement );
-        
+        // add CUBE
         const geometry = new BoxGeometry( 1, 1, 1 );
         const material = new MeshBasicMaterial({ color: 0x00ff00 });
         cube = new Mesh( geometry, material );
         scene.add( cube );
-        camera.position.z = 5;     
+        // make camera not inside cube
+        camera.position.z = 5;   
+        //display scene on 3D canvas
+        renderer.render( scene, camera );  
     }, []);
     
     const play = (file) => {
-        console.log("files", file)
-
-        const audio = audioRef.current
-        audio.src = URL.createObjectURL(file)
-        audio.load(); // load audio from file input element
+    
+        const audio = audioRef.current //grab audio DOM element
+        audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
+        audio.load(); // load audio from src
         audio.play(); // play audio
 
-        const audioContext = new AudioContext();
+        const audioContext = new AudioContext(); // create audio context that can access audio API methods
+        // create analyser that listens to the output from the audio element
         audioSource = audioContext.createMediaElementSource(audio);
         analyser = audioContext.createAnalyser();
         audioSource.connect(analyser);
         analyser.connect(audioContext.destination);
         analyser.fftSize = fourierSize;
         
-        const bufferLength = analyser.frequencyBinCount;
-        console.log("bufferLength", bufferLength)
-        console.log("dataArray", dataArray)
-        
-        const animate = () => {
-            console.log("frame")
-            console.log("dataArray", dataArray)
-            console.log(analyser)
-            
+        const animate = () => { // re-renders scene with modifiers from analyser
             analyser.getByteFrequencyData(dataArray);
             
             scaleX = dataArray[0]/50; 
@@ -85,18 +82,18 @@ const Visualizer = () => {
     }
 
     return (
-        <>
-            <div id={styles.visualizerContainer} >
-                <audio ref={ audioRef } id="test-audio" controls></audio>
-                <input 
-                    type="file" 
-                    id="fileupload" 
-                    accept="audio/*" 
-                    onChange={ e => play(e.currentTarget.files[0]) }
-                />
-                <div id="3Dcontainer"></div>
+            <div id={styles.visualizerContainer}>
+                <div id={styles.controls}>
+                    <audio ref={ audioRef } id="test-audio" controls></audio>
+                    <input 
+                        type="file" 
+                        id="fileupload" 
+                        accept="audio/*" 
+                        onChange={ e => play(e.currentTarget.files[0]) }
+                    />
+                </div>
+                <div ref={ containerRef} id={styles.container3D}></div>
             </div>
-        </>
     );
 };
 
