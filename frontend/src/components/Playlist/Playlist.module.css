@@ -77,3 +77,8 @@
     cursor: pointer;
     background-color: rgb(63, 63, 63);
 }
+
+.artistName {
+    font-size: 12px;
+    color: rgb(219, 219, 219);
+}
