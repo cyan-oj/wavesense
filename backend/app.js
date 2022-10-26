@@ -18,7 +18,7 @@ const { isProduction } = require('./config/keys');
 
 const usersRouter = require('./routes/api/users');
 const csrfRouter = require('./routes/api/csrf');
-const songsRouter = require('./routes/api/songs')
+const songsRouter = require('./routes/api/songs');
 
 app.use(passport.initialize());
 

@@ -1,5 +1,5 @@
 /* TODO Add site wide styles */
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 form>.errors {
     color: red;
@@ -60,4 +60,5 @@ table {
 
 body {
 	background-color: rgb(27, 27, 34);
+	font-family: 'Roboto', sans-serif;
 }
