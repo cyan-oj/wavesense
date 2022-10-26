@@ -3,7 +3,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 require('./models/User');
-require('./models/Song')
+require('./models/Song');
+require('./models/Playlist')
 require('./config/passport');
 const csurf = require('csurf');
 const debug = require('debug');
@@ -19,6 +20,7 @@ const { isProduction } = require('./config/keys');
 const usersRouter = require('./routes/api/users');
 const csrfRouter = require('./routes/api/csrf');
 const songsRouter = require('./routes/api/songs')
+const playlistsRouter = require('./routes/api/playlists')
 
 app.use(passport.initialize());
 
@@ -47,6 +49,7 @@ app.use(
 app.use('/api/users', usersRouter);
 app.use('/api/csrf', csrfRouter);
 app.use('/api/songs', songsRouter);
+app.use('/api/playlists', playlistsRouter)
 
 app.use((req, res, next) => {
     const err = new Error('Not Found');
