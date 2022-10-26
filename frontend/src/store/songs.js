@@ -32,7 +32,7 @@ export const fetchSongs = () => async dispatch => {
     console.log('catching songs...');
     let res = await jwtFetch('/api/songs');
     let data = await res.json();
-    dispatch(receiveSongs(data.songs));
+    dispatch(receiveSongs(data));
 }
 
 export const fetchSong = (song) => async dispatch => {
