@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import './NavBar.css';
+import styles from './NavBar.module.css';
 import { logout } from '../../store/session';
+import LoginFormModal from '../SessionForms';
+import { SignupFormModal } from '../SessionForms';
 
 function NavBar () {
   const loggedIn = useSelector(state => !!state.session.user);
@@ -15,17 +16,16 @@ function NavBar () {
   const getLinks = () => {
     if (loggedIn) {
       return (
-        <div className="links-nav">
-
+        <div className={styles.login}>
           <button onClick={logoutUser}>Logout</button>
         </div>
       );
     } else {
       return (
-        <div className="links-auth">
-          <Link to={'/signup'}>Signup</Link>
+        <div className={styles.linksAuth}>
+          <SignupFormModal />
           <br />
-          <Link to={'/login'}>Login</Link>
+          <LoginFormModal />
         </div>
       );
     }
@@ -33,8 +33,10 @@ function NavBar () {
 
   return (
     <>
-      <h1>WaveSense //:^D</h1>
-      { getLinks() }
+      <header id={styles.navHeader}>
+        <h1 id={styles.logo}>WaveSense //:^D</h1>
+        { getLinks() }
+      </header>
     </>
   );
 }

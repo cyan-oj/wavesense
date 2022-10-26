@@ -1,0 +1,21 @@
+#mainPageVideosContainer {
+    display: flex;
+    justify-content: space-around;
+    background-color: rgb(37, 37, 37);
+    border-radius: 100px;
+    height: 600px;
+    margin: 20px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+#mainPageSettingsContainer {
+    display: flex;
+    justify-content: start;
+    background-color: rgb(37, 37, 37);
+    border-radius: 100px;
+    height: 300px;
+    margin: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
