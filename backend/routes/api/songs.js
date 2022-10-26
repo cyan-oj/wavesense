@@ -10,6 +10,20 @@ router.get('/', async (req, res) => {
 
 });
 
-module.exports = router;
+router.get('/:title', async (req, res) => {
+  const songs = await Song.find();
 
-// test
+  const song = songs.find( (song) => {
+    return song.title.toLowerCase().includes(req.params.title);
+  }) // Is there a Regex way? Who knows?
+
+  if(song){
+    return res.json(song);
+  } else {
+    return res.json({message: "no song with that title"})
+  }
+
+});
+
+
+module.exports = router;
