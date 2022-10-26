@@ -6,7 +6,10 @@ import {
     WebGLRenderer, 
     BoxGeometry, 
     MeshBasicMaterial, 
-    Mesh 
+    MeshLambertMaterial,
+    Mesh, 
+    PlaneGeometry,
+    SpotLight
 } from 'three';
 
 const Visualizer = () => {
@@ -23,29 +26,49 @@ const Visualizer = () => {
     let scene;
     let camera;
     let cube;
+    let plane;
     let scaleX;
     let scaleY;
     let scaleZ;
+    let spotlight;
+
+    const reader = new FileReader()
 
     useEffect(() => {
         const container = containerRef.current // grab DOM container to hold 3D canvas
         // set up Three.js scene, camera and renderer element
         scene = new Scene();
         camera = new PerspectiveCamera( 75, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
-        renderer = new WebGLRenderer();
+        renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize( container.offsetWidth, container.offsetHeight );
         container.appendChild( renderer.domElement );
         // add CUBE
         const geometry = new BoxGeometry( 1, 1, 1 );
-        const material = new MeshBasicMaterial({ color: 0x00ff00 });
+        // const material = new MeshBasicMaterial({ color: 0x00ff00 });
+        const material = new MeshLambertMaterial({ color: 0xff2200 });
         cube = new Mesh( geometry, material );
+        cube.rotation.y += 1
+        cube.rotation.z += 1
         scene.add( cube );
+        // add plane
+        const planeGeo = new PlaneGeometry(50, 50, 50);
+        const planeMat = new MeshBasicMaterial({ color: 0x0000ff });
+        plane = new Mesh( planeGeo, planeMat );
+        plane.position.z = -4
+        scene.add(plane);
+        // add spotlight
+        spotlight = new SpotLight(0xffffff);
+        spotlight.castShadow = true;
+        spotlight.position.set (15, 30, 50);
+        scene.add(spotlight);
         // make camera not inside cube
-        camera.position.z = 5;   
+        camera.position.z = 5;     
         //display scene on 3D canvas
         renderer.render( scene, camera );  
     }, []);
-    
+
+    const average = array => array.reduce((a, b) => a + b)/array.length
+
     const play = (file) => {
     
         const audio = audioRef.current //grab audio DOM element
@@ -63,13 +86,17 @@ const Visualizer = () => {
         
         const animate = () => { // re-renders scene with modifiers from analyser
             analyser.getByteFrequencyData(dataArray);
+
+            const xAvg = average(dataArray.slice( 0, 5 ))/50
+            const yAvg = average(dataArray.slice( 6, 10 ))/50
+            const zAvg = average(dataArray.slice( 11, 15))/10
             
-            scaleX = dataArray[0]/50; 
-            scaleY = dataArray[8]/50; 
-            scaleZ = dataArray[12]/20; 
-            console.log("X", scaleX)
-            console.log("Y", scaleY)
-            console.log("Z", scaleZ)
+            scaleX = xAvg;
+            scaleY = yAvg; 
+            scaleZ = zAvg; 
+            console.log( "X", scaleX )
+            console.log( "Y", scaleY )
+            console.log( "Z", scaleZ )
             
             cube.rotation.x += 0.01;
             cube.rotation.y += 0.01;
