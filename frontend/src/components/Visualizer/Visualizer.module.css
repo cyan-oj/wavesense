@@ -1,0 +1,9 @@
+#visualizerContainer {
+    display: inline-block;
+    border: 2px solid red;
+    border-radius: 20px;
+    height: 550px;
+    width: 70%;
+    margin: 30px;
+    margin-top: 25px;
+}

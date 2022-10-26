@@ -1,0 +1,79 @@
+#allOfPlaylist {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 550px;
+    width: 25%;
+    margin-top: 25px;
+    margin-left: 30px;
+    border: 2px solid purple;
+    border-radius: 20px;
+}
+
+#playlistContainer {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    height: 550px;
+    width: 92%;
+    margin: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 2px solid purple;
+    border-radius: 20px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#playlistContainer::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+#header {
+    display: center;
+    color: white;
+    display: inline-block;
+    font-size: 28px;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.playlistButtons {
+    height: 30px;
+    width: 60px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background: white;
+    border-radius: 5px;
+	color: black;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+#songList {
+    text-decoration: none;
+}
+
+#songList::-webkit-scrollbar {
+    display: hidden;
+}
+
+.songListItems {
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+
+
+}
+
+.songListItems:hover {
+    cursor: pointer;
+    background-color: rgb(63, 63, 63);
+}
