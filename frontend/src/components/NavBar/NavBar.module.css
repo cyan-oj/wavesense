@@ -22,7 +22,17 @@
 .linksAuth {
     width: 18%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     margin-right: 100px;
     margin-bottom: -15px;
 }
+
+#signUpModal {
+    margin-right: 10px;
+}
+
+#loginModal {
+    margin-left: 10px;
+}
+
+
