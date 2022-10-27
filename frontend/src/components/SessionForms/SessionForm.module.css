@@ -30,13 +30,15 @@
     width: 100px;
     text-decoration: none;
     color: white;
-    background-color: transparent;
+    background-color: rgb(56, 54, 54);
     border: 2px solid white;
     border-radius: 3px;
-    margin-top: 40%;
-    margin-bottom: 40%;
+    margin-top: 18%;
     margin-right: 10px;
-    padding: 10%;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     display: inline-block;
     transition: 300ms;
 }
@@ -51,13 +53,14 @@
     width: 100px;
     text-decoration: none;
     color: white;
-    background-color: transparent;
+    background-color: rgb(56, 54, 54);
     border: 2px solid white;
     border-radius: 3px;
-    margin-top: 40%;
-    margin-bottom: 40%;
-    margin-left: 10px;
-    padding: 10%;
+    margin-top: 20%;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     display: inline-block;
     transition: 300ms;
 }

@@ -2,23 +2,22 @@
     display: inline-block;
     border: 2px solid rgb(102, 95, 95);
     border-radius: 20px;
-    height: 550px;
-    width: 70%;
+    height: 90%;
+    width: 100%;
     margin: 30px;
     margin-top: 25px;
     overflow: hidden;
-    position: relative;
     display: flex;
 }
 
 #controls {
     position: absolute;
-    bottom: 30px;
-    left: 0; 
-    right: 0;
+    bottom: 5%;
+    left: 40%;
     margin-left: auto;
     margin-right: auto;
     width: 300px;
+    z-index: 10000;
 }
 
 #container3D {

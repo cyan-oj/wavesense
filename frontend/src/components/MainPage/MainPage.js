@@ -13,7 +13,7 @@ function MainPage() {
           <Visualizer />
         </div>
         <div id={styles.mainPageSettingsContainer}>
-          <VisualizerSettings />
+          {/* <VisualizerSettings /> */}
         </div>
       </>
     );

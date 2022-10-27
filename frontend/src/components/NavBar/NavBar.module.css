@@ -1,38 +1,49 @@
-#navHeader {
+/* #navHeader {
     display: flex;
     justify-content: space-around;
     border: 3px solid rgb(37, 37, 37);
     border-radius: 100px;
     background-color: rgb(37, 37, 37);
+    height: 12%;
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
-}
+} */
 
-#logo {
+/* #logo {
     display: inline-block;
     color: white;
     font-size: 48px;
     font-weight: 700;
-    padding: 24px;
+    padding: 1%;
     
-}
+} */
 
 .linksAuth {
+    position: absolute;
+    right: 6.5%;
+    top: 5%;
     width: 18%;
     display: flex;
-    justify-content: space-evenly;
-    margin-right: 100px;
-    margin-bottom: -15px;
+    justify-content: flex-end;
+    z-index: 100;
 }
 
-#signUpModal {
-    margin-right: 10px;
+#logout {
+    width: 100px;
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 3px;
+    margin-top: 5%;
+    margin-left: 90%;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: inline-block;
+    transition: 300ms;
 }
-
-#loginModal {
-    margin-left: 10px;
-}
-
 
