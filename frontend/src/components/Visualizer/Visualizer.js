@@ -14,6 +14,9 @@ import {
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 
 const Visualizer = ( props ) => {
+
+    const url = props.songUrl
+
     const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
     const audioRef = useRef(null) // will be used to hold reference to audio element
     const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
@@ -76,9 +79,16 @@ const Visualizer = ( props ) => {
     const average = array => array.reduce((a, b) => a + b)/array.length
 
     const play = (file) => {
+
+        console.log(file);
+        console.log(url);
     
         const audio = audioRef.current //grab audio DOM element
-        audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
+
+        // audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
+        audio.src = url // make passed-in file into dataURL
+        audio.crossOrigin="anonymous"
+
         audio.load(); // load audio from src
         audio.play(); // play audio
 
@@ -100,9 +110,9 @@ const Visualizer = ( props ) => {
             scaleX = xAvg;
             scaleY = yAvg; 
             scaleZ = zAvg; 
-            console.log( "X", scaleX )
-            console.log( "Y", scaleY )
-            console.log( "Z", scaleZ )
+            // console.log( "X", scaleX )
+            // console.log( "Y", scaleY )
+            // console.log( "Z", scaleZ )
             
             cube.rotation.x += 0.01;
             cube.rotation.y += 0.01;
