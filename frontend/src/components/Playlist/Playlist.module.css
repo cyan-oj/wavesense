@@ -7,7 +7,7 @@
     width: 25%;
     margin-top: 25px;
     margin-left: 30px;
-    border: 2px solid purple;
+    border: 2px solid rgb(102, 95, 95);
     border-radius: 20px;
 }
 
@@ -20,7 +20,7 @@
     margin: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    border: 2px solid purple;
+    border: 2px solid rgb(102, 95, 95);
     border-radius: 20px;
     overflow-y: scroll;
     scrollbar-width: none;
@@ -66,19 +66,50 @@
 
 .songListItems {
     color: white;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px;
-
-
 }
 
-.songListItems:hover {
+.buttonStyle {
+    display: block;
+    text-align: left;
+    justify-content: flex-start;
+    flex-direction: column;
+    color: white;
+    background-color: transparent;
+    border-style: none;
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+}
+
+.buttonStyle:hover {
     cursor: pointer;
     background-color: rgb(63, 63, 63);
+    border-radius: 5px;
+}
+
+.titleName {
+    pointer-events: none;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .artistName {
+    pointer-events: none;
     font-size: 12px;
     color: rgb(219, 219, 219);
 }
+
+.playPauseAndButton {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.playPause {
+    display: inline-block;
+    justify-content: center;
+    text-align: center;
+}
+
+/* .dotMenu {
+    display: inline-block;
+} */
