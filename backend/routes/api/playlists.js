@@ -53,7 +53,7 @@ router.post('/', requireUser, async (req, res, next) => {
         const newPlaylist = new Playlist({
             creator: req.user._id,
             description: req.body.description,
-            title: req.body.title,
+            title: req.body.title, 
             songs: req.body.songs
         });
 

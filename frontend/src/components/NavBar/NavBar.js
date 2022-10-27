@@ -3,6 +3,7 @@ import styles from './NavBar.module.css';
 import { logout } from '../../store/session';
 import LoginFormModal from '../SessionForms';
 import { SignupFormModal } from '../SessionForms';
+import PlaylistFormModal from '../PlaylistForm/PlaylistFormModal';
 
 function NavBar () {
   const loggedIn = useSelector(state => !!state.session.user);
@@ -17,6 +18,7 @@ function NavBar () {
     if (loggedIn) {
       return (
         <div className={styles.login}>
+          <PlaylistFormModal />
           <button onClick={logoutUser}>Logout</button>
         </div>
       );
