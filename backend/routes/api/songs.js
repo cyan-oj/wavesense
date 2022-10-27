@@ -42,7 +42,7 @@ router.get('/:title', async (req, res) => {
 
   const song = songs.find( (song) => {
     return song.title.toLowerCase().includes(req.params.title);
-  }) // Is there a Regex way? Who knows?
+  }) 
 
   if(song){
     return res.json(song);
