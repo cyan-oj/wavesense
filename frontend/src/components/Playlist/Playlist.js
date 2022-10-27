@@ -1,17 +1,19 @@
 import styles from './Playlist.module.css'
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { getSongs, fetchSongs, createSong } from '../../store/songs';
 import { useEffect } from 'react';
 import Visualizer from '../Visualizer/Visualizer';
+import PlaylistSongIndex from './PlaylistSongIndex/PlaylistSongIndex';
+import { Modal } from '../../context/Modal';
 
 const Playlist = (props) => {
     const dispatch = useDispatch();
+    const [showCreateSongModal, setShowCreateSongModal] = useState(false);
     const allSongs = useSelector(getSongs);
     const [selectedSong, setSelectedSong] = useState('');
     const [minimize, setMinimize] = useState(false);
-    const hiddenFileInput = useRef(null);
 
     const waveSenseLogo = () => {
         return (
@@ -47,15 +49,14 @@ const Playlist = (props) => {
         }
     }
 
-    const handleFileSubmitClick = () => {
-        hiddenFileInput.current.click();
-    }
-
-    const handleFileSubmit = (e) => {
-        e.preventDefault();
-        const fileSong = e.currentTarget.files[0];
-        dispatch(createSong(fileSong))
-    }
+    const addSongForm = () => {
+        return (
+            <div id={styles.addSongForm}>
+                <button id={styles.addSong} onClick={() => setShowCreateSongModal(true) }> Add Song</button>
+                {showCreateSongModal && <Modal onClose={ () => setShowCreateSongModal(false)}> <PlaylistSongIndex /> </Modal> }
+            </div>
+        );
+    };
 
     const playlistTab = () => {
         if (minimize === true) {
@@ -89,15 +90,7 @@ const Playlist = (props) => {
         <>
             <div id={styles.allOfPlaylist} className={minimize ? styles.mini : ''}>
                 <h2 id={styles.header}>{waveSenseLogo()}</h2>
-                <button id={styles.addSong} onClick={handleFileSubmitClick}>Add Song</button>
-                <input 
-                        type="file"
-                        ref={hiddenFileInput}
-                        id='add-song'
-                        accept="audio/*"
-                        onCHange={(e) => handleFileSubmit(e)}
-                        style={ {display: 'none'}}
-                    />
+                {addSongForm()}
                 <br />
                 <div>
                     {playlistTab()}
