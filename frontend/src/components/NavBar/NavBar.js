@@ -23,7 +23,7 @@ function NavBar () {
     } else {
       return (
         <div className={styles.linksAuth}>
-          <SignupFormModal />
+          <SignupFormModal id={styles.signUpModal} />
           <br />
           <LoginFormModal />
         </div>
