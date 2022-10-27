@@ -38,35 +38,37 @@ router.get('/:title', async (req, res) => {
 router.post('/', async (req, res) => {
   console.log(req);
 
-  const upload = multer({
-    storage: multers3({
-      s3: s3,
-      bucket: 'wavesense',
-      metadata: function (req, file, cb) {
-        cb(null, {fieldName: file.fieldname });
-      },
-      key: function(req,file,cb){
-        cb(null, `song-${Date.now()}.mp3`);
-      }
-    })
-  })
 
-  const uploadSingle = upload.single(
-    'audio-upload'
-  );
-
-  uploadSingle(req,res, async (err) => {
-    if(err) return res.status(400).json({ success: false, message: err.message });
-    // console.log(req.files);
-  })
-
-  // await Song.create({
-  //   title: 'test',
-  //   url: '',
-  //   artist: 'test'
+  // S3 stuff, gave up on it.
+  // const upload = multer({
+  //   storage: multers3({
+  //     s3: s3,
+  //     bucket: 'wavesense',
+  //     metadata: function (req, file, cb) {
+  //       cb(null, {fieldName: file.fieldname });
+  //     },
+  //     key: function(req,file,cb){
+  //       cb(null, `song-${Date.now()}.mp3`);
+  //     }
+  //   })
   // })
 
-  res.status(200).json({data: req.file });
+  // const uploadSingle = upload.single(
+  //   'audio-upload'
+  // );
+
+  // uploadSingle(req,res, async (err) => {
+  //   if(err) return res.status(400).json({ success: false, message: err.message });
+  //   // console.log(req.files);
+  // })
+
+  // // await Song.create({
+  // //   title: 'test',
+  // //   url: '',
+  // //   artist: 'test'
+  // // })
+
+  // res.status(200).json({data: req.file });
 
 });
 
