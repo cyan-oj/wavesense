@@ -9,10 +9,11 @@ import {
     MeshLambertMaterial,
     Mesh, 
     PlaneGeometry,
-    SpotLight
+    SpotLight,
 } from 'three';
+import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 
-const Visualizer = () => {
+const Visualizer = ( props ) => {
     const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
     const audioRef = useRef(null) // will be used to hold reference to audio element
     const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
@@ -26,22 +27,27 @@ const Visualizer = () => {
     let scene;
     let camera;
     let cube;
-    let plane;
     let scaleX;
     let scaleY;
     let scaleZ;
     let spotlight;
-
-    const reader = new FileReader()
+    let plane;
 
     useEffect(() => {
         const container = containerRef.current // grab DOM container to hold 3D canvas
+
         // set up Three.js scene, camera and renderer element
         scene = new Scene();
         camera = new PerspectiveCamera( 75, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
         renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize( container.offsetWidth, container.offsetHeight );
         container.appendChild( renderer.domElement );
+
+        // const loader = new ColladaLoader();
+        // loader.load("../../scenes/cubeTrial.dae", function (result) {
+        //     scene.add(result.scene);
+        // });
+
         // add CUBE
         const geometry = new BoxGeometry( 1, 1, 1 );
         // const material = new MeshBasicMaterial({ color: 0x00ff00 });
@@ -62,7 +68,7 @@ const Visualizer = () => {
         spotlight.position.set (15, 30, 50);
         scene.add(spotlight);
         // make camera not inside cube
-        camera.position.z = 5;     
+        camera.position.z = 5;  
         //display scene on 3D canvas
         renderer.render( scene, camera );  
     }, []);
