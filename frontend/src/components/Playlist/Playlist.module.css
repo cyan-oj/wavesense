@@ -1,21 +1,52 @@
 #allOfPlaylist {
+    position: absolute;
+    left: 1%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 550px;
-    width: 25%;
+    height: 94.5%;
+    width: 300px;
     margin-top: 25px;
     margin-left: 30px;
+    background-color: rgb(56, 54, 54);
     border: 2px solid rgb(102, 95, 95);
     border-radius: 20px;
+    z-index: 100;
+    transition: 500ms;
+}
+
+.mini {
+    height: 23% !important;
+}
+
+.minimizeButton {
+    position: absolute;
+    top: 1%;
+    right: 2%;
+    border-style: none;
+    background-color: transparent;
+    color: white;
+    font-size: 24px;
+}
+
+.minimizeButton:hover {
+    cursor: pointer;
+}
+
+#logo {
+    display: inline-block;
+    margin-top: -20%;
+    margin-bottom: -20%;
+    height: 200px;
+    width: 250px;
 }
 
 #playlistContainer {
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
-    height: 550px;
+    height: 100%;
     width: 92%;
     margin: 10px;
     margin-top: 10px;
@@ -32,13 +63,30 @@
     height: 0;
 }
 
-#header {
+/* #header {
     display: center;
     color: white;
     display: inline-block;
     font-size: 28px;
     padding: 5px;
     margin-top: 5px;
+} */
+
+#addSong {
+    color: white;
+    background-color: rgb(56, 54, 54);
+    border: 2px solid rgb(102, 95, 95);
+    border-radius: 10px;
+    padding: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    transition: 300ms;
+}
+
+#addSong:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
 }
 
 .playlistButtons {
@@ -108,6 +156,8 @@
     display: inline-block;
     justify-content: center;
     text-align: center;
+    margin-top: 30px;
+    margin-left: 10px;
 }
 
 /* .dotMenu {
