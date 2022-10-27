@@ -9,6 +9,7 @@ import MainPage from './components/MainPage/MainPage';
 // import SignupForm from './components/SessionForms/SignupForm';
 import Visualizer from './components/Visualizer/Visualizer';
 import { getCurrentUser } from './store/session';
+import PlaylistSongIndex from './components/Playlist/PlaylistSongIndex/PlaylistSongIndex';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
       <Switch>
         <AuthRoute exact path="/" component={MainPage} />
         <Route exact path="/visualizer" component={Visualizer} />
+        <Route exact path="/test" component={PlaylistSongIndex} />
       </Switch>
     </>
   );
