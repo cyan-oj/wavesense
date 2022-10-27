@@ -85,7 +85,17 @@ const Visualizer = ( { songUrl } ) => {
             console.log("play!")
             play();
         }
+
+        return () => {
+            console.log("cleanup")
+            setIsPlaying(false);
+            console.log("cleanup isPlaying?", isPlaying);
+        }
     }, [songUrl]);
+
+    useEffect(() => {
+        console.log(url)
+    }, [songUrl])
 
     const average = array => array.reduce((a, b) => a + b)/array.length
 
@@ -95,8 +105,8 @@ const Visualizer = ( { songUrl } ) => {
     
         //const audio = new Audio(url);
         const audio = audioRef.current //grab audio DOM element
-        // audio.src = url // grab source url from props
-        audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
+        audio.src = url // grab source url from props
+        // audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
         
         audio.crossOrigin="anonymous"
         audio.load();
@@ -146,10 +156,12 @@ const Visualizer = ( { songUrl } ) => {
     const stopPlaying = e => {
         console.log("STOP");
         setIsPlaying(false);
-        console.log("isPlaying?", isPlaying);
+        console.log("stopPlaying isPlaying?", isPlaying)
     }
 
     return (
+        <>
+            <h1 style={{ color: "white"}}>{isPlaying ? "PLAYING" : "NOT PLAYING"}</h1>
             <div id={styles.visualizerContainer}>
                 <div id={styles.controls}>
                     <audio ref={ audioRef } id="test-audio" controls
@@ -164,13 +176,13 @@ const Visualizer = ( { songUrl } ) => {
                         accept="audio/*"
                         onChange={(e) => play(e.currentTarget.files[0])}
                         style={ {display: 'none'}}
-                    />
-                    {/* <button onClick={ e => setIsPlaying(false) }>STPO</button> */}
+                        />
                 </div>
                 <div ref={ containerRef} id={ styles.container3D }>
                     <canvas ref={ canvasRef }></canvas>
                 </div>
             </div>
+        </>
     );
 };
 
