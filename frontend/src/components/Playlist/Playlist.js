@@ -8,15 +8,19 @@ import Visualizer from '../Visualizer/Visualizer';
 
 const Playlist = () => {
     const dispatch = useDispatch();
-
     const allSongs = useSelector(getSongs)
+    const [selectedSong, setSelectedSong] = useState('')
+    const [minimize, setMinimize] = useState(false)
 
     useEffect(() => {
         dispatch(fetchSongs());
         console.log(allSongs[0])
     }, [dispatch])
 
-    const [selectedSong, setSelectedSong] = useState('')
+    // useEffect(() => {
+    //     console.log(minimize);
+
+    // }, [minimize])
 
     const handleClick = (e) => {
         e.preventDefault()
@@ -25,6 +29,27 @@ const Playlist = () => {
         console.log('selectedSong',selectedSong)
     }
 
+    const handleMinimizeButton = (e) => {
+        e.preventDefault();
+        if (minimize === true) {
+            setMinimize(false);
+
+        } else {
+            setMinimize(true)
+        }
+    }
+
+    const playlistTab = () => {
+        if (minimize === true) {
+            return (
+                <button className={styles.minimizeButton} onClick={handleMinimizeButton}>-</button>
+            );
+        } else {
+            return (
+                <button className={styles.maximizeButton} onClick={handleMinimizeButton}>+</button>
+            );
+        };
+    }   
     // const testArray = ['Song 1', 'Song 2', 'Song 3', 'Song 4', 'Song 5', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', ]
 
     const mappedSongs = allSongs.map((song, i) => {
@@ -42,13 +67,12 @@ const Playlist = () => {
 
     return (
         <>
-            <div id={styles.allOfPlaylist}>
+            <div id={styles.allOfPlaylist} className={minimize ? styles.mini : ''}>
                 <h2 id={styles.header}>Playlist Name</h2>
                 <p> {selectedSong} </p>
                 <br />
                 <div>
-                    <button className={styles.playlistButtons}>+</button>
-                    <button className={styles.playlistButtons}>-</button>
+                    {playlistTab()}
                 </div>
                 <aside id={styles.playlistContainer}>
                     <ul id={styles.songList}>

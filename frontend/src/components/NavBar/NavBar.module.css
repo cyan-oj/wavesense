@@ -34,10 +34,10 @@
     width: 100px;
     text-decoration: none;
     color: white;
-    background-color: transparent;
-    border: 2px solid white;
-    border-radius: 3px;
-    margin-top: 5%;
+    background-color: rgb(56, 54, 54);
+    border: 2px solid rgb(102, 95, 95);
+    border-radius: 10px;
+    margin-top: 8%;
     margin-left: 90%;
     padding-right: 20px;
     padding-left: 20px;

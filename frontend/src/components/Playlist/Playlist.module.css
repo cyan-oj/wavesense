@@ -13,6 +13,11 @@
     border: 2px solid rgb(102, 95, 95);
     border-radius: 20px;
     z-index: 100;
+    transition: 500ms;
+}
+
+.mini {
+    height: 17% !important;
 }
 
 #playlistContainer {
