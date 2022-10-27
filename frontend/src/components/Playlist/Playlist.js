@@ -8,7 +8,7 @@ import Visualizer from '../Visualizer/Visualizer';
 import PlaylistSongIndex from './PlaylistSongIndex/PlaylistSongIndex';
 import { Modal } from '../../context/Modal';
 
-const Playlist = (props) => {
+const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
     const [showCreateSongModal, setShowCreateSongModal] = useState(false);
     const allSongs = useSelector(getSongs);
@@ -31,13 +31,13 @@ const Playlist = (props) => {
 
     // }, [minimize])
 
-    // const handleClick = (e) => {
-    //     e.preventDefault()
-    //     setSelectedSong(e.target.id)
-    //     // console.log('e.target', e.target)
-    //     // console.log('selectedSong',selectedSong)
-    //     props.setSongUrl(e.target.value);
-    // }
+    const handleClick = (e) => {
+        e.preventDefault()
+        setSelectedSong(e.target.id)
+        // console.log('e.target', e.target)
+        // console.log('selectedSong',selectedSong)
+        setSongUrl(e.target.value);
+    }
 
     const handleMinimizeButton = (e) => {
         e.preventDefault();
@@ -47,6 +47,7 @@ const Playlist = (props) => {
         } else {
             setMinimize(true)
         }
+        console.log("song url?", songUrl)
     }
 
     const addSongForm = () => {
@@ -76,7 +77,7 @@ const Playlist = (props) => {
                 <li key={i} className={styles.songListItems}>
                     <div className={styles.playPauseAndButton}>
                         <p className={styles.playPause}>PAUSE</p>
-                        <button className={styles.buttonStyle} id={song._id} value={song._id}>
+                        <button className={styles.buttonStyle} id={song._id} value={song.url} onClick={handleClick}>
                                 <span className={styles.titleName}>{song.title}</span>
                                 <br></br>
                                 <span className={styles.artistName}>{song.artist}</span>

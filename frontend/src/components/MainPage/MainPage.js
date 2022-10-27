@@ -13,7 +13,7 @@ function MainPage() {
     return (
       <>
         <div id={styles.mainPageVideosContainer}>
-          <Playlist setSongUrl={setSongUrl}/>
+          <Playlist songUrl={songUrl} setSongUrl={setSongUrl} />
           <Visualizer songUrl={songUrl}/>
         </div>
         <div id={styles.mainPageSettingsContainer}>
