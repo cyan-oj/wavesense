@@ -108,6 +108,8 @@
     display: inline-block;
     justify-content: center;
     text-align: center;
+    margin-top: 30px;
+    margin-left: 10px;
 }
 
 /* .dotMenu {
