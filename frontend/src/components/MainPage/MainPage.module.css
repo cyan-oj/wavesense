@@ -3,13 +3,13 @@
     justify-content: space-around;
     background-color: rgb(37, 37, 37);
     border-radius: 100px;
-    height: 600px;
+    height: 105%;
     margin: 20px;
     margin-top: 10px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
-#mainPageSettingsContainer2 {
+/* #mainPageSettingsContainer2 {
     display: flex;
     justify-content: start;
     background-color: rgb(37, 37, 37);
@@ -18,4 +18,4 @@
     margin: 20px;
     margin-top: 5px;
     margin-bottom: 5px;
-}
+} */

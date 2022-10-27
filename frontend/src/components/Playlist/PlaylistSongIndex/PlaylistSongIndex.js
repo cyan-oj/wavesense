@@ -20,7 +20,7 @@ const PlaylistSongIndex = () => {
     // This is where we can send to Mongo
     useEffect( () => { 
         if( title && artist && dataUrl ){
-            console.log(newSong);
+            console.log(dataUrl);
         }
     }, [dataUrl]);
 
@@ -31,33 +31,35 @@ const PlaylistSongIndex = () => {
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        toDataURL(file);
+        // toDataURL(file);
         // console.log(newSong);
-        // const formData = new FormData();
-        // formData.append('title', title);
-        // formData.append('artist', artist);
-        // formData.append('audio-upload', file);
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('artist', artist);
+        formData.append('audio-upload', file);
 
-        // const res = await jwtFetch('/api/songs', {
-        //     method: 'POST',
-        //     body: formData
-        // });
+        console.log(formData);
 
-        // const res2 = await res.json();
-        // console.log(res2);
+        const res = await jwtFetch('/api/songs', {
+            method: 'POST',
+            body: formData
+        });
+
+        const res2 = await res.json();
+        console.log(res2);
     }
 
-    const toDataURL = async(convertFile) => {
-        let URL;
-        const reader = new FileReader();
-        reader.onload = async event => {
-            URL = event.target.result;
-            setDataUrl(URL);
+    // const toDataURL = async(convertFile) => {
+    //     let URL;
+    //     const reader = new FileReader();
+    //     reader.onload = async event => {
+    //         URL = event.target.result;
+    //         setDataUrl(URL);
         
 
-        };
-        reader.readAsDataURL(convertFile)
-    }
+    //     };
+    //     reader.readAsDataURL(convertFile)
+    // }
 
     return (
         <>
