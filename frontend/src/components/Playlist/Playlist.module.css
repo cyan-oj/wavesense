@@ -72,6 +72,23 @@
     margin-top: 5px;
 } */
 
+#addSong {
+    color: white;
+    background-color: rgb(56, 54, 54);
+    border: 2px solid rgb(102, 95, 95);
+    border-radius: 10px;
+    padding: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    transition: 300ms;
+}
+
+#addSong:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
 .playlistButtons {
     height: 30px;
     width: 60px;

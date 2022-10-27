@@ -1,16 +1,18 @@
 import styles from './Playlist.module.css'
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { getSongs, fetchSongs } from '../../store/songs';
+import { getSongs, fetchSongs, createSong } from '../../store/songs';
 import { useEffect } from 'react';
 import Visualizer from '../Visualizer/Visualizer';
 
 const Playlist = (props) => {
     const dispatch = useDispatch();
-    const allSongs = useSelector(getSongs)
-    const [selectedSong, setSelectedSong] = useState('')
-    const [minimize, setMinimize] = useState(false)
+    const allSongs = useSelector(getSongs);
+    const [selectedSong, setSelectedSong] = useState('');
+    const [minimize, setMinimize] = useState(false);
+    const hiddenFileInput = useRef(null);
+
     const waveSenseLogo = () => {
         return (
             <img src='/wavesenselogo.png' id={styles.logo}/>
@@ -27,13 +29,13 @@ const Playlist = (props) => {
 
     // }, [minimize])
 
-    const handleClick = (e) => {
-        e.preventDefault()
-        setSelectedSong(e.target.id)
-        // console.log('e.target', e.target)
-        // console.log('selectedSong',selectedSong)
-        props.setSongUrl(e.target.value);
-    }
+    // const handleClick = (e) => {
+    //     e.preventDefault()
+    //     setSelectedSong(e.target.id)
+    //     // console.log('e.target', e.target)
+    //     // console.log('selectedSong',selectedSong)
+    //     props.setSongUrl(e.target.value);
+    // }
 
     const handleMinimizeButton = (e) => {
         e.preventDefault();
@@ -43,6 +45,16 @@ const Playlist = (props) => {
         } else {
             setMinimize(true)
         }
+    }
+
+    const handleFileSubmitClick = () => {
+        hiddenFileInput.current.click();
+    }
+
+    const handleFileSubmit = (e) => {
+        e.preventDefault();
+        const fileSong = e.currentTarget.files[0];
+        dispatch(createSong(fileSong))
     }
 
     const playlistTab = () => {
@@ -63,7 +75,7 @@ const Playlist = (props) => {
                 <li key={i} className={styles.songListItems}>
                     <div className={styles.playPauseAndButton}>
                         <p className={styles.playPause}>PAUSE</p>
-                        <button className={styles.buttonStyle} id={song._id} value={song._id} onClick={handleClick}>
+                        <button className={styles.buttonStyle} id={song._id} value={song._id}>
                                 <span className={styles.titleName}>{song.title}</span>
                                 <br></br>
                                 <span className={styles.artistName}>{song.artist}</span>
@@ -77,7 +89,15 @@ const Playlist = (props) => {
         <>
             <div id={styles.allOfPlaylist} className={minimize ? styles.mini : ''}>
                 <h2 id={styles.header}>{waveSenseLogo()}</h2>
-                <p> {selectedSong} </p>
+                <button id={styles.addSong} onClick={handleFileSubmitClick}>Add Song</button>
+                <input 
+                        type="file"
+                        ref={hiddenFileInput}
+                        id='add-song'
+                        accept="audio/*"
+                        onCHange={(e) => handleFileSubmit(e)}
+                        style={ {display: 'none'}}
+                    />
                 <br />
                 <div>
                     {playlistTab()}

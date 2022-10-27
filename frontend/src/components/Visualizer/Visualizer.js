@@ -138,7 +138,8 @@ const Visualizer = ( props ) => {
                         type="file"
                         ref={hiddenFileInput}
                         id="fileupload"
-                        accept="audio/*" 
+                        accept="audio/*"
+                        onChange={(e) => play(e.currentTarget.files[0])}
                         style={ {display: 'none'}}
                     />
                 </div>
