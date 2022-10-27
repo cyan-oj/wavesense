@@ -6,7 +6,7 @@ import { getSongs, fetchSongs } from '../../store/songs';
 import { useEffect } from 'react';
 import Visualizer from '../Visualizer/Visualizer';
 
-const Playlist = (props) => {
+const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
 
     const allSongs = useSelector(getSongs)
@@ -23,7 +23,8 @@ const Playlist = (props) => {
         setSelectedSong(e.target.id)
         // console.log('e.target', e.target)
         // console.log('selectedSong',selectedSong)
-        props.setSongUrl(e.target.value);
+        setSongUrl(e.target.value);
+        console.log("song url?", songUrl)
     }
 
     // const testArray = ['Song 1', 'Song 2', 'Song 3', 'Song 4', 'Song 5', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', ]
@@ -38,7 +39,7 @@ const Playlist = (props) => {
                             <span className={styles.artistName}>{song.artist}</span>
                     </button>
                 </div>
-             </li>
+            </li>
     })
 
     return (
