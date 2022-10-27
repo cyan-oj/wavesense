@@ -63,13 +63,16 @@ const PlaylistSongIndex = () => {
 
     return (
         <>
-            <h1>TEST</h1>
-            <form onSubmit={handleSubmit}>
-                <input placeholder='title' value={title} onChange={(e)=>setTitle(e.target.value)}/>
-                <input placeholder='artist' value={artist} onChange={(e)=>setArtist(e.target.value)}/>
+            <h1 id={styles.header}>Add a song</h1>
+            <form onSubmit={handleSubmit} id={styles.addSongForm}>
+                <br />
+                <input className={styles.inputFields} placeholder='Title' value={title} onChange={(e)=>setTitle(e.target.value)}/>
+                <br />
+                <input className={styles.inputFields} placeholder='Artist' value={artist} onChange={(e)=>setArtist(e.target.value)}/>
+                <br />
                 <input type='file' onChange={handleChange}/>
                 <br></br>
-                <input type='submit' />
+                <input type='submit' id={styles.submitSongButton} />
             </form>
         </>
     );
