@@ -17,7 +17,29 @@
 }
 
 .mini {
-    height: 17% !important;
+    height: 23% !important;
+}
+
+.minimizeButton {
+    position: absolute;
+    top: 1%;
+    right: 2%;
+    border-style: none;
+    background-color: transparent;
+    color: white;
+    font-size: 24px;
+}
+
+.minimizeButton:hover {
+    cursor: pointer;
+}
+
+#logo {
+    display: inline-block;
+    margin-top: -20%;
+    margin-bottom: -20%;
+    height: 200px;
+    width: 250px;
 }
 
 #playlistContainer {
@@ -41,14 +63,14 @@
     height: 0;
 }
 
-#header {
+/* #header {
     display: center;
     color: white;
     display: inline-block;
     font-size: 28px;
     padding: 5px;
     margin-top: 5px;
-}
+} */
 
 .playlistButtons {
     height: 30px;

@@ -11,6 +11,11 @@ const Playlist = () => {
     const allSongs = useSelector(getSongs)
     const [selectedSong, setSelectedSong] = useState('')
     const [minimize, setMinimize] = useState(false)
+    const waveSenseLogo = () => {
+        return (
+            <img src='/wavesenselogo.png' id={styles.logo}/>
+        );
+    };
 
     useEffect(() => {
         dispatch(fetchSongs());
@@ -42,11 +47,11 @@ const Playlist = () => {
     const playlistTab = () => {
         if (minimize === true) {
             return (
-                <button className={styles.minimizeButton} onClick={handleMinimizeButton}>-</button>
+                <button className={styles.minimizeButton} onClick={handleMinimizeButton}>+</button>
             );
         } else {
             return (
-                <button className={styles.maximizeButton} onClick={handleMinimizeButton}>+</button>
+                <button className={styles.minimizeButton} onClick={handleMinimizeButton}>-</button>
             );
         };
     }   
@@ -54,8 +59,8 @@ const Playlist = () => {
 
     const mappedSongs = allSongs.map((song, i) => {
         return <li key={i} className={styles.songListItems}>
-                <div className={styles.playPauseAndButton}>
-                    <p className={styles.playPause}>PAUSE</p>
+                <div className={styles.playPauseAndPlayButton}>
+                    {/* <p className={styles.playPause}>PAUSE</p> */}
                     <button className={styles.buttonStyle} id={song._id} value={song._id} onClick={handleClick}>
                             <span className={styles.titleName}>{song.title}</span>
                             <br></br>
@@ -68,7 +73,7 @@ const Playlist = () => {
     return (
         <>
             <div id={styles.allOfPlaylist} className={minimize ? styles.mini : ''}>
-                <h2 id={styles.header}>Playlist Name</h2>
+                <h2 id={styles.header}>{waveSenseLogo()}</h2>
                 <p> {selectedSong} </p>
                 <br />
                 <div>
