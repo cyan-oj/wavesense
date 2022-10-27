@@ -84,24 +84,27 @@ const Visualizer = ( props ) => {
         console.log(url);
     
         const audio = audioRef.current //grab audio DOM element
-
-        // audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
-        audio.src = url // make passed-in file into dataURL
+        
+        //audio.src = url // grab source url from props
+        audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
+        
         audio.crossOrigin="anonymous"
-
-        audio.load(); // load audio from src
         audio.play(); // play audio
-
+        
         const audioContext = new AudioContext(); // create audio context that can access audio API methods
         // create analyser that listens to the output from the audio element
+        const streamDestination = audioContext.createMediaStreamDestination();
         audioSource = audioContext.createMediaElementSource(audio);
         analyser = audioContext.createAnalyser();
+        audioSource.connect(streamDestination)
         audioSource.connect(analyser);
         analyser.connect(audioContext.destination);
         analyser.fftSize = fourierSize;
         
         const animate = () => { // re-renders scene with modifiers from analyser
             analyser.getByteFrequencyData(dataArray);
+            console.log(dataArray);
+            console.log("cube", cube)
 
             const xAvg = average(dataArray.slice( 0, 5 ))/50
             const yAvg = average(dataArray.slice( 6, 10 ))/50

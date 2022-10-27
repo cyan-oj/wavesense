@@ -14,7 +14,7 @@ function MainPage() {
       <>
         <div id={styles.mainPageVideosContainer}>
           <Playlist setSongUrl={setSongUrl}/>
-          <Visualizer songUrl={songUrl}/>
+          <Visualizer songUrl={songUrl} />
         </div>
         <div id={styles.mainPageSettingsContainer}>
           <VisualizerSettings />
