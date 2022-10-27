@@ -6,7 +6,7 @@ import { getSongs, fetchSongs } from '../../store/songs';
 import { useEffect } from 'react';
 import Visualizer from '../Visualizer/Visualizer';
 
-const Playlist = () => {
+const Playlist = (props) => {
     const dispatch = useDispatch();
     const allSongs = useSelector(getSongs)
     const [selectedSong, setSelectedSong] = useState('')
@@ -29,9 +29,10 @@ const Playlist = () => {
 
     const handleClick = (e) => {
         e.preventDefault()
-        setSelectedSong(e.target.value)
-        console.log('e.target', e.target)
-        console.log('selectedSong',selectedSong)
+        setSelectedSong(e.target.id)
+        // console.log('e.target', e.target)
+        // console.log('selectedSong',selectedSong)
+        props.setSongUrl(e.target.value);
     }
 
     const handleMinimizeButton = (e) => {
@@ -58,16 +59,18 @@ const Playlist = () => {
     // const testArray = ['Song 1', 'Song 2', 'Song 3', 'Song 4', 'Song 5', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', ]
 
     const mappedSongs = allSongs.map((song, i) => {
-        return <li key={i} className={styles.songListItems}>
-                <div className={styles.playPauseAndPlayButton}>
-                    {/* <p className={styles.playPause}>PAUSE</p> */}
-                    <button className={styles.buttonStyle} id={song._id} value={song._id} onClick={handleClick}>
-                            <span className={styles.titleName}>{song.title}</span>
-                            <br></br>
-                            <span className={styles.artistName}>{song.artist}</span>
-                    </button>
-                </div>
-             </li>
+        return (
+                <li key={i} className={styles.songListItems}>
+                    <div className={styles.playPauseAndButton}>
+                        <p className={styles.playPause}>PAUSE</p>
+                        <button className={styles.buttonStyle} id={song._id} value={song._id} onClick={handleClick}>
+                                <span className={styles.titleName}>{song.title}</span>
+                                <br></br>
+                                <span className={styles.artistName}>{song.artist}</span>
+                        </button>
+                    </div>
+                </li>
+        )
     })
 
     return (

@@ -20,7 +20,7 @@ const PlaylistSongIndex = () => {
     // This is where we can send to Mongo
     useEffect( () => { 
         if( title && artist && dataUrl ){
-            console.log(newSong);
+            console.log(dataUrl);
         }
     }, [dataUrl]);
 
