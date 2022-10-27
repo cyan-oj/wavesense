@@ -47,3 +47,8 @@
     transition: 300ms;
 }
 
+#logout:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}

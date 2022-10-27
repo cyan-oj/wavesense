@@ -14,6 +14,7 @@ import {
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 
 const Visualizer = ( props ) => {
+    const hiddenFileInput = useRef(null)
     const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
     const audioRef = useRef(null) // will be used to hold reference to audio element
     const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
@@ -114,15 +115,21 @@ const Visualizer = ( props ) => {
         animate();
     }
 
+    const handleFileSubmitClick = () => {
+        hiddenFileInput.current.click();
+    }
+
     return (
             <div id={styles.visualizerContainer}>
                 <div id={styles.controls}>
                     <audio ref={ audioRef } id="test-audio" controls></audio>
+                    <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>Upload a file</button>
                     <input 
-                        type="file" 
-                        id="fileupload" 
+                        type="file"
+                        ref={hiddenFileInput}
+                        id="fileupload"
                         accept="audio/*" 
-                        onChange={ e => play(e.currentTarget.files[0]) }
+                        style={ {display: 'none'}}
                     />
                 </div>
                 <div ref={ containerRef} id={styles.container3D}></div>
