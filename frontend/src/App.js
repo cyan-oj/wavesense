@@ -23,7 +23,7 @@ function App() {
     <>
       <NavBar />
       <Switch>
-        <AuthRoute exact path="/" component={MainPage} />
+        <Route exact path="/" component={MainPage} />
         <Route exact path="/visualizer" component={Visualizer} />
         <Route exact path="/test" component={PlaylistSongIndex} />
       </Switch>

@@ -1,28 +1,54 @@
-#navHeader {
+/* #navHeader {
     display: flex;
     justify-content: space-around;
     border: 3px solid rgb(37, 37, 37);
     border-radius: 100px;
     background-color: rgb(37, 37, 37);
+    height: 12%;
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
-}
+} */
 
-#logo {
+/* #logo {
     display: inline-block;
     color: white;
     font-size: 48px;
     font-weight: 700;
-    padding: 24px;
+    padding: 1%;
     
-}
+} */
 
 .linksAuth {
+    position: absolute;
+    right: 6.5%;
+    top: 5%;
     width: 18%;
     display: flex;
-    justify-content: space-between;
-    margin-right: 100px;
-    margin-bottom: -15px;
+    justify-content: flex-end;
+    z-index: 100;
+}
+
+#logout {
+    width: 100px;
+    text-decoration: none;
+    color: white;
+    background-color: rgb(56, 54, 54);
+    border: 2px solid rgb(102, 95, 95);
+    border-radius: 10px;
+    margin-top: 8%;
+    margin-left: 90%;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: inline-block;
+    transition: 300ms;
+}
+
+#logout:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
 }

@@ -16,14 +16,14 @@ function NavBar () {
   const getLinks = () => {
     if (loggedIn) {
       return (
-        <div className={styles.login}>
-          <button onClick={logoutUser}>Logout</button>
+        <div className={styles.linksAuth}>
+          <button  id={styles.logout} onClick={logoutUser}>Logout</button>
         </div>
       );
     } else {
       return (
         <div className={styles.linksAuth}>
-          <SignupFormModal id={styles.signUpModal} />
+          <SignupFormModal />
           <br />
           <LoginFormModal />
         </div>
@@ -34,7 +34,6 @@ function NavBar () {
   return (
     <>
       <header id={styles.navHeader}>
-        <h1 id={styles.logo}>WaveSense //:^D</h1>
         { getLinks() }
       </header>
     </>

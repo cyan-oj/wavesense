@@ -23,8 +23,8 @@ async function jwtFetch(url, options = {}) {
     if (!options.headers['Content-Type'] && !(options.body instanceof FormData)){
       options.headers["Content-Type"] =
         options.headers["Content-Type"] || "application/json";
-        options.headers["CSRF-Token"] = getCookie("CSRF-TOKEN");
-    }
+      }
+    options.headers["CSRF-Token"] = getCookie("CSRF-TOKEN");
   }
 
   // Call fetch with the url and the updated options hash.

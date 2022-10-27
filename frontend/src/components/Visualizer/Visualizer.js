@@ -14,6 +14,7 @@ import {
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 
 const Visualizer = ( { songUrl } ) => {
+    const hiddenFileInput = useRef(null)
 
     const url = songUrl
     console.log("incoming songUrl useState", songUrl)
@@ -138,6 +139,10 @@ const Visualizer = ( { songUrl } ) => {
         animate();
     }
 
+    const handleFileSubmitClick = () => {
+        hiddenFileInput.current.click();
+    }
+
     const stopPlaying = e => {
         console.log("STOP");
         setIsPlaying(false);
@@ -151,11 +156,14 @@ const Visualizer = ( { songUrl } ) => {
                         onPause={ stopPlaying }
                         onEnded={ stopPlaying }
                     ></audio>
+                    <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>Upload a file</button>
                     <input 
-                        type="file" 
-                        id="fileupload" 
-                        accept="audio/*" 
-                        onChange={ e => play(e.currentTarget.files[0]) }
+                        type="file"
+                        ref={hiddenFileInput}
+                        id="fileupload"
+                        accept="audio/*"
+                        onChange={(e) => play(e.currentTarget.files[0])}
+                        style={ {display: 'none'}}
                     />
                     <button onClick={ e => setIsPlaying(false) }>STPO</button>
                 </div>
