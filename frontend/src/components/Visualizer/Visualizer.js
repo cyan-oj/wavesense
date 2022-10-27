@@ -14,6 +14,7 @@ import {
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 
 const Visualizer = ( { songUrl } ) => {
+    const hiddenFileInput = useRef(null)
 
     const url = songUrl
     console.log("incoming songUrl useState", songUrl)
@@ -104,8 +105,8 @@ const Visualizer = ( { songUrl } ) => {
     
         //const audio = new Audio(url);
         const audio = audioRef.current //grab audio DOM element
-        audio.src = url // grab source url from props
-        //audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
+        // audio.src = url // grab source url from props
+        audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
         
         audio.crossOrigin="anonymous"
         audio.load();
@@ -148,6 +149,10 @@ const Visualizer = ( { songUrl } ) => {
         animate();
     }
 
+    const handleFileSubmitClick = () => {
+        hiddenFileInput.current.click();
+    }
+
     const stopPlaying = e => {
         console.log("STOP");
         setIsPlaying(false);
@@ -163,13 +168,15 @@ const Visualizer = ( { songUrl } ) => {
                         onPause={ stopPlaying }
                         onEnded={ stopPlaying }
                     ></audio>
+                    <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>Play Local File</button>
                     <input 
-                        type="file" 
-                        id="fileupload" 
-                        accept="audio/*" 
-                        onChange={ e => play(e.currentTarget.files[0]) }
+                        type="file"
+                        ref={hiddenFileInput}
+                        id="fileupload"
+                        accept="audio/*"
+                        onChange={(e) => play(e.currentTarget.files[0])}
+                        style={ {display: 'none'}}
                         />
-                    <button onClick={ e => setIsPlaying(false) }>STPO</button>
                 </div>
                 <div ref={ containerRef} id={ styles.container3D }>
                     <canvas ref={ canvasRef }></canvas>

@@ -17,7 +17,7 @@ function MainPage() {
           <Visualizer songUrl={songUrl}/>
         </div>
         <div id={styles.mainPageSettingsContainer}>
-          <VisualizerSettings />
+          {/* <VisualizerSettings /> */}
         </div>
       </>
     );
