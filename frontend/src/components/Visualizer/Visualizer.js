@@ -170,8 +170,8 @@ const Visualizer = ( { songUrl } ) => {
 
     const play = (file) => {
         const audio = audioRef.current //grab audio DOM element
-        audio.src = url // grab source url from props
-        // audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
+        //audio.src = url // grab source url from props
+         audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
         
         audio.crossOrigin="anonymous"
         audio.load();
