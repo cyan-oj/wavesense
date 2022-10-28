@@ -10,7 +10,7 @@
     margin-top: 25px;
     margin-left: 30px;
     background-color: rgb(56, 54, 54);
-    border: 2px solid rgb(102, 95, 95);
+    border: 2px solid rgb(101, 6, 127);
     border-radius: 20px;
     z-index: 100;
     transition: 500ms;
@@ -51,7 +51,7 @@
     margin: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    border: 2px solid rgb(102, 95, 95);
+    border: 2px solid rgb(101, 6, 127);
     border-radius: 20px;
     overflow-y: scroll;
     scrollbar-width: none;
@@ -75,7 +75,7 @@
 #addSong {
     color: white;
     background-color: rgb(56, 54, 54);
-    border: 2px solid rgb(102, 95, 95);
+    border: 2px solid rgb(101, 6, 127);
     border-radius: 10px;
     padding: 20px;
     padding-top: 12px;
@@ -157,7 +157,11 @@
     justify-content: center;
     text-align: center;
     margin-top: 30px;
-    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.playPause:hover {
+    cursor: pointer;
 }
 
 /* .dotMenu {
