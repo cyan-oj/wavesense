@@ -271,29 +271,26 @@ const Visualizer = ( { songUrl } ) => {
     }
 
     return (
-        <>
-            <h1 style={{ color: "white"}}>{isPlaying ? "PLAYING" : "NOT PLAYING"}</h1>
-            <div id={styles.visualizerContainer}>
-                <div id={styles.controls}>
-                    <audio ref={ audioRef } id="test-audio" controls
-                        onPause={ stopPlaying }
-                        onEnded={ stopPlaying }
-                    ></audio>
-                    <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>Play Local File</button>
-                    <input 
-                        type="file"
-                        ref={hiddenFileInput}
-                        id="fileupload"
-                        accept="audio/*"
-                        onChange={(e) => play(e.currentTarget.files[0])}
-                        style={ {display: 'none'}}
-                    />
-                </div>
-                <div ref={ containerRef} id={ styles.container3D }>
-                    <canvas ref={ canvasRef }></canvas>
-                </div>
+        <div id={styles.visualizerContainer}>
+            <div id={styles.controls}>
+                <audio ref={ audioRef } id="test-audio" controls
+                    onPause={ stopPlaying }
+                    onEnded={ stopPlaying }
+                ></audio>
+                <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>Play Local File</button>
+                <input 
+                    type="file"
+                    ref={hiddenFileInput}
+                    id="fileupload"
+                    accept="audio/*"
+                    onChange={(e) => play(e.currentTarget.files[0])}
+                    style={ {display: 'none'}}
+                />
             </div>
-        </>
+            <div ref={ containerRef} id={ styles.container3D }>
+                <canvas ref={ canvasRef }></canvas>
+            </div>
+        </div>
     );
 };
 
