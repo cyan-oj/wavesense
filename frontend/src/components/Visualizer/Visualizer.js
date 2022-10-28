@@ -14,7 +14,8 @@ import {
     EdgesGeometry,
     LineSegments,
     LineDashedMaterial,
-    HemisphereLight
+    HemisphereLight,
+    PointLight
 } from 'three';
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 
@@ -40,8 +41,6 @@ const Visualizer = ( { songUrl } ) => {
     let scene;
     let camera;
 
-    let cube;
-
     let scaleX;
     let scaleY;
     let scaleZ;
@@ -49,6 +48,10 @@ const Visualizer = ( { songUrl } ) => {
     let plane;
     let groundPlane;
     
+    let yellowPoint;
+    let redPoint;
+
+
     useEffect(() => { // new dependency for play/pause?
         console.log("useEffect rendering: songurl", songUrl);
         setIsPlaying(true);
@@ -99,9 +102,9 @@ const Visualizer = ( { songUrl } ) => {
             scene.add( box )
         }
 
-        const cubeGeo = new BoxGeometry(16, 16, 16)
-        cube = new Mesh( cubeGeo, cubeMaterial );
-        cube.scale.set(.025, .025, .025)
+        const cubeGeo = new BoxGeometry(1, 1, 1)
+        const cube = new Mesh( cubeGeo, cubeMaterial );
+        cube.scale.set(.4, .4, .4)
         cube.position.z = 3
         cube.rotation.y = Math.PI/3.4
         cube.rotation.z = Math.PI/2.8
@@ -129,6 +132,10 @@ const Visualizer = ( { songUrl } ) => {
         groundPlane.scale.set( 300, 300, 300 )
         groundPlane.name = "ground"
         scene.add( groundPlane );
+
+        yellowPoint = new PointLight( 0xfff352, 1, 400, 3 );
+        yellowPoint.position.set(0, 5, -4)
+        scene.add( yellowPoint )
 
         const light = new HemisphereLight(0x000000, 0xed289b, 1)
         scene.add(light)
@@ -163,8 +170,8 @@ const Visualizer = ( { songUrl } ) => {
 
     const play = (file) => {
         const audio = audioRef.current //grab audio DOM element
-        //audio.src = url // grab source url from props
-         audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
+        audio.src = url // grab source url from props
+        // audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
         
         audio.crossOrigin="anonymous"
         audio.load();
@@ -184,12 +191,12 @@ const Visualizer = ( { songUrl } ) => {
             console.log("isPlaying in animation loop?", isPlaying)
             if(!isPlaying) return;
             analyser.getByteFrequencyData(dataArray);
-            //console.log(data
+            //console.log(dat
             // console.log("frame")
             const xAvg = average(dataArray.slice( 0, 5 ))/8000
             const yAvg = average(dataArray.slice( 6, 10 ))/8000
             const zAvg = average(dataArray.slice( 11, 15))/4000
-            const totalAvg = average(dataArray)/5000
+            const totalAvg = average(dataArray)/100
             scaleX = xAvg;
             scaleY = yAvg; 
             scaleZ = zAvg; 
@@ -239,17 +246,13 @@ const Visualizer = ( { songUrl } ) => {
                         child.rotation.x += (scaleX) 
                         child.rotation.y += (scaleY) 
                         child.rotation.z += (scaleZ)
-                        child.scale.set(scaleX, scaleY, scaleZ)
+                        child.scale.set((scaleX*15 + .01), (scaleY*15 + .01), (scaleZ*15 + .01))
                         break;
                     default:
                         break;
                 }
             })
-            ///////
-            // cube.rotation.x += (scaleX) 
-            // cube.rotation.y += (scaleY) 
-            // cube.rotation.z += (scaleZ)
-            // cube.scale.set(scaleX, scaleY, scaleZ)
+            yellowPoint.intensity = totalAvg;
 
             requestAnimationFrame( animate );
             renderer.render( scene, camera );
