@@ -16,7 +16,7 @@ const Playlists = () => {
 
     const mappedPlaylists = allPlaylists.map((playlist, i) => {
         return (
-            <li key={i} className={styles.songListItems}>
+            <li key={i} className={styles.playlistListItems}>
                 <div className={styles.playPauseAndButton}>
                     <button className={styles.buttonStyle} id={playlist._id}>
                             <span className={styles.titleName}>{playlist.title}</span>
@@ -31,7 +31,7 @@ const Playlists = () => {
     return (
         <>
             <div id={styles.playlistsMenuContainer}>
-                <h1>hello worlddddddddddddddd</h1>
+                <h1>hello world</h1>
                 {mappedPlaylists}
             </div>
         </>
