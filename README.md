@@ -1,6 +1,7 @@
 # wavesense
 
-Wavesense is a music visualizer and playlist manager using the youtube api.
+Wavesense is a music visualizer and playlist manager using AWS S3 and Three.js
+[Link Here](https://wavesense.herokuapp.com/)
 
 # Functionality & MVP
 
