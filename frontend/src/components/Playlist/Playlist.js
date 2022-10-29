@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import Visualizer from '../Visualizer/Visualizer';
 import PlaylistSongIndex from './PlaylistSongIndex/PlaylistSongIndex';
 import { Modal } from '../../context/Modal';
+import { fetchPlaylists, getPlaylists } from '../../store/playlists';
 
 const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
@@ -14,18 +15,20 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     const allSongs = useSelector(getSongs);
     const [selectedSong, setSelectedSong] = useState('');
     const [minimize, setMinimize] = useState(false);
-
+    const allPlaylists = useSelector(getPlaylists);
+    
     const waveSenseLogo = () => {
         return (
             <img src='/wavesenselogo.png' id={styles.logo}/>
-        );
+            );
     };
-
+        
     useEffect(() => {
+        dispatch(fetchPlaylists());
         dispatch(fetchSongs());
         console.log(allSongs[0])
     }, [dispatch])
-
+    
     // useEffect(() => {
     //     console.log(minimize);
 
@@ -87,6 +90,19 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         )
     })
 
+    const mappedPlaylists = allPlaylists.map((playlist, i) => {
+        return (
+            <li key={i} className={styles.songListItems}>
+                <div className={styles.playPauseAndButton}>
+                    <button className={styles.buttonStyle} id={playlist._id} >
+                        <span className={styles.titleName}>{playlist.title}</span>
+                    </button>
+                    <p className={styles.playPause}>DELETE</p>
+                </div>
+            </li>
+        )
+    })
+
     return (
         <>
             <div id={styles.allOfPlaylist} className={minimize ? styles.mini : ''}>
@@ -99,6 +115,10 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                 <aside id={styles.playlistContainer}>
                     <ul id={styles.songList}>
                         {mappedSongs}
+                    </ul>
+                    <ul>
+                        <h1>Playlists</h1>
+                        {mappedPlaylists}
                     </ul>
                 </aside>
             </div>
