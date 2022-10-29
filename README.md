@@ -66,3 +66,120 @@ Daily Task Breakdowns
 - UI polish
 - Production Readme
 - if hosting didn't work, figure out why and get it going
+
+
+# Code Snippets
+## Brian
+
+```javascript 
+//frontend/src/components/MainPage/MainPage.js
+function MainPage() {
+
+  const[songUrl, setSongUrl] = useState(null);
+
+    return (
+      <>
+        <div id={styles.mainPageVideosContainer}>
+          <Playlist songUrl={songUrl} setSongUrl={setSongUrl} />
+          <Visualizer songUrl={songUrl}/>
+
+```
+
+```javascript
+//frontend/src/components/Playlist/Playlist.js
+const handleClick = (e) => {
+    e.preventDefault()
+    setSelectedSong(e.target.id)
+    // console.log('e.target', e.target)
+    // console.log('selectedSong',selectedSong)
+    setSongUrl(e.target.value);
+}
+```
+
+```javascript
+const play = (file) => {
+    console.log("file", file);
+    console.log("url in play", url);
+
+    //const audio = new Audio(url);
+    const audio = audioRef.current //grab audio DOM element
+    audio.src = url // grab source url from props
+    //audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
+    
+    audio.crossOrigin="anonymous"
+    audio.load();
+    audio.play(); // play audio
+```
+
+
+## May
+```javascript
+//backend/models/Playlist.js
+const playlistSchema = Schema({
+    creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    title: {
+        type: String,
+    },
+    description: {
+        type: String,
+    }, 
+    songs: {
+        type: Array
+    }
+}, {
+    timestamps: true
+});
+```
+
+```javascript 
+//backend/routes/api/playlists.js
+
+//retrieve individual playlists - Postman tested; works
+router.get('/:id', async (req, res, next) => {
+    try {
+        const playlist = await Playlist.findById( req.params.id )
+                                        .populate("creator", "id, username");
+        res.json(playlist);
+    }
+    catch(err) {
+        const error = new Error('Playlist not found');
+        error.statusCode = 404;
+        error.errors = { message: "No playlist found with that id" };
+        return next(error);
+    }
+})
+
+//create a playlist - Postman tested; works
+router.post('/', requireUser, async (req, res, next) => {
+    try {
+        const newPlaylist = new Playlist({
+            creator: req.user._id,
+            description: req.body.description,
+            title: req.body.title, 
+            songs: req.body.songs
+        });
+
+        let playlist = await newPlaylist.save();
+        playlist = await playlist.populate('creator', '_id, username');
+        return res.json(playlist);
+    }
+    catch(err) {
+        next(err);
+    }
+});
+
+// delete a playlist - Postman tested; works
+router.delete('/:id', requireUser, async (req, res, next) => {
+    try {
+        const playlist = await Playlist.findById(req.params.id)
+        await playlist.remove();
+        return res.json();
+    }
+    catch (err) {
+        next(err);
+    }
+})
+```

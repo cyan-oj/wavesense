@@ -10,15 +10,7 @@ const { requireUser } = require('../../config/passport');
 
 //retrieve a single user's playlists - Postman tested; works
 router.get('/user/:userId', async (req, res, next) => {
-    // let user;
-    // try {
-    //     user = await User.findById(req.params.userId);
-    // } catch(err) {
-    //     const error = new Error('User not Found');
-    //     error.statusCode = 404;
-    //     error.errors = { message: "No user found with that id"};
-    //     return next(error);
-    // }
+
     try {
         const playlists = await Playlist.find({ creator: req.params.userId })
                                         .sort({ createdAt: -1 })
