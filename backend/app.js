@@ -38,6 +38,21 @@ if (!isProduction) {
     app.use(cors());
 }
 
+app.use(
+    csurf({
+        cookie: {
+            secure: isProduction,
+            sameSite: isProduction && "Lax",
+            httpOnly: true
+        }
+    })
+);
+    
+app.use('/api/users', usersRouter);
+app.use('/api/csrf', csrfRouter);
+app.use('/api/songs', songsRouter);
+app.use('/api/playlists', playlistsRouter)
+
 if (isProduction) {
     const path = require('path');
     // Serve the frontend's index.html file at the root route
@@ -59,22 +74,6 @@ if (isProduction) {
       );
     });
 }
-
-
-app.use(
-    csurf({
-        cookie: {
-            secure: isProduction,
-            sameSite: isProduction && "Lax",
-            httpOnly: true
-        }
-    })
-);
-    
-app.use('/api/users', usersRouter);
-app.use('/api/csrf', csrfRouter);
-app.use('/api/songs', songsRouter);
-app.use('/api/playlists', playlistsRouter)
 
 app.use((req, res, next) => {
     const err = new Error('Not Found');

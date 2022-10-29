@@ -1,0 +1,25 @@
+#addSongForm {
+    display: flex;
+    flex-direction: column;
+}
+
+#header {
+    display: inline-block;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.inputFields {
+    height: 30px;
+    width: 95%;
+}
+
+#submitSongButton {
+    width: 98%;
+    height: 40px;
+}
+
+#submitSongButton:hover {
+    cursor: pointer;
+}

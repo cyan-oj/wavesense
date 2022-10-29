@@ -76,12 +76,12 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         return (
                 <li key={i} className={styles.songListItems}>
                     <div className={styles.playPauseAndButton}>
-                        <p className={styles.playPause}>PAUSE</p>
                         <button className={styles.buttonStyle} id={song._id} value={song.url} onClick={handleClick}>
                                 <span className={styles.titleName}>{song.title}</span>
                                 <br></br>
                                 <span className={styles.artistName}>{song.artist}</span>
                         </button>
+                        <p className={styles.playPause}>DELETE</p>
                     </div>
                 </li>
         )
