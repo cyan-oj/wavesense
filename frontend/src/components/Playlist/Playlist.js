@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import Visualizer from '../Visualizer/Visualizer';
 import PlaylistSongIndex from './PlaylistSongIndex/PlaylistSongIndex';
 import { Modal } from '../../context/Modal';
+import Playlists from '../Playlists/Playlists';
 
 const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     const allSongs = useSelector(getSongs);
     const [selectedSong, setSelectedSong] = useState('');
     const [minimize, setMinimize] = useState(false);
+    const [showPlaylists, setShowSplaylists] = useState(true)
 
     const waveSenseLogo = () => {
         return (
@@ -87,6 +89,14 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         )
     })
 
+    const showMenu = () => {
+        if (!showPlaylists) {
+            return mappedSongs
+        } else {
+            return <Playlists />
+        }
+    }
+
     return (
         <>
             <div id={styles.allOfPlaylist} className={minimize ? styles.mini : ''}>
@@ -98,9 +108,10 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                 </div>
                 <aside id={styles.playlistContainer}>
                     <ul id={styles.songList}>
-                        {mappedSongs}
+                        {showMenu()}
                     </ul>
                 </aside>
+
             </div>
             
 

@@ -25,6 +25,7 @@ export const getPlaylist = (playlistId) => ({playlists}) => ( playlists ? playli
 export const fetchPlaylists = () => async dispatch => {
     const res = await jwtFetch('/api/playlists');
     const data = await res.json();
+    console.log(data)
     dispatch(receivePlaylists(data.playlists))
 }
 
