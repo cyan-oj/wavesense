@@ -100,23 +100,23 @@ const songs = [
 Song.insertMany(songs);
 
 const [a, b, c] = songs;
-const playlists = [
-  new Playlist({
-    // 'creator': 1,
-    'title': 'Playlist 1',
-    'description': '#1 Playlist',
-    'songs': [a, b]
-  }),
+// const playlists = [
+//   new Playlist({
+//     'creator': 1,
+//     'title': 'Playlist 1',
+//     'description': '#1 Playlist',
+//     'songs': [a, b]
+//   }),
 
-  new Playlist({
-    // 'creator': 2,
-    'title': 'Playlist 2',
-    'description': '#2 Playlist',
-    'songs': [b, c]
-  }),
-]
+//   new Playlist({
+//     'creator': 2,
+//     'title': 'Playlist 2',
+//     'description': '#2 Playlist',
+//     'songs': [b, c]
+//   }),
+// ]
 
-Playlist.insertMany(playlists);
+// Playlist.insertMany(playlists);
 
 
 

@@ -12,29 +12,23 @@ import {
     SpotLight,
     DoubleSide,
     EdgesGeometry,
-    LineSegments,
-    LineDashedMaterial,
     HemisphereLight,
     PointLight
 } from 'three';
-import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 
 const Visualizer = ( { songUrl } ) => {
     const hiddenFileInput = useRef(null)
 
-    const url = songUrl
-    console.log("incoming songUrl useState", songUrl)
+    let url = songUrl  
     const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
     const audioRef = useRef(null) // will be used to hold reference to audio element
     const canvasRef = useRef(null) // holds visualiser canvas 
-
 
     const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
     const [dataArray, setDataArray] = useState(new Uint8Array(fourierSize/2)); // used to store raw audio data
     const [isPlaying, setIsPlaying] = useState(false)
 
-    // predeclaring variables that multiple functions need to e
-    // todo: properly react-ify these
+    let loop;
     let audioSource;
     let analyser;
     let renderer;
@@ -44,20 +38,18 @@ const Visualizer = ( { songUrl } ) => {
     let scaleX;
     let scaleY;
     let scaleZ;
-    let spotlight;
+    
     let plane;
     let groundPlane;
     
+    let spotlight;
     let yellowPoint;
-    let redPoint;
 
-
-    useEffect(() => { // new dependency for play/pause?
-        console.log("useEffect rendering: songurl", songUrl);
+    const psychoticHelperFunction = () => {
         setIsPlaying(true);
-        console.log("useEffect isPlaying", isPlaying);
-        const container = containerRef.current // grab DOM container to hold 3D canvas
-        // set up Three.js scene, camera and renderer element
+
+        const container = containerRef.current 
+
         scene = new Scene();
         camera = new PerspectiveCamera( 75, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
         renderer = new WebGLRenderer({ canvas: canvasRef.current, antialias: true });
@@ -65,17 +57,8 @@ const Visualizer = ( { songUrl } ) => {
         renderer.setSize( container.offsetWidth, container.offsetHeight );
         container.appendChild( renderer.domElement );
 
-        // const loader = new ColladaLoader();
-        // loader.load("../../scenes/cubeTrial.dae", function (result) {
-        //     scene.add(result.scene);
-        // });
-        const examplegeometry = new BoxGeometry( 2, 2, 2 );
-        const edges = new EdgesGeometry( examplegeometry );
 
-
-        // add CU
         const geometry = new BoxGeometry( 1, 1, 1 );
-        // const material = new MeshBasicMaterial({ color: 0x00ff00 });
         const material = new MeshLambertMaterial({ color: 0x65b2ab });
         const cubeMaterial = new MeshLambertMaterial({ color: 0x65b2ab, transparent: true, opacity: .8 });
         const wireMaterial = new MeshBasicMaterial({ color: 0x65b2ab, wireframe: true });
@@ -104,7 +87,7 @@ const Visualizer = ( { songUrl } ) => {
 
         const cubeGeo = new BoxGeometry(1, 1, 1)
         const cube = new Mesh( cubeGeo, cubeMaterial );
-        cube.scale.set(.4, .4, .4)
+        cube.scale.set(.01, .01, .01)
         cube.position.z = 3
         cube.rotation.y = Math.PI/3.4
         cube.rotation.z = Math.PI/2.8
@@ -113,8 +96,6 @@ const Visualizer = ( { songUrl } ) => {
         cube.name = "cube"
         scene.add( cube );
 
-
-        // add plane
         const planeGeo = new PlaneGeometry(1, 1, 1);
         const planeMat = new MeshLambertMaterial({ color: 0x2825f5 });
         plane = new Mesh( planeGeo, planeMat );
@@ -139,46 +120,41 @@ const Visualizer = ( { songUrl } ) => {
 
         const light = new HemisphereLight(0x000000, 0xed289b, 1)
         scene.add(light)
-        // add spotlight
+
         spotlight = new SpotLight(0xffffff);
         spotlight.position.set (0, 30, 50);
         scene.add(spotlight);
-        // make camera not inside cub
-        camera.position.z = 4;  
-        //display scene on 3D canvas
-        renderer.render( scene, camera ); 
-        console.log("scene", scene)
-        if(url) {
-            console.log("play!")
-            play();
-        }
 
-        return () => {
-            console.log("cleanup")
-            setIsPlaying(false);
-            console.log("cleanup isPlaying?", isPlaying);
-        }
-    }, [songUrl]);
+        camera.position.z = 4;  
+        renderer.render( scene, camera ); 
+    }
 
     useEffect(() => {
-        console.log(url)
-    }, [songUrl])
+        psychoticHelperFunction();
+        if(url) {
+            play();
+        }
+        return () => {
+            cancelAnimationFrame(loop);
+        }
+    }, [songUrl, isPlaying]);
 
     const average = array => array.reduce((a, b) => a + b)/array.length
 
-
-
     const play = (file) => {
-        const audio = audioRef.current //grab audio DOM element
-         audio.src = url // grab source url from props
-        // audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
+        const audio = audioRef.current 
+        if(!file){
+            audio.src = url 
+            audio.crossOrigin="anonymous"
+        } else{
+            psychoticHelperFunction();
+            audio.src = URL.createObjectURL(file) 
+        }
         
-        audio.crossOrigin="anonymous"
         audio.load();
-        audio.play(); // play audio
+        audio.play();
         
-        const audioContext = new AudioContext(); // create audio context that can access audio API methods
-        // create analyser that listens to the output from the audio element
+        const audioContext = new AudioContext();
         const streamDestination = audioContext.createMediaStreamDestination();
         audioSource = audioContext.createMediaElementSource(audio);
         analyser = audioContext.createAnalyser();
@@ -187,12 +163,10 @@ const Visualizer = ( { songUrl } ) => {
         analyser.connect(audioContext.destination);
         analyser.fftSize = fourierSize;
         
-        const animate = () => { // re-renders scene with modifiers from analyser
-            console.log("isPlaying in animation loop?", isPlaying)
+        const animate = () => {
+            console.log("frame")
             if(!isPlaying) return;
             analyser.getByteFrequencyData(dataArray);
-            //console.log(dat
-            // console.log("frame")
             const xAvg = average(dataArray.slice( 0, 5 ))/8000
             const yAvg = average(dataArray.slice( 6, 10 ))/8000
             const zAvg = average(dataArray.slice( 11, 15))/4000
@@ -254,7 +228,7 @@ const Visualizer = ( { songUrl } ) => {
             })
             yellowPoint.intensity = totalAvg;
 
-            requestAnimationFrame( animate );
+            loop = requestAnimationFrame( animate );
             renderer.render( scene, camera );
         }
         animate();
@@ -265,9 +239,7 @@ const Visualizer = ( { songUrl } ) => {
     }
 
     const stopPlaying = e => {
-        console.log("STOP");
         setIsPlaying(false);
-        console.log("stopPlaying isPlaying?", isPlaying)
     }
 
     return (

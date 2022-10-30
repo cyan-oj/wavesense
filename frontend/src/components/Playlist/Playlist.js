@@ -146,12 +146,17 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         const handleDelete = (e) => {
             dispatch(deletePlaylist(playlist._id));
         }
-        return (
-            <div>
-                <PlaylistUpdateModal playlist={ playlist }/>
-                <button onClick={handleDelete} className={styles.playPause} >DELETE</button>
-            </div>
-        )
+
+        if (currentUser && (playlist.creator._id === currentUser._id)) {
+            return (
+                <div>
+                    <PlaylistUpdateModal playlist={ playlist }/>
+                    <button onClick={handleDelete} className={styles.playPause} >DELETE</button>
+                </div>
+            )   
+        } else {
+            return null;
+        }
     }
 
     const showMenu = () => {
@@ -169,7 +174,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                     <button className={styles.buttonStyle} id={playlist._id} >
                         <span className={styles.titleName}>{playlist.title}</span>
                     </button>
-                    {/* {playlist.creator._id === currentUser._id && updateAndDeletePlaylist(playlist)} */}
+                    {updateAndDeletePlaylist(playlist)}
                 </div>
             </li>
         )
