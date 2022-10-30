@@ -1,6 +1,6 @@
 # Background
 
-### Do you wish there was a way to vibe with audio visually and audibly rather than only listening to it? [WaveSense](https://wavesense.herokuapp.com/ "WaveSense") is an audio visualizer application that enables users to select songs or upload local audio files, then feeds the selected audio into a visual display reflective of the audio waves. 
+Do you wish there was a way to vibe with audio visually and audibly rather than only listening to it? [WaveSense](https://wavesense.herokuapp.com/ "WaveSense") is an audio visualizer application that enables users to select songs or upload local audio files, then feeds the selected audio into a visual display reflective of the audio waves. 
 
 # Functionality & MVP
 - ### New User and User Login
