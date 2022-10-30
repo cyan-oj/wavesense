@@ -100,10 +100,11 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     }   
 
     const handlePlaylistItemClick = (playlistObject) => {
-        console.log('clicked handlePlaylistItemClick')
-        setSelectedPlaylist(playlistObject)
-        console.log(selectedPlaylist)
-        setShowPlaylistSongs(1)
+        console.log('clicked handlePlaylistItemClick');
+        setSelectedPlaylist(playlistObject);
+        setShowPlaylists(false);
+        console.log(selectedPlaylist);
+        setShowPlaylistSongs(1);
     }
     // const testArray = ['Song 1', 'Song 2', 'Song 3', 'Song 4', 'Song 5', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', ]
 
