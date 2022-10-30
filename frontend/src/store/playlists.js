@@ -44,7 +44,7 @@ export const createPlaylist = (playlist) => async dispatch => {
 }
 
 export const updatePlaylist = (playlist) => async dispatch => {
-    const res = await jwtFetch(`/api/playlists/${playlist.id}`,{
+    const res = await jwtFetch(`/api/playlists/${playlist._id}`,{
         method: 'PATCH',
         body: JSON.stringify(playlist)
     });

@@ -14,7 +14,7 @@ router.get('/user/:userId', async (req, res, next) => {
     try {
         const playlists = await Playlist.find({ creator: req.params.userId })
                                         .sort({ createdAt: -1 })
-                                        .populate("creator", "_id, username");
+                                        .populate("creator", "_id, username, email");
         console.log('hello')
         playlist.filter
         return res.json(playlists);
@@ -28,7 +28,7 @@ router.get('/user/:userId', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
     try {
         const playlist = await Playlist.findById( req.params.id )
-                                        .populate("creator", "id, username");
+                                        .populate("creator", "id, username, email");
         res.json(playlist);
     }
     catch(err) {
@@ -50,7 +50,7 @@ router.post('/', requireUser, async (req, res, next) => {
         });
 
         let playlist = await newPlaylist.save();
-        playlist = await playlist.populate('creator', '_id, username');
+        playlist = await playlist.populate('creator', '_id, username, email');
         return res.json(playlist);
     }
     catch(err) {
@@ -93,7 +93,7 @@ router.delete('/:id', requireUser, async (req, res, next) => {
 //retrieve all playlists - Postman tested; works
 router.get('/', async (req, res) => {
     const playlists = await Playlist.find()
-        .populate("creator", "_id, username")
+        .populate("creator", "_id, username, email")
         .sort({ createdAt: -1 });
     return res.json(playlists);
 
