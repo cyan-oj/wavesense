@@ -24,6 +24,12 @@
     margin: 10px;
 }
 
+.buttonStyle:hover {
+    cursor: pointer;
+    background-color: rgb(63, 63, 63);
+    border-radius: 5px;
+}
+
 .playlistListItems {
     color: white;
 }

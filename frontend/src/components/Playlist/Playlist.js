@@ -18,7 +18,10 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     const [selectedSong, setSelectedSong] = useState('');
     const [minimize, setMinimize] = useState(false);
     const [showPlaylists, setShowPlaylists] = useState(false)
+    const [showPlaylistSongs, setShowPlaylistSongs] = useState(0)
+    const [selectedPlaylist, setSelectedPlaylist] = useState(null)
     const allPlaylists = useSelector(getPlaylists);
+
 
     const waveSenseLogo = () => {
         return (
@@ -95,9 +98,17 @@ const Playlist = ({ songUrl, setSongUrl }) => {
             );
         };
     }   
+
+    const handlePlaylistItemClick = (playlistObject) => {
+        console.log('clicked handlePlaylistItemClick')
+        setSelectedPlaylist(playlistObject)
+        console.log(selectedPlaylist)
+        setShowPlaylistSongs(1)
+    }
     // const testArray = ['Song 1', 'Song 2', 'Song 3', 'Song 4', 'Song 5', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', ]
 
     const mappedSongs = allSongs.map((song, i) => {
+
         return (
                 <li key={i} className={styles.songListItems}>
                     <div className={styles.playPauseAndButton}>
@@ -112,11 +123,32 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         )
     })
 
+    const mappedPlaylistSongs = () => {
+        if (!selectedPlaylist) {
+            return mappedSongs;
+        } else {
+            selectedPlaylist.songs.map((song, i) => {
+                return (
+                    <li key={i} className={styles.songListItems}>
+                        <div className={styles.playPauseAndButton}>
+                            <button className={styles.buttonStyle} id={song._id} value={song.url} onClick={handleClick}>
+                                    <span className={styles.titleName}>{song.title}</span>
+                                    <br></br>
+                                    <span className={styles.artistName}>{song.artist}</span>
+                            </button>
+                            <p className={styles.playPause}>DELETE</p>
+                        </div>
+                    </li>
+            )
+            })
+        }
+    }
+
     const showMenu = () => {
         if (!showPlaylists) {
-            return mappedSongs
+            return mappedPlaylistSongs()
         } else {
-            return <Playlists />
+            return <Playlists handlePlaylistItemClick={handlePlaylistItemClick} />
         }
     }
     const mappedPlaylists = allPlaylists.map((playlist, i) => {
@@ -144,10 +176,6 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                 <aside id={styles.playlistContainer}>
                     <ul id={styles.songList}>
                         {showMenu()}
-                    </ul>
-                    <ul>
-                        <h1>Playlists</h1>
-                        {mappedPlaylists}
                     </ul>
                 </aside>
 

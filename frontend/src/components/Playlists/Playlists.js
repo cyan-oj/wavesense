@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 
 
-const Playlists = () => {
+const Playlists = ({handlePlaylistItemClick}) => {
     const dispatch = useDispatch();
     const allPlaylists = useSelector(getPlaylists)
 
@@ -18,7 +18,7 @@ const Playlists = () => {
         return (
             <li key={i} className={styles.playlistListItems}>
                 <div className={styles.playPauseAndButton}>
-                    <button className={styles.buttonStyle} id={playlist._id}>
+                    <button className={styles.buttonStyle} id={playlist._id} onClick={(e) => handlePlaylistItemClick(playlist)}>
                             <span className={styles.titleName}>{playlist.title}</span>
                     </button>
                     <p className={styles.playPause}>DELETE</p>
@@ -31,7 +31,7 @@ const Playlists = () => {
     return (
         <>
             <div id={styles.playlistsMenuContainer}>
-                <h1>hello world</h1>
+                <h1>Playlists</h1>
                 {mappedPlaylists}
             </div>
         </>
