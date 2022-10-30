@@ -5,9 +5,13 @@ Do you wish there was a way to vibe with audio visually and audibly rather than 
 # Functionality & MVP
 - ### New User and User Login
     New Users can sign up for an account by clicking the 'Sign Up' button in the Navigation Bar. If users already have an account, they can use login.
+    ![Signup](./signup.png)
+    ![Login](./login.png)
 
 - ### Music Player and Music Visualizer
     Users can select a song from the song list on the left or upload a local audio file to start playing. The audio will feed into the visualizer and display movements.
+
+    ![PlayerVisualizer](./playervisualizer.png)
 
 - ### Songs
     Users can upload audio files and the song title will be displayed on the song list. 
@@ -61,7 +65,7 @@ function MainPage() {
           <Visualizer songUrl={songUrl}/>
 
 ```
-
+The Main page renders two child components, Playlist and Visualizer, so that the same props of songUrl and setSongUrl can be passed to both siblings.
 ```javascript
 //frontend/src/components/Playlist/Playlist.js
 const handleClick = (e) => {
@@ -72,7 +76,7 @@ const handleClick = (e) => {
     setSongUrl(e.target.value);
 }
 ```
-
+Song elements within the Playlist component have both an id and a value. The handleClick helper function uses the song id to display information within the playlist, while passing the value to the Visualizer component. 
 ```javascript
 const play = (file) => {
     console.log("file", file);
@@ -87,7 +91,7 @@ const play = (file) => {
     audio.load();
     audio.play(); // play audio
 ```
-
+The Visualizer component receives the selected song URL, then loads the audio file from AWS S3 for concurrent visualizer analysis and audio playback. 
 
 ## May
 ```javascript
