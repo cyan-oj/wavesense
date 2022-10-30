@@ -23,7 +23,7 @@ Do you wish there was a way to vibe with audio visually and audibly rather than 
 
 # Technologies & Technical Challenges
 
-WaveSense is built on the MERN (MongoDB, Express.js, React.js, and Node.js) stack.
+WaveSense will be build on the MERN stack  (MongoDB, Express, React, and Node)
 
 The visualizer is built using Canvas.
 
