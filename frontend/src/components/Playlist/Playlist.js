@@ -8,7 +8,8 @@ import Visualizer from '../Visualizer/Visualizer';
 import PlaylistSongIndex from './PlaylistSongIndex/PlaylistSongIndex';
 import { Modal } from '../../context/Modal';
 
-import { fetchPlaylists, getPlaylists } from '../../store/playlists';
+import { deletePlaylist, fetchPlaylists, getPlaylists } from '../../store/playlists';
+import PlaylistUpdateModal from '../PlaylistEditForm/PlaylistUpdateModal';
 import Playlists from '../Playlists/Playlists';
 
 const Playlist = ({ songUrl, setSongUrl }) => {
@@ -20,7 +21,9 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     const [showPlaylists, setShowPlaylists] = useState(false)
     const [showPlaylistSongs, setShowPlaylistSongs] = useState(0)
     const [selectedPlaylist, setSelectedPlaylist] = useState(null)
-    const allPlaylists = useSelector(getPlaylists);
+    const allPlaylists = useSelector(getPlaylists) || {};
+    const currentUser = useSelector(state => state.session.user);
+
 
 
     const waveSenseLogo = () => {
@@ -32,7 +35,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     useEffect(() => {
         dispatch(fetchPlaylists());
         dispatch(fetchSongs());
-        console.log(allSongs[0])
+        // console.log(allSongs[0])
     }, [dispatch, showPlaylists])
     
     // useEffect(() => {
@@ -145,6 +148,19 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         }
     }
 
+    
+    const updateAndDeletePlaylist = (playlist) => {
+        const handleDelete = (e) => {
+            dispatch(deletePlaylist(playlist._id));
+        }
+        return (
+            <div>
+                <PlaylistUpdateModal playlist={ playlist }/>
+                <button onClick={handleDelete} className={styles.playPause} >DELETE</button>
+            </div>
+        )
+    }
+
     const showMenu = () => {
         if (!showPlaylists) {
             return mappedPlaylistSongs()
@@ -153,17 +169,19 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         }
     }
     const mappedPlaylists = allPlaylists.map((playlist, i) => {
+
         return (
             <li key={i} className={styles.songListItems}>
                 <div className={styles.playPauseAndButton}>
                     <button className={styles.buttonStyle} id={playlist._id} >
                         <span className={styles.titleName}>{playlist.title}</span>
                     </button>
-                    <p className={styles.playPause}>DELETE</p>
+                    {playlist.creator._id === currentUser._id && updateAndDeletePlaylist(playlist)}
                 </div>
             </li>
         )
     })
+
 
     return (
         <>
