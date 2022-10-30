@@ -176,7 +176,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                     <button className={styles.buttonStyle} id={playlist._id} >
                         <span className={styles.titleName}>{playlist.title}</span>
                     </button>
-                    {playlist.creator._id === currentUser._id && updateAndDeletePlaylist(playlist)}
+                    {/* {playlist.creator._id === currentUser._id && updateAndDeletePlaylist(playlist)} */}
                 </div>
             </li>
         )
