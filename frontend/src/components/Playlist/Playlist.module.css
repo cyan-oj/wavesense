@@ -72,7 +72,7 @@
     margin-top: 5px;
 } */
 
-#addSong {
+.addSong {
     color: white;
     background-color: rgb(56, 54, 54);
     border: 2px solid rgb(101, 6, 127);
@@ -83,7 +83,7 @@
     transition: 300ms;
 }
 
-#addSong:hover {
+.addSong:hover {
     cursor: pointer;
     background-color: white;
     color: black;

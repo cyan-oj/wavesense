@@ -17,7 +17,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     const allSongs = useSelector(getSongs);
     const [selectedSong, setSelectedSong] = useState('');
     const [minimize, setMinimize] = useState(false);
-    const [showPlaylists, setShowSplaylists] = useState(true)
+    const [showPlaylists, setShowPlaylists] = useState(false)
     const allPlaylists = useSelector(getPlaylists);
 
     const waveSenseLogo = () => {
@@ -30,7 +30,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         dispatch(fetchPlaylists());
         dispatch(fetchSongs());
         console.log(allSongs[0])
-    }, [dispatch])
+    }, [dispatch, showPlaylists])
     
     // useEffect(() => {
     //     console.log(minimize);
@@ -56,10 +56,29 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         console.log("song url?", songUrl)
     }
 
+    const togglePlaylistsSongs = () => {
+        if (!showPlaylists) {
+            return addSongForm()
+        } else {
+            return addPlaylistForm()
+        }
+    }
+
+    const addPlaylistForm = () => {
+        return (
+            <div id={styles.addSongForm}>
+                <button className={styles.addSong} onClick={() => setShowPlaylists(false)}>Show Songs</button>
+                <button className={styles.addSong} onClick={() => setShowCreateSongModal(true) }> Add Playlist</button>
+                {showCreateSongModal && <Modal onClose={ () => setShowCreateSongModal(false)}> <PlaylistSongIndex /> </Modal> }
+            </div>
+        );
+    }
+
     const addSongForm = () => {
         return (
             <div id={styles.addSongForm}>
-                <button id={styles.addSong} onClick={() => setShowCreateSongModal(true) }> Add Song</button>
+                <button className={styles.addSong} onClick={() => setShowPlaylists(true)}>Show Playlists</button>
+                <button className={styles.addSong} onClick={() => setShowCreateSongModal(true) }> Add Song</button>
                 {showCreateSongModal && <Modal onClose={ () => setShowCreateSongModal(false)}> <PlaylistSongIndex /> </Modal> }
             </div>
         );
@@ -117,7 +136,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         <>
             <div id={styles.allOfPlaylist} className={minimize ? styles.mini : ''}>
                 <h2 id={styles.header}>{waveSenseLogo()}</h2>
-                {addSongForm()}
+                {togglePlaylistsSongs()}
                 <br />
                 <div>
                     {playlistTab()}
