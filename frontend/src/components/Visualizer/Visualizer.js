@@ -57,8 +57,6 @@ const Visualizer = ( { songUrl } ) => {
         renderer.setSize( container.offsetWidth, container.offsetHeight );
         container.appendChild( renderer.domElement );
 
-        const examplegeometry = new BoxGeometry( 2, 2, 2 );
-        const edges = new EdgesGeometry( examplegeometry );
 
         const geometry = new BoxGeometry( 1, 1, 1 );
         const material = new MeshLambertMaterial({ color: 0x65b2ab });
