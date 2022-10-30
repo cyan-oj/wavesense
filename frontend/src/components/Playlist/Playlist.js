@@ -7,19 +7,26 @@ import { useEffect } from 'react';
 import Visualizer from '../Visualizer/Visualizer';
 import PlaylistSongIndex from './PlaylistSongIndex/PlaylistSongIndex';
 import { Modal } from '../../context/Modal';
+
 import { deletePlaylist, fetchPlaylists, getPlaylists } from '../../store/playlists';
 import PlaylistUpdateModal from '../PlaylistEditForm/PlaylistUpdateModal';
+import PlaylistFormModal from '../PlaylistForm/PlaylistFormModal';
+import Playlists from '../Playlists/Playlists';
 
 const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
     const [showCreateSongModal, setShowCreateSongModal] = useState(false);
+    const [showPlaylistFormModal, setShowPlaylistFormModal] = useState(false);
     const allSongs = useSelector(getSongs);
     const [selectedSong, setSelectedSong] = useState('');
     const [minimize, setMinimize] = useState(false);
+    const [showPlaylists, setShowPlaylists] = useState(false)
+    const [selectedPlaylist, setSelectedPlaylist] = useState(null)
     const allPlaylists = useSelector(getPlaylists) || {};
     const currentUser = useSelector(state => state.session.user);
 
-    
+
+
     const waveSenseLogo = () => {
         return (
             <img src='/wavesenselogo.png' id={styles.logo}/>
@@ -29,19 +36,11 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     useEffect(() => {
         dispatch(fetchPlaylists());
         dispatch(fetchSongs());
-        // console.log(allSongs[0])
-    }, [dispatch])
-    
-    // useEffect(() => {
-    //     console.log(minimize);
-
-    // }, [minimize])
+    }, [dispatch, showPlaylists])
 
     const handleClick = (e) => {
         e.preventDefault()
         setSelectedSong(e.target.id)
-        // console.log('e.target', e.target)
-        // console.log('selectedSong',selectedSong)
         setSongUrl(e.target.value);
     }
 
@@ -49,17 +48,36 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         e.preventDefault();
         if (minimize === true) {
             setMinimize(false);
-
         } else {
             setMinimize(true)
         }
-        // console.log("song url?", songUrl)
+        console.log("song url?", songUrl)
+    }
+
+    const togglePlaylistsSongs = () => {
+        if (!showPlaylists) {
+            return addSongForm()
+        } else {
+            return addPlaylistForm()
+        }
+    }
+
+    const addPlaylistForm = () => {
+        return (
+            <div id={styles.addSongForm}>
+                <button className={styles.addSong} onClick={() => setShowPlaylists(false) && setSelectedPlaylist(null)}>Show All Songs</button>
+                <button className={styles.addSong} onClick={() => setShowPlaylistFormModal(true) }> Create Playlist</button>
+                {/* <button className={styles.addSong} onClick={() => } >  </button> */}
+                {showPlaylistFormModal && <Modal onClose={ () => setShowPlaylistFormModal(false)}> <PlaylistFormModal /> </Modal> }
+            </div>
+        );
     }
 
     const addSongForm = () => {
         return (
             <div id={styles.addSongForm}>
-                <button id={styles.addSong} onClick={() => setShowCreateSongModal(true) }> Add Song</button>
+                <button className={styles.addSong} onClick={() => setShowPlaylists(true)}>Show Playlists</button>
+                <button className={styles.addSong} onClick={() => setShowCreateSongModal(true) }> Add Song</button>
                 {showCreateSongModal && <Modal onClose={ () => setShowCreateSongModal(false)}> <PlaylistSongIndex /> </Modal> }
             </div>
         );
@@ -76,9 +94,16 @@ const Playlist = ({ songUrl, setSongUrl }) => {
             );
         };
     }   
+
+    const handlePlaylistItemClick = (playlistObject) => {
+        setSelectedPlaylist(playlistObject);
+        setShowPlaylists(false);
+        console.log(selectedPlaylist);
+    }
     // const testArray = ['Song 1', 'Song 2', 'Song 3', 'Song 4', 'Song 5', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', ]
 
     const mappedSongs = allSongs.map((song, i) => {
+
         return (
                 <li key={i} className={styles.songListItems}>
                     <div className={styles.playPauseAndButton}>
@@ -92,6 +117,29 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                 </li>
         )
     })
+
+    const mappedPlaylistSongs = () => {
+        if (!selectedPlaylist) {
+            return mappedSongs;
+        } else {
+            const mappedSpecificSongs = selectedPlaylist.songs.map((song, i) => {
+                console.log('mapped song from specific playlist!')
+                return (
+                    <li key={i} className={styles.songListItems}>
+                        <div className={styles.playPauseAndButton}>
+                            <button className={styles.buttonStyle} id={song._id} value={song.url} onClick={handleClick}>
+                                    <span className={styles.titleName}>{song.title}</span>
+                                    <br></br>
+                                    <span className={styles.artistName}>{song.artist}</span>
+                            </button>
+                            <p className={styles.playPause}>DELETE</p>
+                        </div>
+                    </li>
+                )
+            })
+            return mappedSpecificSongs
+        }
+    }
 
     
     const updateAndDeletePlaylist = (playlist) => {
@@ -111,6 +159,13 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         }
     }
 
+    const showMenu = () => {
+        if (!showPlaylists) {
+            return mappedPlaylistSongs()
+        } else {
+            return <Playlists handlePlaylistItemClick={handlePlaylistItemClick} />
+        }
+    }
     const mappedPlaylists = allPlaylists.map((playlist, i) => {
 
         return (
@@ -130,20 +185,17 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         <>
             <div id={styles.allOfPlaylist} className={minimize ? styles.mini : ''}>
                 <h2 id={styles.header}>{waveSenseLogo()}</h2>
-                {addSongForm()}
+                {togglePlaylistsSongs()}
                 <br />
                 <div>
                     {playlistTab()}
                 </div>
                 <aside id={styles.playlistContainer}>
                     <ul id={styles.songList}>
-                        {mappedSongs}
-                    </ul>
-                    <ul>
-                        <h1>Playlists</h1>
-                        {mappedPlaylists}
+                        {showMenu()}
                     </ul>
                 </aside>
+
             </div>
             
 

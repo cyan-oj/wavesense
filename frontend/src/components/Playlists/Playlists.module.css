@@ -1,0 +1,35 @@
+.playPauseAndButton {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.playPause {
+    display: inline-block;
+    justify-content: center;
+    text-align: center;
+    margin-top: 30px;
+    margin-right: 10px;
+}
+
+.buttonStyle {
+    display: block;
+    text-align: left;
+    justify-content: flex-start;
+    flex-direction: column;
+    color: white;
+    background-color: transparent;
+    border-style: none;
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+}
+
+.buttonStyle:hover {
+    cursor: pointer;
+    background-color: rgb(63, 63, 63);
+    border-radius: 5px;
+}
+
+.playlistListItems {
+    color: white;
+}
