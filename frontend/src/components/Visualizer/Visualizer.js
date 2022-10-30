@@ -12,8 +12,6 @@ import {
     SpotLight,
     DoubleSide,
     EdgesGeometry,
-    LineSegments,
-    LineDashedMaterial,
     HemisphereLight,
     PointLight
 } from 'three';
@@ -23,11 +21,9 @@ const Visualizer = ( { songUrl } ) => {
     const hiddenFileInput = useRef(null)
 
     const url = songUrl
-    console.log("incoming songUrl useState", songUrl)
     const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
     const audioRef = useRef(null) // will be used to hold reference to audio element
     const canvasRef = useRef(null) // holds visualiser canvas 
-
 
     const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
     const [dataArray, setDataArray] = useState(new Uint8Array(fourierSize/2)); // used to store raw audio data
@@ -35,6 +31,8 @@ const Visualizer = ( { songUrl } ) => {
 
     // predeclaring variables that multiple functions need to e
     // todo: properly react-ify these
+    let id;
+
     let audioSource;
     let analyser;
     let renderer;
@@ -63,15 +61,9 @@ const Visualizer = ( { songUrl } ) => {
         renderer.setSize( container.offsetWidth, container.offsetHeight );
         container.appendChild( renderer.domElement );
 
-        // const loader = new ColladaLoader();
-        // loader.load("../../scenes/cubeTrial.dae", function (result) {
-        //     scene.add(result.scene);
-        // });
         const examplegeometry = new BoxGeometry( 2, 2, 2 );
         const edges = new EdgesGeometry( examplegeometry );
-
-
-        // add CU
+        
         const geometry = new BoxGeometry( 1, 1, 1 );
         // const material = new MeshBasicMaterial({ color: 0x00ff00 });
         const material = new MeshLambertMaterial({ color: 0x65b2ab });
@@ -153,14 +145,10 @@ const Visualizer = ( { songUrl } ) => {
 
         return () => {
             console.log("cleanup")
-            setIsPlaying(false);
+            cancelAnimationFrame(id)
             console.log("cleanup isPlaying?", isPlaying);
         }
     }, [songUrl]);
-
-    useEffect(() => {
-        console.log(url)
-    }, [songUrl])
 
     const average = array => array.reduce((a, b) => a + b)/array.length
 
@@ -252,7 +240,7 @@ const Visualizer = ( { songUrl } ) => {
             })
             yellowPoint.intensity = totalAvg;
 
-            requestAnimationFrame( animate );
+            id = requestAnimationFrame( animate );
             renderer.render( scene, camera );
         }
         animate();
