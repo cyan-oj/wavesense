@@ -1,0 +1,21 @@
+#header {
+    display: inline-block;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 20px;
+}
+
+.inputFields {
+    height: 30px;
+    width: 95%;
+}
+
+.submitPlaylistButton {
+    width: 98%;
+    height: 40px;
+}
+
+.submitPlaylistButton:hover {
+    cursor: pointer;
+}

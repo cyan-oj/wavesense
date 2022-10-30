@@ -10,16 +10,17 @@ import { Modal } from '../../context/Modal';
 
 import { deletePlaylist, fetchPlaylists, getPlaylists } from '../../store/playlists';
 import PlaylistUpdateModal from '../PlaylistEditForm/PlaylistUpdateModal';
+import PlaylistFormModal from '../PlaylistForm/PlaylistFormModal';
 import Playlists from '../Playlists/Playlists';
 
 const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
     const [showCreateSongModal, setShowCreateSongModal] = useState(false);
+    const [showPlaylistFormModal, setShowPlaylistFormModal] = useState(false);
     const allSongs = useSelector(getSongs);
     const [selectedSong, setSelectedSong] = useState('');
     const [minimize, setMinimize] = useState(false);
     const [showPlaylists, setShowPlaylists] = useState(false)
-    const [showPlaylistSongs, setShowPlaylistSongs] = useState(0)
     const [selectedPlaylist, setSelectedPlaylist] = useState(null)
     const allPlaylists = useSelector(getPlaylists) || {};
     const currentUser = useSelector(state => state.session.user);
@@ -35,19 +36,11 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     useEffect(() => {
         dispatch(fetchPlaylists());
         dispatch(fetchSongs());
-        // console.log(allSongs[0])
     }, [dispatch, showPlaylists])
-    
-    // useEffect(() => {
-    //     console.log(minimize);
-
-    // }, [minimize])
 
     const handleClick = (e) => {
         e.preventDefault()
         setSelectedSong(e.target.id)
-        // console.log('e.target', e.target)
-        // console.log('selectedSong',selectedSong)
         setSongUrl(e.target.value);
     }
 
@@ -55,7 +48,6 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         e.preventDefault();
         if (minimize === true) {
             setMinimize(false);
-
         } else {
             setMinimize(true)
         }
@@ -73,9 +65,10 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     const addPlaylistForm = () => {
         return (
             <div id={styles.addSongForm}>
-                <button className={styles.addSong} onClick={() => setShowPlaylists(false)}>Show Songs</button>
-                <button className={styles.addSong} onClick={() => setShowCreateSongModal(true) }> Add Playlist</button>
-                {showCreateSongModal && <Modal onClose={ () => setShowCreateSongModal(false)}> <PlaylistSongIndex /> </Modal> }
+                <button className={styles.addSong} onClick={() => setShowPlaylists(false) && setSelectedPlaylist(null)}>Show All Songs</button>
+                <button className={styles.addSong} onClick={() => setShowPlaylistFormModal(true) }> Create Playlist</button>
+                {/* <button className={styles.addSong} onClick={() => } >  </button> */}
+                {showPlaylistFormModal && <Modal onClose={ () => setShowPlaylistFormModal(false)}> <PlaylistFormModal /> </Modal> }
             </div>
         );
     }
@@ -103,11 +96,9 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     }   
 
     const handlePlaylistItemClick = (playlistObject) => {
-        console.log('clicked handlePlaylistItemClick');
         setSelectedPlaylist(playlistObject);
         setShowPlaylists(false);
         console.log(selectedPlaylist);
-        setShowPlaylistSongs(1);
     }
     // const testArray = ['Song 1', 'Song 2', 'Song 3', 'Song 4', 'Song 5', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', ]
 
@@ -131,7 +122,8 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         if (!selectedPlaylist) {
             return mappedSongs;
         } else {
-            selectedPlaylist.songs.map((song, i) => {
+            const mappedSpecificSongs = selectedPlaylist.songs.map((song, i) => {
+                console.log('mapped song from specific playlist!')
                 return (
                     <li key={i} className={styles.songListItems}>
                         <div className={styles.playPauseAndButton}>
@@ -143,8 +135,9 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                             <p className={styles.playPause}>DELETE</p>
                         </div>
                     </li>
-            )
+                )
             })
+            return mappedSpecificSongs
         }
     }
 
