@@ -1,20 +1,6 @@
 import styles from './Visualizer.module.css';
 import React, { useEffect, useRef, useState } from "react";
-import { 
-    Scene, 
-    PerspectiveCamera, 
-    WebGLRenderer, 
-    BoxGeometry, 
-    MeshBasicMaterial, 
-    MeshLambertMaterial,
-    Mesh, 
-    PlaneGeometry,
-    SpotLight,
-    DoubleSide,
-    EdgesGeometry,
-    HemisphereLight,
-    PointLight
-} from 'three';
+import * as THREE from 'three'
 
 const Visualizer = ( { songUrl } ) => {
     const hiddenFileInput = useRef(null)
@@ -22,13 +8,15 @@ const Visualizer = ( { songUrl } ) => {
     let url = songUrl  
     const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
     const audioRef = useRef(null) // will be used to hold reference to audio element
+    const audioContextRef = useRef(null)
     const canvasRef = useRef(null) // holds visualiser canvas 
 
     const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
     const [dataArray, setDataArray] = useState(new Uint8Array(fourierSize/2)); // used to store raw audio data
-    const [isPlaying, setIsPlaying] = useState(false)
+    const [isPlaying, setIsPlaying] = useState(true);
 
     let loop;
+    let listener;
     let audioSource;
     let analyser;
     let renderer;
@@ -45,26 +33,42 @@ const Visualizer = ( { songUrl } ) => {
     let spotlight;
     let yellowPoint;
 
+    useEffect(() => {
+        psychoticHelperFunction();
+        return cancelAnimationFrame( loop );
+    }, [])
+
+    useEffect(() => {
+        psychoticHelperFunction();
+        if( url && isPlaying ) {
+            play();
+        }
+        return () => {
+            cancelAnimationFrame( loop );
+        }
+    }, [songUrl, isPlaying]);
+    
     const psychoticHelperFunction = () => {
-        setIsPlaying(true);
-
         const container = containerRef.current 
-
-        scene = new Scene();
-        camera = new PerspectiveCamera( 75, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
-        renderer = new WebGLRenderer({ canvas: canvasRef.current, antialias: true });
+        
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera( 75, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
+        camera.position.z = 4;  
+        renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, antialias: true });
         renderer.shadowMapEnabled = true
         renderer.setSize( container.offsetWidth, container.offsetHeight );
         container.appendChild( renderer.domElement );
 
+        listener = new THREE.AudioListener();
+        camera.add( listener );
 
-        const geometry = new BoxGeometry( 1, 1, 1 );
-        const material = new MeshLambertMaterial({ color: 0x65b2ab });
-        const cubeMaterial = new MeshLambertMaterial({ color: 0x65b2ab, transparent: true, opacity: .8 });
-        const wireMaterial = new MeshBasicMaterial({ color: 0x65b2ab, wireframe: true });
+        const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+        const material = new THREE.MeshLambertMaterial({ color: 0x65b2ab });
+        const cubeMaterial = new THREE.MeshLambertMaterial({ color: 0x65b2ab, transparent: true, opacity: .8 });
+        const wireMaterial = new THREE.MeshBasicMaterial({ color: 0x65b2ab, wireframe: true });
 
         for (let i = 0; i < fourierSize/2; i++) {
-            const bar = new Mesh( geometry, material );
+            const bar = new THREE.Mesh( geometry, material );
             bar.position.z = -8
             bar.position.x = 1.5*i - fourierSize/2.8
             bar.rotation.x = .4
@@ -75,7 +79,7 @@ const Visualizer = ( { songUrl } ) => {
         }
 
         for (let i = 0; i < 2; i++) {
-            const box = new Mesh( geometry, wireMaterial );
+            const box = new THREE.Mesh( geometry, wireMaterial );
             box.position.z = 3
             box.position.x = 2*i - 1
             box.rotation.x = i - .5
@@ -85,8 +89,8 @@ const Visualizer = ( { songUrl } ) => {
             scene.add( box )
         }
 
-        const cubeGeo = new BoxGeometry(1, 1, 1)
-        const cube = new Mesh( cubeGeo, cubeMaterial );
+        const cubeGeo = new THREE.BoxGeometry(1, 1, 1)
+        const cube = new THREE.Mesh( cubeGeo, cubeMaterial );
         cube.scale.set(.01, .01, .01)
         cube.position.z = 3
         cube.rotation.y = Math.PI/3.4
@@ -96,64 +100,56 @@ const Visualizer = ( { songUrl } ) => {
         cube.name = "cube"
         scene.add( cube );
 
-        const planeGeo = new PlaneGeometry(1, 1, 1);
-        const planeMat = new MeshLambertMaterial({ color: 0x2825f5 });
-        plane = new Mesh( planeGeo, planeMat );
+        const planeGeo = new THREE.PlaneGeometry(1, 1, 1);
+        const planeMat = new THREE.MeshLambertMaterial({ color: 0x2825f5 });
+        plane = new THREE.Mesh( planeGeo, planeMat );
         plane.position.z = -400
         plane.scale.set( 2000, 2000, 2000 )
         plane.name = "backdrop"
         scene.add( plane );
 
-        const groundGeo = new PlaneGeometry(16, 16, 16);
-        const groundMat = new MeshLambertMaterial({ color: 0xb826f6, transparent: true, opacity: 0.5  });
-        groundPlane = new Mesh( groundGeo, groundMat );
+        const groundGeo = new THREE.PlaneGeometry(16, 16, 16);
+        const groundMat = new THREE.MeshLambertMaterial({ color: 0xb826f6, transparent: true, opacity: 0.5  });
+        groundPlane = new THREE.Mesh( groundGeo, groundMat );
         groundPlane.rotation.x = 1.6
         groundPlane.position.z = -10
-        groundPlane.material.side = DoubleSide;
+        groundPlane.material.side = THREE.DoubleSide;
         groundPlane.scale.set( 300, 300, 300 )
         groundPlane.name = "ground"
         scene.add( groundPlane );
 
-        yellowPoint = new PointLight( 0xfff352, 1, 400, 3 );
+        yellowPoint = new THREE.PointLight( 0xfff352, 1, 400, 3 );
         yellowPoint.position.set(0, 5, -4)
         scene.add( yellowPoint )
 
-        const light = new HemisphereLight(0x000000, 0xed289b, 1)
+        const light = new THREE.HemisphereLight(0x000000, 0xed289b, 1)
         scene.add(light)
 
-        spotlight = new SpotLight(0xffffff);
+        spotlight = new THREE.SpotLight(0xffffff);
         spotlight.position.set (0, 30, 50);
         scene.add(spotlight);
 
-        camera.position.z = 4;  
         renderer.render( scene, camera ); 
     }
-
-    useEffect(() => {
-        psychoticHelperFunction();
-        if(url) {
-            play();
-        }
-        return () => {
-            cancelAnimationFrame(loop);
-        }
-    }, [songUrl, isPlaying]);
 
     const average = array => array.reduce((a, b) => a + b)/array.length
 
     const play = (file) => {
+        //debugger;
+        console.log("file", file)
+        console.log("isPlaying", isPlaying)
         const audio = audioRef.current 
         if(!file){
+            psychoticHelperFunction();
             audio.src = url 
             audio.crossOrigin="anonymous"
         } else{
             psychoticHelperFunction();
             audio.src = URL.createObjectURL(file) 
         }
-        
-        audio.load();
+
         audio.play();
-        
+
         const audioContext = new AudioContext();
         const streamDestination = audioContext.createMediaStreamDestination();
         audioSource = audioContext.createMediaElementSource(audio);
@@ -240,12 +236,23 @@ const Visualizer = ( { songUrl } ) => {
 
     const stopPlaying = e => {
         setIsPlaying(false);
+        //cancelAnimationFrame(loop);
+    }
+
+    const startPlaying = () => {
+        setIsPlaying(true);
+    }
+
+    const playFile = (file) => {
+        setIsPlaying(true)
+        play(file)
     }
 
     return (
         <div id={styles.visualizerContainer}>
             <div id={styles.controls}>
                 <audio ref={ audioRef } id="test-audio" controls
+                    onPlay={ startPlaying }
                     onPause={ stopPlaying }
                     onEnded={ stopPlaying }
                 ></audio>
@@ -255,7 +262,7 @@ const Visualizer = ( { songUrl } ) => {
                     ref={hiddenFileInput}
                     id="fileupload"
                     accept="audio/*"
-                    onChange={(e) => play(e.currentTarget.files[0])}
+                    onChange={e => playFile(e.currentTarget.files[0]) }
                     style={ {display: 'none'}}
                 />
             </div>
