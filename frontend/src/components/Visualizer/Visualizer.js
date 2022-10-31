@@ -3,9 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import * as THREE from 'three'
 
 const Visualizer = ( { songUrl } ) => {
-    const hiddenFileInput = useRef(null)
-
+    
     let url = songUrl  
+    const hiddenFileInput = useRef(null)
     const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
     const audioRef = useRef(null) // will be used to hold reference to audio element
     const canvasRef = useRef(null) // holds visualiser canvas 
@@ -57,7 +57,6 @@ const Visualizer = ( { songUrl } ) => {
         camera = new THREE.PerspectiveCamera( 75, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
         camera.position.z = 4;  
         renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, antialias: true });
-        renderer.shadowMapEnabled = true
         renderer.setSize( container.offsetWidth, container.offsetHeight );
         container.appendChild( renderer.domElement );
 
@@ -140,6 +139,7 @@ const Visualizer = ( { songUrl } ) => {
         //debugger;
         console.log("file", file)
         console.log("isPlaying", isPlaying)
+        
         const audio = audioRef.current 
         if(!file){
             psychoticHelperFunction();
