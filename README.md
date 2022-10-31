@@ -71,25 +71,18 @@ The Main page renders two child components, Playlist and Visualizer, so that the
 const handleClick = (e) => {
     e.preventDefault()
     setSelectedSong(e.target.id)
-    // console.log('e.target', e.target)
-    // console.log('selectedSong',selectedSong)
     setSongUrl(e.target.value);
 }
 ```
 Song elements within the Playlist component have both an id and a value. The handleClick helper function uses the song id to display information within the playlist, while passing the value to the Visualizer component. 
 ```javascript
+//frontend/src/components/Visualizer/Viszualizer.js
 const play = (file) => {
-    console.log("file", file);
-    console.log("url in play", url);
-
-    //const audio = new Audio(url);
-    const audio = audioRef.current //grab audio DOM element
-    audio.src = url // grab source url from props
-    //audio.src = URL.createObjectURL(file) // make passed-in file into dataURL
-    
+    const audio = audioRef.current
+    audio.src = url     
     audio.crossOrigin="anonymous"
     audio.load();
-    audio.play(); // play audio
+    audio.play();
 ```
 The Visualizer component receives the selected song URL, then loads the audio file from AWS S3 for concurrent visualizer analysis and audio playback. 
 
@@ -137,3 +130,124 @@ router.post('/', requireUser, async (req, res, next) => {
 });
 ```
 The code above is the backend route to create a playlist. The router takes in a route, middleware(requireUser), and a callback function/route handler. If the request matches both the route('/') and the HTTP method(POST) it will hit the requireUser middleware then the route handler. The requireUser ensures there is a current user, otherwise it throws an error. The creator value is accessed from req.user which is provided by requireUser. The description, title, and songs values are accessed from the request body. The newly created playlist is saved then the creator value is a User object populated with the creator's Id and username keys and values, and finally the playlist is returned as a JSON reponse. 
+
+## Kat
+Once we have a source URL from AWS, we can set up our three.js renderer 
+
+```javascript
+// frontend/src/components/Visualizer/Viszualizer.js
+// ...
+const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+const material = new THREE.MeshLambertMaterial({ color: 0x65b2ab });
+// ...
+
+for (let i = 0; i < fourierSize/2; i++) {
+    const bar = new THREE.Mesh( geometry, material );
+    bar.position.z = -8
+    bar.position.x = 1.5*i - fourierSize/2.8
+    bar.rotation.x = .4
+    bar.scale.x = .2
+    bar.scale.z = .2
+    bar.name = `bar${i}`
+    scene.add( bar )
+}
+```
+First we set up a basic geometry and materials. In this case a basic cube which will be the basis for most of the shapes on screen. This loop lets us generate a number of 3D bars that we can later manipulate.
+
+first, a quick check for whether our audio source is a local upload or remote from AWS. Then, we set up the audio context and analyser to get some workable data from our audio file.
+
+```javascript
+// frontend/src/components/Visualizer/Viszualizer.js
+const audio = audioRef.current 
+if(!file){
+    sceneSetup();
+    audio.src = url 
+    audio.crossOrigin="anonymous"
+} else{
+    sceneSetup();
+    audio.src = URL.createObjectURL(file) 
+}
+
+audio.play();
+
+const audioContext = new AudioContext();
+const streamDestination = audioContext.createMediaStreamDestination();
+audioSource = audioContext.createMediaElementSource(audio);
+analyser = audioContext.createAnalyser();
+audioSource.connect(streamDestination)
+audioSource.connect(analyser);
+analyser.connect(audioContext.destination);
+analyser.fftSize = fourierSize;
+```
+Once we have the scene set up and our audio source, we're ready to animate. The analyser puts the audio data into Uint8 array that we can then read and split into parts. On each new frame render, the data from the array is used to modify the properties of the elements, including scale, rotation speed and light brightness.
+```javascript
+// frontend/src/components/Visualizer/Viszualizer.js
+const animate = () => {
+    if(!isPlaying) return;
+    analyser.getByteFrequencyData(dataArray);
+    const xAvg = average(dataArray.slice( 0, 5 ))/8000
+    const yAvg = average(dataArray.slice( 6, 10 ))/8000
+    const zAvg = average(dataArray.slice( 11, 15))/4000
+    const totalAvg = average(dataArray)/100
+
+    scaleX = xAvg;
+    scaleY = yAvg; 
+    scaleZ = zAvg; 
+
+    scene.children.forEach(child => {
+        switch(child.name){ 
+            case "bar0": 
+            case "bar15":
+                child.scale.y = average([dataArray[15], dataArray[14]])/6 + .5
+                break;
+            case "bar1":
+            case "bar14":
+                child.scale.y = average( [dataArray[13], dataArray[12]])/7 + .5
+                break;
+            case "bar2":
+            case "bar13":
+                child.scale.y = average( [dataArray[11], dataArray[10]])/8 + .5
+                break;
+            case "bar3":
+            case "bar12":
+                child.scale.y = average( [dataArray[9], dataArray[8]])/9 + .5
+                break;
+            case "bar4": 
+            case "bar11":
+                child.scale.y = average([dataArray[7], dataArray[6]])/10 + .5
+                break;
+            case "bar5":
+            case "bar10":
+                child.scale.y = average( [dataArray[5], dataArray[4]])/10 + .5
+                break;
+            case "bar6":
+            case "bar9":
+                child.scale.y = average( [dataArray[3], dataArray[2]])/11 + .5
+                break;
+            case "bar7":
+            case "bar8":
+                child.scale.y = average( [dataArray[1], dataArray[0]])/12 + .5
+                break;
+            case "box0":
+            case "box1":
+                child.rotation.y += scaleY/4 
+                child.rotation.x += scaleX/4 
+                child.rotation.z += scaleZ/4
+                child.scale.set(scaleX*40, scaleY*40, scaleZ*40)
+                break;
+            case "cube":
+                child.rotation.x += (scaleX) 
+                child.rotation.y += (scaleY) 
+                child.rotation.z += (scaleZ)
+                child.scale.set((scaleX*15 + .01), (scaleY*15 + .01), (scaleZ*15 + .01))
+                break;
+            default:
+                break;
+        }
+    })
+    yellowPoint.intensity = totalAvg;
+
+    loop = requestAnimationFrame( animate );
+    renderer.render( scene, camera );
+}
+```
