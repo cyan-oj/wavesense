@@ -8,12 +8,11 @@ const Visualizer = ( { songUrl } ) => {
     let url = songUrl  
     const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
     const audioRef = useRef(null) // will be used to hold reference to audio element
-    const audioContextRef = useRef(null)
     const canvasRef = useRef(null) // holds visualiser canvas 
 
     const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
     const [dataArray, setDataArray] = useState(new Uint8Array(fourierSize/2)); // used to store raw audio data
-    const [isPlaying, setIsPlaying] = useState(true);
+    let isPlaying = true;
 
     let loop;
     let listener;
@@ -39,14 +38,17 @@ const Visualizer = ( { songUrl } ) => {
     }, [])
 
     useEffect(() => {
+        const file = hiddenFileInput.current.files[0]
         psychoticHelperFunction();
         if( url && isPlaying ) {
             play();
+        } else if ( file ) {
+            play( file )
         }
         return () => {
             cancelAnimationFrame( loop );
         }
-    }, [songUrl, isPlaying]);
+    }, [url, isPlaying]);
     
     const psychoticHelperFunction = () => {
         const container = containerRef.current 
@@ -235,17 +237,20 @@ const Visualizer = ( { songUrl } ) => {
     }
 
     const stopPlaying = e => {
-        setIsPlaying(false);
-        //cancelAnimationFrame(loop);
+        isPlaying = false;
+        cancelAnimationFrame(loop);
     }
 
     const startPlaying = () => {
-        setIsPlaying(true);
+        isPlaying = true;
     }
 
     const playFile = (file) => {
-        setIsPlaying(true)
-        play(file)
+        console.log("playableFile?", file)
+        isPlaying = true;
+        url = (null);
+        console.log("isPlaying in playFile?", isPlaying);
+        play(file);
     }
 
     return (
