@@ -9,8 +9,8 @@ import PlaylistSongIndex from './PlaylistSongIndex/PlaylistSongIndex';
 import { Modal } from '../../context/Modal';
 
 import { fetchPlaylists } from '../../store/playlists';
-import PlaylistFormModal from '../PlaylistForm/PlaylistFormModal';
 import Playlists from '../Playlists/Playlists';
+import { PlaylistCreateForm } from '../PlaylistForm/PlaylistFormModal';
 
 const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
@@ -21,6 +21,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     const [minimize, setMinimize] = useState(false);
     const [showPlaylists, setShowPlaylists] = useState(false)
     const [selectedPlaylist, setSelectedPlaylist] = useState(null)
+    const currentUser = useSelector(state => state.session.user);
 
     const waveSenseLogo = () => {
         return (
@@ -61,9 +62,9 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         return (
             <div id={styles.addSongForm}>
                 <button className={styles.addSong} onClick={() => setShowPlaylists(false) && setSelectedPlaylist(null)}>Show All Songs</button>
-                <button className={styles.addSong} onClick={() => setShowPlaylistFormModal(true) }> Create Playlist</button>
+                { currentUser && <button className={styles.addSong} onClick={() => setShowPlaylistFormModal(true) }> Create Playlist</button>}
                 {/* <button className={styles.addSong} onClick={() => } >  </button> */}
-                {showPlaylistFormModal && <Modal onClose={ () => setShowPlaylistFormModal(false)}> <PlaylistFormModal /> </Modal> }
+                {showPlaylistFormModal && <Modal onClose={() => setShowPlaylistFormModal(false)}> <PlaylistCreateForm setShowPlaylistFormModal={setShowPlaylistFormModal}/> </Modal> }
             </div>
         );
     }

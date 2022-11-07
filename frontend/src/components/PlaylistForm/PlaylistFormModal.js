@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Modal } from "../../context/Modal";
+// import { Modal } from "../../context/Modal";
 import { createPlaylist } from "../../store/playlists";
 import styles from './PlaylistFormModal.module.css'
 
 
-const PlaylistCreateForm = ({setShowPlaylistModal}) => {
+export const PlaylistCreateForm = ({ setShowPlaylistFormModal }) => {
     const currentUser = useSelector( state => state.session.user);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+        
     const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
@@ -18,7 +19,7 @@ const PlaylistCreateForm = ({setShowPlaylistModal}) => {
             description: description,
             creator: currentUser
         }))
-        setShowPlaylistModal(false);
+        setShowPlaylistFormModal(false);
         window.location.reload(false);
     }
 
@@ -37,16 +38,15 @@ const PlaylistCreateForm = ({setShowPlaylistModal}) => {
 }
 
 
-const PlaylistFormModal = () => {
-    const [showPlaylistModal, setShowPlaylistModal] = useState(false);
+// const PlaylistFormModal = () => {
+// const [showPlaylistModal, setShowPlaylistModal] = useState(false);
+//     return (
+//         <div id='create-playlist-modal'>
+//             <button onClick={ () => setShowPlaylistModal(true) }> Create Playlist </button>
+//             { showPlaylistModal && <Modal onClose={ () => setShowPlaylistModal(false)}><PlaylistCreateForm setShowPlaylistModal={setShowPlaylistModal}/></Modal>}
+//         </div>
+//     )
+// }
 
-    return (
-        <div id='create-playlist-modal'>
-            <button onClick={ () => setShowPlaylistModal(true) }> Create Playlist </button>
-            { showPlaylistModal && <Modal onClose={ () => setShowPlaylistModal(false)}><PlaylistCreateForm setShowPlaylistModal={setShowPlaylistModal}/></Modal>}
-        </div>
-    )
-}
 
-
-export default PlaylistFormModal;
+// export default PlaylistFormModal;
