@@ -1,7 +1,7 @@
 import styles from './Playlists.module.css'
-import { fetchPlaylists, fetchPlaylist, getPlaylist, getPlaylists } from '../../store/playlists';
+import { fetchPlaylists, getPlaylists } from '../../store/playlists';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import PlaylistUpdateModal from '../PlaylistEditForm/PlaylistUpdateModal';
 import { deletePlaylist } from '../../store/playlists';
 
@@ -11,7 +11,7 @@ import { deletePlaylist } from '../../store/playlists';
 const Playlists = ({handlePlaylistItemClick}) => {
     const dispatch = useDispatch();
     const allPlaylists = useSelector(getPlaylists);
-    const [showPlaylists, setShowPlaylists] = useState(false);
+    // const [showPlaylists, setShowPlaylists] = useState(false);
     const currentUser = useSelector(state => state.session.user);
 
     useEffect(() => {
