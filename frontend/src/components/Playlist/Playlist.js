@@ -67,7 +67,6 @@ const Playlist = ({ songUrl, setSongUrl }) => {
             <div id={styles.addSongForm}>
                 <button className={styles.addSong} onClick={() => setShowPlaylists(false) && setSelectedPlaylist(null)}>Show All Songs</button>
                 <button className={styles.addSong} onClick={() => setShowPlaylistFormModal(true) }> Create Playlist</button>
-                {/* <button className={styles.addSong} onClick={() => } >  </button> */}
                 {showPlaylistFormModal && <Modal onClose={ () => setShowPlaylistFormModal(false)}> <PlaylistFormModal /> </Modal> }
             </div>
         );
@@ -123,7 +122,6 @@ const Playlist = ({ songUrl, setSongUrl }) => {
             return mappedSongs;
         } else {
             const mappedSpecificSongs = selectedPlaylist.songs.map((song, i) => {
-                console.log('mapped song from specific playlist!')
                 return (
                     <li key={i} className={styles.songListItems}>
                         <div className={styles.playPauseAndButton}>
@@ -132,7 +130,6 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                                     <br></br>
                                     <span className={styles.artistName}>{song.artist}</span>
                             </button>
-                            <p className={styles.playPause}>DELETE</p>
                         </div>
                     </li>
                 )
@@ -147,11 +144,14 @@ const Playlist = ({ songUrl, setSongUrl }) => {
             dispatch(deletePlaylist(playlist._id));
         }
 
+        console.log(playlist.creator._id)
+        console.log(currentUser._id)
+
         if (currentUser && (playlist.creator._id === currentUser._id)) {
             return (
                 <div>
                     <PlaylistUpdateModal playlist={ playlist }/>
-                    <button onClick={handleDelete} className={styles.playPause} >DELETE</button>
+                    <button onClick={handleDelete} className={styles.playPause}>DELETE</button>
                 </div>
             )   
         } else {
@@ -163,7 +163,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         if (!showPlaylists) {
             return mappedPlaylistSongs()
         } else {
-            return <Playlists handlePlaylistItemClick={handlePlaylistItemClick} />
+            return mappedPlaylists
         }
     }
     const mappedPlaylists = allPlaylists.map((playlist, i) => {
@@ -171,9 +171,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         return (
             <li key={i} className={styles.songListItems}>
                 <div className={styles.playPauseAndButton}>
-                    <button className={styles.buttonStyle} id={playlist._id} >
-                        <span className={styles.titleName}>{playlist.title}</span>
-                    </button>
+                    <Playlists handlePlaylistItemClick={handlePlaylistItemClick} />
                     {updateAndDeletePlaylist(playlist)}
                 </div>
             </li>

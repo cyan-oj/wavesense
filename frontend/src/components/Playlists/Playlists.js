@@ -21,7 +21,6 @@ const Playlists = ({handlePlaylistItemClick}) => {
                     <button className={styles.buttonStyle} id={playlist._id} onClick={(e) => handlePlaylistItemClick(playlist)}>
                             <span className={styles.titleName}>{playlist.title}</span>
                     </button>
-                    <p className={styles.playPause}>DELETE</p>
                 </div>
             </li>
     )
