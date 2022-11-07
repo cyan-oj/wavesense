@@ -19,6 +19,7 @@ const PlaylistCreateForm = ({setShowPlaylistModal}) => {
             creator: currentUser
         }))
         setShowPlaylistModal(false);
+        window.location.reload(false);
     }
 
     return (
