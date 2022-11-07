@@ -16,6 +16,7 @@ const PlaylistUpdateForm = ({ setShowPlaylistUpdateModal, playlist }) => {
         playlist.description = description;
         dispatch(updatePlaylist(playlist))
         setShowPlaylistUpdateModal(false);
+        window.location.reload(false);
     }
 
     return (

@@ -8,8 +8,7 @@ import Visualizer from '../Visualizer/Visualizer';
 import PlaylistSongIndex from './PlaylistSongIndex/PlaylistSongIndex';
 import { Modal } from '../../context/Modal';
 
-import { deletePlaylist, fetchPlaylists, getPlaylists } from '../../store/playlists';
-import PlaylistUpdateModal from '../PlaylistEditForm/PlaylistUpdateModal';
+import { fetchPlaylists } from '../../store/playlists';
 import PlaylistFormModal from '../PlaylistForm/PlaylistFormModal';
 import Playlists from '../Playlists/Playlists';
 
@@ -22,10 +21,6 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     const [minimize, setMinimize] = useState(false);
     const [showPlaylists, setShowPlaylists] = useState(false)
     const [selectedPlaylist, setSelectedPlaylist] = useState(null)
-    const allPlaylists = useSelector(getPlaylists) || {};
-    const currentUser = useSelector(state => state.session.user);
-
-
 
     const waveSenseLogo = () => {
         return (
@@ -141,23 +136,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         }
     }
 
-    
-    const updateAndDeletePlaylist = (playlist) => {
-        const handleDelete = (e) => {
-            dispatch(deletePlaylist(playlist._id));
-        }
 
-        if (currentUser && (playlist.creator._id === currentUser._id)) {
-            return (
-                <div>
-                    <PlaylistUpdateModal playlist={ playlist }/>
-                    <button onClick={handleDelete} className={styles.playPause} >DELETE</button>
-                </div>
-            )   
-        } else {
-            return null;
-        }
-    }
 
     const showMenu = () => {
         if (!showPlaylists) {
@@ -166,19 +145,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
             return <Playlists handlePlaylistItemClick={handlePlaylistItemClick} />
         }
     }
-    const mappedPlaylists = allPlaylists.map((playlist, i) => {
 
-        return (
-            <li key={i} className={styles.songListItems}>
-                <div className={styles.playPauseAndButton}>
-                    <button className={styles.buttonStyle} id={playlist._id} >
-                        <span className={styles.titleName}>{playlist.title}</span>
-                    </button>
-                    {updateAndDeletePlaylist(playlist)}
-                </div>
-            </li>
-        )
-    })
 
 
     return (
