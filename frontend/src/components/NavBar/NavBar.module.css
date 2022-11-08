@@ -30,6 +30,28 @@
     z-index: 100;
 }
 
+#developerLinks {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    background-color: rgb(56, 54, 54);
+    border: 2px solid rgb(101, 6, 127);
+    border-radius: 10px;
+    color: white;
+    padding: 10px 15px;
+    margin-left: 10px;
+    width: 8rem;
+}
+
+#developerLinks > li {
+    padding: 0.5rem 0;
+    font-size: 90%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
 #logout {
     width: 100px;
     text-decoration: none;
@@ -47,8 +69,27 @@
     transition: 300ms;
 }
 
-#logout:hover {
+#aboutDevelopers {
+    width: 150px;
+    text-decoration: none;
+    color: white;
+    background-color: rgb(56, 54, 54);
+    border: 2px solid rgb(101, 6, 127);
+    border-radius: 10px;
+    margin-top: 13%;
+    margin-left: 8%;
+    padding: 8px 10px;
+}
+
+#logout:hover, #aboutDevelopers:hover {
     cursor: pointer;
     background-color: white;
     color: black;
 }
+
+.githubLink, .linkedinLink {
+    width: 24px;
+    height: 24px;
+    /* padding-left: 5px; */
+}
+
