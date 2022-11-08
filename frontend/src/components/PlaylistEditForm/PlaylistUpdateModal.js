@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Modal } from "../../context/Modal";
 import { updatePlaylist } from "../../store/playlists";
 
 
 const PlaylistUpdateForm = ({ setShowPlaylistUpdateModal, playlist }) => {
-    const currentUser = useSelector(state => state.session.user);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const dispatch = useDispatch();
@@ -16,6 +15,7 @@ const PlaylistUpdateForm = ({ setShowPlaylistUpdateModal, playlist }) => {
         playlist.description = description;
         dispatch(updatePlaylist(playlist))
         setShowPlaylistUpdateModal(false);
+        window.location.reload(false);
     }
 
     return (
