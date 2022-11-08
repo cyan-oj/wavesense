@@ -29,7 +29,7 @@ const DeveloperMenu = () => {
                 <a href="https://github.com/cyan-oj">
                     <img className={styles.githubLink} src={githubIcon} alt="github-logo" />
                 </a>
-                <a href="https://github.com/cyan-oj">
+                <a href="https://www.linkedin.com/in/katherine-n-smith/">
                     <img className={styles.linkedinLink} src={linkedInIcon} alt="linkedin-logo" />
                 </a>
             </li>
