@@ -1,28 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import jwtFetch from '../../../store/jwt';
 import styles from './PlaylistSongIndex.module.css'
 
 
-const PlaylistSongIndex = () => {
-
+const SongUploadForm = (props) => {
+    const close = props.close;
     const [title, setTitle] = useState('');
     const [artist, setArtist] = useState('');
     const [file, setFile] = useState(null);
-    const [dataUrl, setDataUrl] = useState('');
+    // const [dataUrl, setDataUrl] = useState('');
 
-    const newSong = {
-        title: title,
-        artist: artist,
-        url: dataUrl
-    }
+    const currentUser = useSelector(state => state.session.user);
+
+    // const newSong = {
+    //     title: title,
+    //     artist: artist,
+    //     url: dataUrl
+    // }
 
 
     // This is where we can send to Mongo
-    useEffect( () => { 
-        if( title && artist && dataUrl ){
-            console.log(dataUrl);
-        }
-    }, [dataUrl]);
+    // useEffect( () => { 
+    //     if( title && artist && dataUrl ){
+    //         console.log(dataUrl);
+    //     }
+    // }, [dataUrl]);
 
     const handleChange = (e)=>{
         e.preventDefault();
@@ -30,6 +33,10 @@ const PlaylistSongIndex = () => {
     }
 
     const handleSubmit = async (e)=>{
+        if(!currentUser){
+            console.log("You're nbot logged in");
+            return;
+        }
         e.preventDefault();
         // toDataURL(file);
         // console.log(newSong);
@@ -47,6 +54,7 @@ const PlaylistSongIndex = () => {
 
         const res2 = await res.json();
         console.log(res2);
+        close(false); // This closes the modal after submit
     }
 
     // const toDataURL = async(convertFile) => {
@@ -78,7 +86,7 @@ const PlaylistSongIndex = () => {
     );
 };
 
-export default PlaylistSongIndex;
+export default SongUploadForm;
 
 
 // import styles from '../../Visualizer/Visualizer.module.css';
@@ -213,3 +221,24 @@ export default PlaylistSongIndex;
 // };
 
 // export default Visualizer;
+
+
+
+// Old CORS Configuration
+// [
+//     {
+//         "AllowedHeaders": [
+//             "Authorization"
+//         ],
+//         "AllowedMethods": [
+//             "GET",
+//             "HEAD"
+//         ],
+//         "AllowedOrigins": [
+//             "*"
+//         ],
+//         "ExposeHeaders": [
+//             "Access-Control-Allow-Origin"
+//         ]
+//     }
+// ]
