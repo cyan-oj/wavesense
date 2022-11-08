@@ -3,6 +3,7 @@ import styles from './NavBar.module.css';
 import { logout } from '../../store/session';
 import LoginFormModal from '../SessionForms';
 import { SignupFormModal } from '../SessionForms';
+import DeveloperMenu from './DeveloperMenu';
 
 
 function NavBar () {
@@ -19,6 +20,7 @@ function NavBar () {
       return (
         <div className={styles.linksAuth}>
           <button  id={styles.logout} onClick={logoutUser}>Logout</button>
+          <DeveloperMenu />
         </div>
       );
     } else {
@@ -27,6 +29,8 @@ function NavBar () {
           <SignupFormModal />
           <br />
           <LoginFormModal />
+          <br />
+          <DeveloperMenu />
         </div>
       );
     }
