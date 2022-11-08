@@ -5,12 +5,12 @@ import { useSelector } from 'react-redux';
 import { getSongs, fetchSongs, createSong } from '../../store/songs';
 import { useEffect } from 'react';
 import Visualizer from '../Visualizer/Visualizer';
-import PlaylistSongIndex from './PlaylistSongIndex/PlaylistSongIndex';
 import { Modal } from '../../context/Modal';
 
 import { fetchPlaylists } from '../../store/playlists';
 import Playlists from '../Playlists/Playlists';
 import { PlaylistCreateForm } from '../PlaylistForm/PlaylistFormModal';
+import SongUploadForm from './SongUploadForm/SongUploadForm';
 
 const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
@@ -69,12 +69,19 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         );
     }
 
+    const openSongForm = () => {
+        if(currentUser){
+            setShowCreateSongModal(true)
+        } else {
+            alert('You Must Be Logged In');
+        }
+    }
     const addSongForm = () => {
         return (
             <div id={styles.addSongForm}>
                 <button className={styles.addSong} onClick={() => setShowPlaylists(true)}>Show Playlists</button>
-                <button className={styles.addSong} onClick={() => setShowCreateSongModal(true) }> Add Song</button>
-                {showCreateSongModal && <Modal onClose={ () => setShowCreateSongModal(false)}> <PlaylistSongIndex /> </Modal> }
+                <button className={styles.addSong} onClick={openSongForm}> Add Song</button>
+                {showCreateSongModal && <Modal onClose={ () => setShowCreateSongModal(false)}> <SongUploadForm close={setShowCreateSongModal}/> </Modal> }
             </div>
         );
     };
