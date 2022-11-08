@@ -73,29 +73,34 @@ export const fetchSong = (song) => async dispatch => { // may not need, dependen
     dispatch(receiveSong(data));
 }
 
-export const addSong = (song) => async dispatch => {
-    console.log('adding song...');
-    let res = await jwtFetch(`/api/songs/${song.id}`, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        header: {
-            'Content-Type': '/application/json'
-        }
-    });
-    let data = await res.json();
-    dispatch(createSong(data))
-}
+
+// This isn't being used
+// export const addSong = (song) => async dispatch => {
+//     console.log('adding song...');
+//     let res = await jwtFetch(`/api/songs/${song.id}`, {
+//         method: 'POST',
+//         body: JSON.stringify(song),
+//         header: {
+//             'Content-Type': '/application/json'
+//         }
+//     });
+//     let data = await res.json();
+//     dispatch(createSong(data))
+// }
 
 export const deleteSong = (songId) => async dispatch => {
-    await jwtFetch(`/api/songs/${songId}`, {
+    let res = await jwtFetch(`/api/songs/${songId}`, {
         method: 'DELETE',
-        header: {
+        headers: {
             'Content-Type': '/application/json'
         }
     });
+
+    console.log("deleting song: ",songId);
+    dispatch(removeSong(songId));
 };
 
-const songsReducer = (state= {}, action) => {
+const songsReducer = (state = {}, action) => {
     let prevState = {...state};
     switch (action.type) {
         case RECEIVE_SONGS:

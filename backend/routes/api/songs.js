@@ -69,8 +69,14 @@ router.post('/', upload.single('audio-upload'), async (req, res) => {
   console.log(song)
 
   return res.json(song)
-
 })
 
+
+router.delete('/:id',  async (req, res) => {
+
+  await Song.deleteOne({ _id: req.params.id});
+  return res.json(req.params.id);
+
+});
 
 module.exports = router;

@@ -6,6 +6,7 @@ import styles from './PlaylistSongIndex.module.css'
 
 const SongUploadForm = (props) => {
     const close = props.close;
+    const reload = props.reload;
     const [title, setTitle] = useState('');
     const [artist, setArtist] = useState('');
     const [file, setFile] = useState(null);
@@ -33,8 +34,10 @@ const SongUploadForm = (props) => {
     }
 
     const handleSubmit = async (e)=>{
+        close(false); // This closes the modal after submit
+
         if(!currentUser){
-            console.log("You're nbot logged in");
+            console.log("You're not logged in");
             return;
         }
         e.preventDefault();
@@ -53,8 +56,7 @@ const SongUploadForm = (props) => {
         });
 
         const res2 = await res.json();
-        console.log(res2);
-        close(false); // This closes the modal after submit
+        reload( p => p+1 ); // This changes the playlist component state to make it rerender
     }
 
     // const toDataURL = async(convertFile) => {
@@ -80,7 +82,7 @@ const SongUploadForm = (props) => {
                 <br />
                 <input type='file' onChange={handleChange}/>
                 <br></br>
-                <input type='submit' id={styles.submitSongButton} />
+                <button type='submit' id={styles.submitSongButton} >Add Song (Please Be Patient)</button>
             </form>
         </>
     );
