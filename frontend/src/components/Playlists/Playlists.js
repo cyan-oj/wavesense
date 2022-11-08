@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import PlaylistUpdateModal from '../PlaylistEditForm/PlaylistUpdateModal';
 import { deletePlaylist } from '../../store/playlists';
+import { useState } from 'react';
 
 
 
@@ -13,15 +14,17 @@ const Playlists = ({handlePlaylistItemClick}) => {
     const allPlaylists = useSelector(getPlaylists);
     // const [showPlaylists, setShowPlaylists] = useState(false);
     const currentUser = useSelector(state => state.session.user);
+    const [reload,setReload] = useState(0);
 
     useEffect(() => {
         dispatch(fetchPlaylists());
-    }, [dispatch])
+    }, [dispatch, reload])
 
     const updateAndDeletePlaylist = (playlist) => {
         const handleDelete = (e) => {
             dispatch(deletePlaylist(playlist._id));
-            window.location.reload(false);
+            setReload(reload+1);
+            // window.location.reload(false);
         }
 
         if (currentUser && (playlist.creator._id === currentUser._id)) {
