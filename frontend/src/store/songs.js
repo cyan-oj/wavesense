@@ -1,6 +1,7 @@
 import jwtFetch from "./jwt";
 
 export const RECEIVE_SONGS = '/api/RECEIVE_SONGS'
+export const RECEIVE_PLAYLIST_SONGS = '/api/RECEIVE_PLAYLIST_SONGS'
 export const RECEIVE_SONG = '/api/RECEIVE_SONG'
 export const REMOVE_SONG = '/api/REMOVE_SONG'
 export const CREATE_SONG = '/api/CREATE_SONG'
@@ -19,6 +20,13 @@ export const receiveSongs = (songs) => {
     };
 };
 
+export const receivePlaylistSongs = (playlistId) => {
+    return {
+        type: RECEIVE_PLAYLIST_SONGS,
+        playlistId
+    };
+};
+
 export const receiveSong = (song) => {
     return {
         type: RECEIVE_SONG,
@@ -33,6 +41,14 @@ export const removeSong = (songId) => {
     };
 };
 
+export const getPlaylistSongs = (playlistId) => ( {songs} ) => {
+    if (playlistId && songs) {
+        const filteredSongs = Object.values(songs).filter((song) => song.playlistId === playlistId);
+        return filteredSongs
+    } else {
+        return []
+    }
+}
 export const getSongs = ( { songs } ) => songs ? Object.values(songs) : [];
 export const getSong = (songId) => ( { songs } ) => songs ? songs[songId] : null;
 
@@ -43,7 +59,14 @@ export const fetchSongs = () => async dispatch => {
     dispatch(receiveSongs(data));
 }
 
-export const fetchSong = (song) => async dispatch => {
+export const fetchPlaylistSongs = (playlistId) => async dispatch => {
+    console.log('catching playlist specific songs...');
+    let res = await jwtFetch(`/api/songs/${playlistId}`);
+    let data = await res.json();
+    dispatch(receivePlaylistSongs(data))
+}
+
+export const fetchSong = (song) => async dispatch => { // may not need, dependent on get above if we also ever need allsongs 
     console.log('catching song...');
     let res = await jwtFetch(`/api/songs/${song.id}`);
     let data = await res.json();
@@ -77,6 +100,8 @@ const songsReducer = (state= {}, action) => {
     switch (action.type) {
         case RECEIVE_SONGS:
             return action.songs;
+        case RECEIVE_PLAYLIST_SONGS:
+            return {...prevState, [action.playlistId]: action.songs}
         case RECEIVE_SONG: 
             return {...prevState, [action.song.id]: action.song};
         case REMOVE_SONG:
