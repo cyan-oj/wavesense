@@ -53,7 +53,7 @@ export const getSongs = ( { songs } ) => songs ? Object.values(songs) : [];
 export const getSong = (songId) => ( { songs } ) => songs ? songs[songId] : null;
 
 export const fetchSongs = () => async dispatch => {
-    console.log('catching songs...');
+    // console.log('catching songs...');
     let res = await jwtFetch('/api/songs');
     let data = await res.json();
     dispatch(receiveSongs(data));
