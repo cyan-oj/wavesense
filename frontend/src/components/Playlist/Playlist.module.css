@@ -54,23 +54,9 @@
     border: 2px solid rgb(101, 6, 127);
     border-radius: 20px;
     overflow-y: scroll;
-    scrollbar-width: none;
+    scrollbar-width: thin;
     -ms-overflow-style: none;
 }
-
-#playlistContainer::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-}
-
-/* #header {
-    display: center;
-    color: white;
-    display: inline-block;
-    font-size: 28px;
-    padding: 5px;
-    margin-top: 5px;
-} */
 
 .addSong {
     color: white;
@@ -163,7 +149,3 @@
 .playPause:hover {
     cursor: pointer;
 }
-
-/* .dotMenu {
-    display: inline-block;
-} */
