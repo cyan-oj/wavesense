@@ -3,7 +3,7 @@
     justify-content: flex-start;
 }
 
-.playPause {
+.playPause, .playlistUpdate {
     display: inline-block;
     justify-content: center;
     text-align: center;
@@ -11,7 +11,7 @@
     margin-right: 10px;
 }
 
-.buttonStyle {
+.buttonStyle, .playlistUpdate {
     display: block;
     text-align: left;
     justify-content: flex-start;
@@ -32,4 +32,19 @@
 
 .playlistListItems {
     color: white;
+}
+
+.editPlaylist {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlistUpdate:hover {
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.playlistUpdate {
+    padding: 0;
 }
