@@ -53,12 +53,13 @@ router.get('/:title', async (req, res) => {
 });
 
 router.post('/', upload.single('audio-upload'), async (req, res) => {
-  console.log(req.file.location);
-  // const urlBeginning = req.file.location.substr(0, 8);
-  // const urlEnding = req.file.location.substr(18, (req.file.location.length -1))       // url is being doubled somewhere in multer for some reason
-  // const goodUrl = urlBeginning + urlEnding;
-
-  const goodUrl = req.file.location;
+  
+  let goodUrl = req.file.location;
+  if(goodUrl.length > 70){ // This fixes the weird URL doubling bug
+    const urlBeginning = req.file.location.substr(0, 8);
+    const urlEnding = req.file.location.substr(18, (req.file.location.length -1))       // url is being doubled somewhere in multer for some reason
+    goodUrl = urlBeginning + urlEnding;
+  }
 
   const newSong = new Song({
     title: req.body.title,
