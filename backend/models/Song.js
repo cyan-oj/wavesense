@@ -14,6 +14,10 @@ const songSchema = Schema({
     artist: {
         type: String,
         required: true
+    },
+    playlistId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Playlist'
     }
 }, {
     timestamps: true

@@ -2,16 +2,15 @@ import styles from './Playlist.module.css'
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { getSongs, fetchSongs, createSong } from '../../store/songs';
+import { getSongs, fetchSongs, deleteSong } from '../../store/songs';
 import { useEffect } from 'react';
 import Visualizer from '../Visualizer/Visualizer';
-import PlaylistSongIndex from './PlaylistSongIndex/PlaylistSongIndex';
 import { Modal } from '../../context/Modal';
 
-import { deletePlaylist, fetchPlaylists, getPlaylists } from '../../store/playlists';
-import PlaylistUpdateModal from '../PlaylistEditForm/PlaylistUpdateModal';
-import PlaylistFormModal from '../PlaylistForm/PlaylistFormModal';
+import { fetchPlaylists } from '../../store/playlists';
 import Playlists from '../Playlists/Playlists';
+import { PlaylistCreateForm } from '../PlaylistForm/PlaylistFormModal';
+import SongUploadForm from './SongUploadForm/SongUploadForm';
 
 const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
@@ -22,10 +21,9 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     const [minimize, setMinimize] = useState(false);
     const [showPlaylists, setShowPlaylists] = useState(false)
     const [selectedPlaylist, setSelectedPlaylist] = useState(null)
-    const allPlaylists = useSelector(getPlaylists) || {};
     const currentUser = useSelector(state => state.session.user);
 
-
+    const [deletes, setDeletes] = useState(0);
 
     const waveSenseLogo = () => {
         return (
@@ -36,11 +34,11 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     useEffect(() => {
         dispatch(fetchPlaylists());
         dispatch(fetchSongs());
-    }, [dispatch, showPlaylists])
+    }, [dispatch, showPlaylists, deletes])
 
     const handleClick = (e) => {
-        e.preventDefault()
-        setSelectedSong(e.target.id)
+        e.preventDefault();
+        setSelectedSong(e.target.id);
         setSongUrl(e.target.value);
     }
 
@@ -49,7 +47,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         if (minimize === true) {
             setMinimize(false);
         } else {
-            setMinimize(true)
+            setMinimize(true);
         }
         console.log("song url?", songUrl)
     }
@@ -66,19 +64,26 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         return (
             <div id={styles.addSongForm}>
                 <button className={styles.addSong} onClick={() => setShowPlaylists(false) && setSelectedPlaylist(null)}>Show All Songs</button>
-                <button className={styles.addSong} onClick={() => setShowPlaylistFormModal(true) }> Create Playlist</button>
+                { currentUser && <button className={styles.addSong} onClick={() => setShowPlaylistFormModal(true) }> Create Playlist</button>}
                 {/* <button className={styles.addSong} onClick={() => } >  </button> */}
-                {showPlaylistFormModal && <Modal onClose={ () => setShowPlaylistFormModal(false)}> <PlaylistFormModal /> </Modal> }
+                {showPlaylistFormModal && <Modal onClose={() => setShowPlaylistFormModal(false)}> <PlaylistCreateForm setShowPlaylistFormModal={setShowPlaylistFormModal}/> </Modal> }
             </div>
         );
     }
 
+    const openSongForm = () => {
+        if(currentUser){
+            setShowCreateSongModal(true)
+        } else {
+            alert('You Must Be Logged In');
+        }
+    }
     const addSongForm = () => {
         return (
             <div id={styles.addSongForm}>
                 <button className={styles.addSong} onClick={() => setShowPlaylists(true)}>Show Playlists</button>
-                <button className={styles.addSong} onClick={() => setShowCreateSongModal(true) }> Add Song</button>
-                {showCreateSongModal && <Modal onClose={ () => setShowCreateSongModal(false)}> <PlaylistSongIndex /> </Modal> }
+                <button className={styles.addSong} onClick={openSongForm}> Add Song</button>
+                {showCreateSongModal && <Modal onClose={ () => setShowCreateSongModal(false)}> <SongUploadForm close={setShowCreateSongModal} reload={setDeletes}/> </Modal> }
             </div>
         );
     };
@@ -102,6 +107,14 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     }
     // const testArray = ['Song 1', 'Song 2', 'Song 3', 'Song 4', 'Song 5', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', 'Song Test', ]
 
+    const handleDelete = (e) => {
+        e.preventDefault();
+        // console.log(e.target.value);
+        dispatch(deleteSong(e.target.id));
+        // window.location.reload(false); //too fast
+        setDeletes(deletes+1);
+    }
+
     const mappedSongs = allSongs.map((song, i) => {
 
         return (
@@ -112,7 +125,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                                 <br></br>
                                 <span className={styles.artistName}>{song.artist}</span>
                         </button>
-                        <p className={styles.playPause}>DELETE</p>
+                        <p className={styles.playPause} value={song} id={song._id} onClick={handleDelete}>DELETE</p>
                     </div>
                 </li>
         )
@@ -141,23 +154,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         }
     }
 
-    
-    const updateAndDeletePlaylist = (playlist) => {
-        const handleDelete = (e) => {
-            dispatch(deletePlaylist(playlist._id));
-        }
 
-        if (currentUser && (playlist.creator._id === currentUser._id)) {
-            return (
-                <div>
-                    <PlaylistUpdateModal playlist={ playlist }/>
-                    <button onClick={handleDelete} className={styles.playPause} >DELETE</button>
-                </div>
-            )   
-        } else {
-            return null;
-        }
-    }
 
     const showMenu = () => {
         if (!showPlaylists) {
@@ -166,19 +163,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
             return <Playlists handlePlaylistItemClick={handlePlaylistItemClick} />
         }
     }
-    const mappedPlaylists = allPlaylists.map((playlist, i) => {
 
-        return (
-            <li key={i} className={styles.songListItems}>
-                <div className={styles.playPauseAndButton}>
-                    <button className={styles.buttonStyle} id={playlist._id} >
-                        <span className={styles.titleName}>{playlist.title}</span>
-                    </button>
-                    {updateAndDeletePlaylist(playlist)}
-                </div>
-            </li>
-        )
-    })
 
 
     return (

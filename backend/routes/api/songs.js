@@ -53,10 +53,12 @@ router.get('/:title', async (req, res) => {
 });
 
 router.post('/', upload.single('audio-upload'), async (req, res) => {
-  const urlBeginning = req.file.location.substr(0, 8);
-  const urlEnding = req.file.location.substr(18, (req.file.location.length -1))       // url is being doubled somewhere in multer for some reason
-  const goodUrl = urlBeginning + urlEnding;
-  console.log(req.body.title);
+  console.log(req.file.location);
+  // const urlBeginning = req.file.location.substr(0, 8);
+  // const urlEnding = req.file.location.substr(18, (req.file.location.length -1))       // url is being doubled somewhere in multer for some reason
+  // const goodUrl = urlBeginning + urlEnding;
+
+  const goodUrl = req.file.location;
 
   const newSong = new Song({
     title: req.body.title,
@@ -66,11 +68,17 @@ router.post('/', upload.single('audio-upload'), async (req, res) => {
 
   let song = await newSong.save();
 
-  console.log(song)
+  // console.log(song)
 
   return res.json(song)
-
 })
 
+
+router.delete('/:id',  async (req, res) => {
+
+  await Song.deleteOne({ _id: req.params.id});
+  return res.json(req.params.id);
+
+});
 
 module.exports = router;

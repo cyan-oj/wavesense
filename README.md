@@ -86,6 +86,53 @@ const play = (file) => {
 ```
 The Visualizer component receives the selected song URL, then loads the audio file from AWS S3 for concurrent visualizer analysis and audio playback. 
 
+## Will
+
+```javascript
+const mappedPlaylistSongs = () => {
+        if (!selectedPlaylist) {
+            return mappedSongs;
+        } else {
+            const mappedSpecificSongs = selectedPlaylist.songs.map((song, i) => {
+                return (
+                    <li key={i} className={styles.songListItems}>
+                        <div className={styles.playPauseAndButton}>
+                            <button className={styles.buttonStyle} id={song._id} value={song.url} onClick={handleClick}>
+                                    <span className={styles.titleName}>{song.title}</span>
+                                    <br></br>
+                                    <span className={styles.artistName}>{song.artist}</span>
+                            </button>
+                        </div>
+                    </li>
+                )
+            })
+            return mappedSpecificSongs
+        }
+    }
+```
+The above code snippet shows the logic for mapping out the Playlists AND songs. At the initial load of the site, it defaults to mapping out all songs, and then maps out only the songs related to the selected playlist once clicked. None of these changes affect any song that may be playing.
+
+```javascript
+
+    const handlePlaylistItemClick = (playlistObject) => {
+        setSelectedPlaylist(playlistObject);
+        setShowPlaylists(false);
+    }
+    
+    const mappedPlaylists = allPlaylists.map((playlist, i) => {
+
+        return (
+            <li key={i} className={styles.songListItems}>
+                <div className={styles.playPauseAndButton}>
+                    <Playlists handlePlaylistItemClick={handlePlaylistItemClick} />
+                    {updateAndDeletePlaylist(playlist)}
+                </div>
+            </li>
+        )
+    })
+```
+The above code snippit handles the logic for pulling the appropriate playlist data on click, and populates the list with the related song to said songs. We pass in a function that pulls data from the child component through a useState value.
+
 ## May
 ```javascript
 //backend/models/Playlist.js

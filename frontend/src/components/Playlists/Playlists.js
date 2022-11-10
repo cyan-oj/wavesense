@@ -1,18 +1,44 @@
 import styles from './Playlists.module.css'
-import { fetchPlaylists, fetchPlaylist, getPlaylist, getPlaylists } from '../../store/playlists';
+import { fetchPlaylists, getPlaylists } from '../../store/playlists';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import PlaylistUpdateModal from '../PlaylistEditForm/PlaylistUpdateModal';
+import { deletePlaylist } from '../../store/playlists';
+import { useState } from 'react';
 
 
 
 
 const Playlists = ({handlePlaylistItemClick}) => {
     const dispatch = useDispatch();
-    const allPlaylists = useSelector(getPlaylists)
+    const allPlaylists = useSelector(getPlaylists);
+    // const [showPlaylists, setShowPlaylists] = useState(false);
+    const currentUser = useSelector(state => state.session.user);
+    const [reload,setReload] = useState(0);
 
     useEffect(() => {
         dispatch(fetchPlaylists());
-    }, [dispatch])
+    }, [dispatch, reload])
+
+    const updateAndDeletePlaylist = (playlist) => {
+        const handleDelete = (e) => {
+            dispatch(deletePlaylist(playlist._id));
+            setReload(reload+1);
+            // window.location.reload(false);
+        }
+
+        if (currentUser && (playlist.creator._id === currentUser._id)) {
+            return (
+                <div className={styles.editPlaylist}>
+                    <PlaylistUpdateModal playlist={playlist} />
+                    <button onClick={handleDelete} className={styles.playlistUpdate}>DELETE</button>
+                </div>
+            )
+        } else {
+            return null;
+        }
+    }
+
 
     const mappedPlaylists = allPlaylists.map((playlist, i) => {
         return (
@@ -21,17 +47,15 @@ const Playlists = ({handlePlaylistItemClick}) => {
                     <button className={styles.buttonStyle} id={playlist._id} onClick={(e) => handlePlaylistItemClick(playlist)}>
                             <span className={styles.titleName}>{playlist.title}</span>
                     </button>
-                    <p className={styles.playPause}>DELETE</p>
+                    {updateAndDeletePlaylist(playlist)}
                 </div>
             </li>
     )
     })
 
-
     return (
         <>
             <div id={styles.playlistsMenuContainer}>
-                <h1>Playlists</h1>
                 {mappedPlaylists}
             </div>
         </>
