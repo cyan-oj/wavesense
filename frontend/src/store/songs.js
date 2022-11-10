@@ -96,7 +96,7 @@ export const deleteSong = (songId) => async dispatch => {
         }
     });
 
-    console.log("deleting song: ",songId);
+    // console.log("deleting song: ",songId);
     dispatch(removeSong(songId));
 };
 
