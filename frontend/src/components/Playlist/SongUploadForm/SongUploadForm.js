@@ -1,17 +1,36 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import jwtFetch from '../../../store/jwt';
 import styles from './PlaylistSongIndex.module.css'
+import { getPlaylists, fetchPlaylists } from '../../../store/playlists';
+import { useEffect } from 'react';
 
 
 const SongUploadForm = (props) => {
     const close = props.close;
     const [title, setTitle] = useState('');
     const [artist, setArtist] = useState('');
+    const [selectedPlaylistId, setSelectedPlaylistId] = useState('')
     const [file, setFile] = useState(null);
     // const [dataUrl, setDataUrl] = useState('');
+    const dispatch = useDispatch()
 
     const currentUser = useSelector(state => state.session.user);
+    const allPlaylists = useSelector(getPlaylists)
+
+    const listedPlaylists = allPlaylists.filter((playlist) => {
+        if (currentUser._id == playlist.creator._id) {
+            
+            return playlist !== undefined
+        }
+    })
+
+    // useEffect(() => {
+    //     dispatch(fetchPlaylists())
+    // }, [dispatch])
+    
+    console.log(allPlaylists)
+    console.log(listedPlaylists)
 
     // const newSong = {
     //     title: title,
@@ -34,7 +53,7 @@ const SongUploadForm = (props) => {
 
     const handleSubmit = async (e)=>{
         if(!currentUser){
-            console.log("You're nbot logged in");
+            console.log("You're not logged in");
             return;
         }
         e.preventDefault();
@@ -43,6 +62,7 @@ const SongUploadForm = (props) => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('artist', artist);
+        formData.append('playlistId', selectedPlaylistId);
         formData.append('audio-upload', file);
 
         console.log(formData);
@@ -56,19 +76,7 @@ const SongUploadForm = (props) => {
         console.log(res2);
         close(false); // This closes the modal after submit
     }
-
-    // const toDataURL = async(convertFile) => {
-    //     let URL;
-    //     const reader = new FileReader();
-    //     reader.onload = async event => {
-    //         URL = event.target.result;
-    //         setDataUrl(URL);
-        
-
-    //     };
-    //     reader.readAsDataURL(convertFile)
-    // }
-
+    
     return (
         <>
             <h1 id={styles.header}>Add a song</h1>
@@ -78,6 +86,11 @@ const SongUploadForm = (props) => {
                 <br />
                 <input className={styles.inputFields} placeholder='Artist' value={artist} onChange={(e)=>setArtist(e.target.value)}/>
                 <br />
+                <select className={styles.inputFields} onChange={(e) => setSelectedPlaylistId(e.target.key)}>Select Playlist
+                    {listedPlaylists.map((playlist, i) => (
+                        <option key={playlist._id}>{i + 1}. {playlist.title}</option>
+                    ))}
+                </select>
                 <input type='file' onChange={handleChange}/>
                 <br></br>
                 <input type='submit' id={styles.submitSongButton} />
