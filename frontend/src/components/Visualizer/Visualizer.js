@@ -8,6 +8,9 @@ const Visualizer = ( { songUrl } ) => {
     const hiddenFileInput = useRef(null)
     const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
     const audioRef = useRef(null) // will be used to hold reference to audio element
+
+    const audioContextRef = useRef(null)
+
     const canvasRef = useRef(null) // holds visualiser canvas 
 
     const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
@@ -36,8 +39,9 @@ const Visualizer = ( { songUrl } ) => {
         psychoticHelperFunction();
         return cancelAnimationFrame( loop );
     }, [])
-
+    
     useEffect(() => {
+        audioContextRef.current = new AudioContext;
         const file = hiddenFileInput.current.files[0]
         psychoticHelperFunction();
         if( url && isPlaying ) {
@@ -47,6 +51,7 @@ const Visualizer = ( { songUrl } ) => {
         }
         return () => {
             cancelAnimationFrame( loop );
+            audioContextRef.current.close();
         }
     }, [url, isPlaying]);
     
@@ -136,11 +141,10 @@ const Visualizer = ( { songUrl } ) => {
     const average = array => array.reduce((a, b) => a + b)/array.length
 
     const play = (file) => {
-        //debugger;
-        console.log("file", file)
-        console.log("isPlaying", isPlaying)
         
         const audio = audioRef.current 
+        const audioContext = audioContextRef.current
+
         if(!file){
             psychoticHelperFunction();
             audio.src = url 
@@ -152,7 +156,6 @@ const Visualizer = ( { songUrl } ) => {
 
         audio.play();
 
-        const audioContext = new AudioContext();
         const streamDestination = audioContext.createMediaStreamDestination();
         audioSource = audioContext.createMediaElementSource(audio);
         analyser = audioContext.createAnalyser();
@@ -162,8 +165,6 @@ const Visualizer = ( { songUrl } ) => {
         analyser.fftSize = fourierSize;
         
         const animate = () => {
-            console.log("frame")
-            if(!isPlaying) return;
             analyser.getByteFrequencyData(dataArray);
             const xAvg = average(dataArray.slice( 0, 5 ))/8000
             const yAvg = average(dataArray.slice( 6, 10 ))/8000
@@ -238,7 +239,6 @@ const Visualizer = ( { songUrl } ) => {
 
     const stopPlaying = e => {
         isPlaying = false;
-        cancelAnimationFrame(loop);
     }
 
     const startPlaying = () => {
