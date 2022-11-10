@@ -86,9 +86,9 @@ const SongUploadForm = (props) => {
                 <br />
                 <input className={styles.inputFields} placeholder='Artist' value={artist} onChange={(e)=>setArtist(e.target.value)}/>
                 <br />
-                <select className={styles.inputFields} onChange={(e) => setSelectedPlaylistId(e.target.key)}>Select Playlist
+                <select className={styles.inputFields}>Select Playlist
                     {listedPlaylists.map((playlist, i) => (
-                        <option key={playlist._id}>{i + 1}. {playlist.title}</option>
+                        <option onClick={(e) => setSelectedPlaylistId(playlist._id)}key={playlist._id}>{i + 1}. {playlist.title}</option>
                     ))}
                 </select>
                 <input type='file' onChange={handleChange}/>
