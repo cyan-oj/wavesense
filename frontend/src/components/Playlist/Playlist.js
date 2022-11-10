@@ -115,6 +115,11 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         setDeletes(deletes+1);
     }
 
+    const handleAdd = (e) => {
+        e.preventDefault();
+        console.log(`handle add: add song id ${e.target.id} to playlist`)
+    }
+
     const mappedSongs = allSongs.map((song, i) => {
 
         return (
@@ -126,6 +131,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                                 <span className={styles.artistName}>{song.artist}</span>
                         </button>
                         <p className={styles.playPause} value={song} id={song._id} onClick={handleDelete}>DELETE</p>
+                        <p className={styles.playPause} value={song._id} id={song._id} onClick={handleAdd}>+</p>
                     </div>
                 </li>
         )
