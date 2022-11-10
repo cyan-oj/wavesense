@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Modal } from "../../context/Modal";
 import { updatePlaylist } from "../../store/playlists";
+import styles from '../Playlists/Playlists.module.css'
 
 
 const PlaylistUpdateForm = ({ setShowPlaylistUpdateModal, playlist }) => {
@@ -42,7 +43,7 @@ const PlaylistUpdateModal = ({playlist}) => {
 
     return (
         <div id='update-playlist-modal'>
-            <button onClick={() => setShowPlaylistUpdateModal(true)}> Update </button>
+            <button onClick={() => setShowPlaylistUpdateModal(true)} className={styles.playlistUpdate}> UPDATE </button>
             {showPlaylistUpdateModal && <Modal onClose={() => setShowPlaylistUpdateModal(false)}><PlaylistUpdateForm setShowPlaylistUpdateModal={setShowPlaylistUpdateModal} playlist={playlist} /></Modal>}
         </div>
     )
