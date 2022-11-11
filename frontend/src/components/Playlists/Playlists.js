@@ -29,9 +29,9 @@ const Playlists = ({handlePlaylistItemClick}) => {
 
         if (currentUser && (playlist.creator._id === currentUser._id)) {
             return (
-                <div className={styles.editPlaylist}>
+                <div className='editPlaylist'>
                     <PlaylistUpdateModal playlist={playlist} />
-                    <button onClick={handleDelete} className={styles.playlistUpdate}>DELETE</button>
+                    <button onClick={handleDelete} className={styles.playPause}>DELETE</button>
                 </div>
             )
         } else {
