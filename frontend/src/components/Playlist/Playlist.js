@@ -143,20 +143,26 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         if (!selectedPlaylist) {
             return mappedSongs;
         } else {
-            const mappedSpecificSongs = selectedPlaylist.songs.map((song, i) => {
+            const mappedSpecificSongs = selectedPlaylist.songs.map((songId, i) => {
                 console.log('mapped song from specific playlist!')
-                return (
-                    <li key={i} className={styles.songListItems}>
-                        <div className={styles.playPauseAndButton}>
-                            <button className={styles.buttonStyle} id={song._id} value={song.url} onClick={handleClick}>
-                                    <span className={styles.titleName}>{song.title}</span>
-                                    <br></br>
-                                    <span className={styles.artistName}>{song.artist}</span>
-                            </button>
-                            <p className={styles.playPause}>DELETE</p>
-                        </div>
-                    </li>
-                )
+                return allSongs.map((song, i) => {
+                    if (songId == song._id) {
+                        console.log(songId)
+                        console.log(song.title)
+                        return (
+                            <li key={i} className={styles.songListItems}>
+                                <div className={styles.playPauseAndButton}>
+                                    <button className={styles.buttonStyle} id={song._id} value={song.url} onClick={handleClick}>
+                                            <span className={styles.titleName}>{song.title}</span>
+                                            <br></br>
+                                            <span className={styles.artistName}>{song.artist}</span>
+                                    </button>
+                                    <p className={styles.playPause}>DELETE</p>
+                                </div>
+                            </li>
+                        )
+                    }
+                })
             })
             return mappedSpecificSongs
         }
