@@ -14,17 +14,19 @@ const Playlists = ({handlePlaylistItemClick}) => {
     const allPlaylists = useSelector(getPlaylists);
     // const [showPlaylists, setShowPlaylists] = useState(false);
     const currentUser = useSelector(state => state.session.user);
-    const [reload,setReload] = useState(0);
+    const [reload, setReload] = useState(0);
 
     useEffect(() => {
         dispatch(fetchPlaylists());
+        console.log("FETCHING PLAYLISTS");
     }, [dispatch, reload])
 
     const updateAndDeletePlaylist = (playlist) => {
-        const handleDelete = (e) => {
-            dispatch(deletePlaylist(playlist._id));
+        const handleDelete = async (e) => {
+            await dispatch(deletePlaylist(playlist._id));
             setReload(reload+1);
             // window.location.reload(false);
+            // dispatch(fetchPlaylists());
         }
 
         if (currentUser && (playlist.creator._id === currentUser._id)) {
