@@ -133,7 +133,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                         </button>
                         <p className={styles.playPause} value={song} id={song._id} onClick={handleDelete}>DELETE</p>
                         {/* <p className={styles.playPause} value={song._id} id={song._id} onClick={handleAdd}>+</p> */}
-                        <AddSongToPlaylistMenu />
+                        <AddSongToPlaylistMenu song={song}/>
                     </div>
                 </li>
         )
