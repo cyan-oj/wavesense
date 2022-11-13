@@ -1,4 +1,7 @@
-const Box = ( { scale = [1, 1, 1], position = [1, 1, 1] } ) => {
+const Box = ( { scale = [1, 1, 1], position = [1, 1, 1], name } ) => {
+console.log("scale", scale)
+console.log("position", position)
+console.log("name", name)
 
   return(
     <mesh 

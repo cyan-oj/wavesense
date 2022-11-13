@@ -2,6 +2,7 @@ import styles from './Visualizer.module.css';
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from 'three'
 import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei'
 import GridViz from './gridViz';
 
 const Visualizer = ( { songUrl } ) => {
@@ -277,7 +278,7 @@ const Visualizer = ( { songUrl } ) => {
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                     <pointLight position={[-10, -10, -10]} />
                     <GridViz position={[-1.2, 0, 0]} />
-                    <GridViz position={[1.2, 0, 0]} />
+                    <OrbitControls />
                 </Canvas>
             </div>
         </div>
