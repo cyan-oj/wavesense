@@ -13,8 +13,8 @@ const AddSongToPlaylistMenu = ({song}) => {
     const ensureCurrentUser = () => {
         return (
             <div>
-                <button onClick={openPlaylistsMenu}>+</button>
-                <ul>
+                <button onClick={openPlaylistsMenu} className={styles.addDelete} id={styles.addToPlaylist}>+</button>
+                <ul className={styles.dropDownMenuPlaylists}>
                 {showPlaylistsMenu && currentUserPlaylists}
                 </ul>
             </div>
