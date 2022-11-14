@@ -9,18 +9,21 @@ const AddSongToPlaylistMenu = ({song}) => {
     const allPlaylists = useSelector(getPlaylists);
     const currentUser = useSelector(state => state.session.user);
     const dispatch = useDispatch();
+    
 
     const ensureCurrentUser = () => {
         return (
             <div>
                 <button onClick={openPlaylistsMenu} className={styles.addDelete} id={styles.addToPlaylist}>+</button>
                 <ul className={styles.dropDownMenuPlaylists}>
-                {showPlaylistsMenu && currentUserPlaylists}
+                    {showPlaylistsMenu && currentUserPlaylists}
                 </ul>
             </div>
         )
 
     };
+
+
     const currentUserPlaylists = (allPlaylists
         // .filter(playlist => {
         //     let a = playlist.creator._id

@@ -173,7 +173,7 @@
     height: 40%;
     scroll-behavior: auto;
     overflow-y: scroll;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
