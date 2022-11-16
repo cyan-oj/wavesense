@@ -1,16 +1,19 @@
-import { useRef, useState, useLayoutEffect } from "react"
+import { useRef, useState, useLayoutEffect, useEffect } from "react"
+import { useSelector } from "react-redux";
 import { useFrame } from '@react-three/fiber'
 import Box from "./Box";
 import * as THREE from "three";
 
-const GridViz = ( { scale, rotation, position, analyser, dataArray } ) => {
+const GridViz = ( { scale, rotation, position} ) => {
+
+  const data = useSelector(state => state.data)
 
   const numBars = 16;
   const width = 8;
   const start = width * -0.5;
   const interval = width/(numBars+1)
 
-  const grid = useRef();
+  const grid = useRef(null);
 
   const [hovered, hover] = useState(false)
   const [clicked, click] = useState(false)
@@ -19,45 +22,14 @@ const GridViz = ( { scale, rotation, position, analyser, dataArray } ) => {
     grid.current.setMatrixAt(0, new THREE.Matrix4())
   }, [])
 
-  const makeRow = ( numBars ) => {
-    const bars = []
-
-    for(let i = 0; i < numBars; i++ ) {
-      const interval = i * 8/numBars;
-      bars.push({
-        name: `bar${i}`,
-        position: [start+interval, -1, 1], 
-        scale: [.2, .2, .2]
-      })
-    }
-
-    return bars
-  }
-
-  const makeRows = ( numBars ) => {
-    const rows = []
-    for(let i = 0; i < numBars; i++ ) {
-      
-
-    }
-
-  }
-
-  const barProps = makeRow( numBars );
-  console.log("outbars", barProps)
-
-  const barsList = barProps.map((bar, i) => {
-    return <Box key={i} name={bar.name} scale={bar.scale} position={bar.position} />
-  })
+  useEffect(() => {
+    console.log("data", data)
+  }, [data])
 
   const average = array => array.reduce((a, b) => a + b)/array.length
 
   useFrame((state, delta) => {
-    // if(analyser){
-    //   analyser.getByteFrequencyData(dataArray);
-    //   let avg = average(dataArray);
-    //   grid.current.scale.y = avg/100;
-    // }
+    if(data) grid.current.scale.y = average(data)/10;
     grid.current.rotation.x += 0.001
     grid.current.rotation.y += 0.001
   })
@@ -77,7 +49,7 @@ const GridViz = ( { scale, rotation, position, analyser, dataArray } ) => {
     <instancedMesh
       castShadow
       ref={grid}
-      args={[ null, null, 4]}
+      args={[ null, null, 1]}
       scale={clicked ? .5 : 1 }
       onClick={(event) => click(!clicked)}
     >

@@ -1,8 +1,8 @@
 import styles from './Visualizer.module.css';
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import * as THREE from 'three'
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, PositionalAudio } from '@react-three/drei'
 import GridViz from './gridViz';
 
 const Visualizer = ( { songUrl } ) => {
@@ -13,8 +13,12 @@ const Visualizer = ( { songUrl } ) => {
     const audioRef = useRef(null) // will be used to hold reference to audio element
     const audioContextRef = useRef(null)
 
+    const update = useRef({update: () => [1]})
+
     const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
-    const [dataArray, setDataArray] = useState(new Uint8Array(fourierSize/2)); // used to store raw audio data
+    const dataArray = new Uint8Array(fourierSize/2); // used to store raw audio data
+
+    const [data, setData] = useState([1]);
 
     let isPlaying = true;
 
@@ -43,20 +47,17 @@ const Visualizer = ( { songUrl } ) => {
     useEffect(() => {
         audioContextRef.current = new AudioContext;
         const file = hiddenFileInput.current.files[0]
-        // psychoticHelperFunction();
         // if( url && isPlaying ) {
         //     play();
         // } else if ( file ) {
         //     play( file )
         // }
         return () => {
-            cancelAnimationFrame( loop );
+            cancelAnimationFrame(loop)
             audioContextRef.current.close();
         }
 
     }, [url, isPlaying]);
-
-    // const average = array => array.reduce((a, b) => a + b)/array.length
 
     const play = (file) => {       
         const audio = audioRef.current 
@@ -79,12 +80,10 @@ const Visualizer = ( { songUrl } ) => {
         analyser.connect(audioContext.destination);
         analyser.fftSize = fourierSize;
         
-        return {     
-            update: () => {
-                analyser.getByteFrequencyData(dataArray);
-                return dataArray;
-            },
-        }
+        loop = requestAnimationFrame(() => {
+            setData(analyser.getByteFrequencyData(dataArray))
+            console.log("data", data)
+        })
     }
 
     const handleFileSubmitClick = () => {
@@ -104,7 +103,8 @@ const Visualizer = ( { songUrl } ) => {
         isPlaying = true;
         url = (null);
         console.log("isPlaying in playFile?", isPlaying);
-        play(file);
+        update.current = play(file);
+        console.log("update?", update.current)
     }
 
     return (
@@ -130,7 +130,7 @@ const Visualizer = ( { songUrl } ) => {
                     <ambientLight intensity={0.5} />
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                     <pointLight position={[-10, -10, -10]} />
-                    <GridViz position={[-1.2, 0, 0]} analyser={analyser} dataArray={dataArray} />
+                    <GridViz position={[-1.2, 0, 0]} data={data} />
                     <OrbitControls />
                 </Canvas>
             </div>
