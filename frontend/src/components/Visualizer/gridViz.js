@@ -35,17 +35,6 @@ const GridViz = ( { scale, rotation, position} ) => {
   })
 
   return (
-    // <mesh
-    //   {...props}
-    //   ref={ref}
-    //   scale={clicked ? 1.5 : 1 }
-    //   onClick={(event) => click(!clicked)}
-    //   onPointerOver={(event) => hover(true)}
-    //   onPointerOut={(event) => hover(false)}
-    // >
-    //   <boxGeometry args={[1, 1, 1]} />
-    //   <meshStandardMaterial color={ hovered ? 'hotpink' : 'orange' }/>
-    // </mesh>
     <instancedMesh
       castShadow
       ref={grid}
