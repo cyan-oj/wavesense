@@ -10,7 +10,7 @@ import Analyzer from './Analyzer';
 const Visualizer = ( { songUrl } ) => {
     
     const hiddenFileInput = useRef()
-    const containerRef = useRef() // grabs container so visu
+    const containerRef = useRef()
     const audioRef = useRef()
 
     const audio = useRef();
@@ -25,13 +25,6 @@ const Visualizer = ( { songUrl } ) => {
             audio.current.stop();
             audio.current.url = url;
             console.log(audio.current.url)
-            setTimeout(() => {
-                audio.current.play();
-            }, 2000)
-        }
-        
-        return () => {
-
         }
     }, [url])
 

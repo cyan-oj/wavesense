@@ -6,7 +6,7 @@ import { Sphere } from '@react-three/drei'
 function Analyzer({ audio }) {
   const mesh = useRef();
   const analyser = useRef();
-  ////
+
   useEffect(() => {
     if (audio.current) {
       analyser.current = new AudioAnalyser(audio.current, 32);
