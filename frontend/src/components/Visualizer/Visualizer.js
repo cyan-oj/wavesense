@@ -11,12 +11,8 @@ const Visualizer = ( { songUrl } ) => {
     
     const hiddenFileInput = useRef()
     const containerRef = useRef()
-    const audioRef = useRef()
-
     const audio = useRef();
-    const analyzer = useRef();
 
-    const [data, setData] = useState([1]);
     const [url, setURL] = useState();
 
     useEffect(() => {
@@ -32,10 +28,13 @@ const Visualizer = ( { songUrl } ) => {
         hiddenFileInput.current.click();
     }
 
-    const stopPlaying = e => {
-    }
-
-    const startPlaying = () => {
+    const playPause = () => {
+        if (audio.current.isPlaying){
+            audio.current.pause();
+        } else {
+            audio.current.play();
+        }
+        
     }
 
     const playFile = (file) => {
@@ -46,12 +45,8 @@ const Visualizer = ( { songUrl } ) => {
     return (
         <div id={styles.visualizerContainer}>
             <div id={styles.controls}>
-                <audio ref={ audioRef } id="test-audio" controls
-                    onPlay={ startPlaying }
-                    onPause={ stopPlaying }
-                    onEnded={ stopPlaying }
-                ></audio>
                 <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>Play Local File</button>
+                <button id={styles.fileUploadButton} onClick={playPause}>P</button>
                 <input 
                     type="file"
                     ref={hiddenFileInput}
