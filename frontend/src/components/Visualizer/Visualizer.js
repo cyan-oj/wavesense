@@ -5,54 +5,49 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PositionalAudio } from '@react-three/drei'
 import GridViz from './gridViz';
 import PlaySound from './PlaySound';
+import Analyzer from './Analyzer';
 
 const Visualizer = ( { songUrl } ) => {
     
-    let url = songUrl  
-    const hiddenFileInput = useRef(null)
-    const containerRef = useRef(null) // grabs container so visualizer can 
-    const audioRef = useRef(null)
+    const hiddenFileInput = useRef()
+    const containerRef = useRef() // grabs container so visu
+    const audioRef = useRef()
+
+    const audio = useRef();
+    const analyzer = useRef();
 
     const [data, setData] = useState([1]);
+    const [url, setURL] = useState();
 
-    const isPlaying = true
-
-    const play = (file) => {       
-
-        // if(!file){
-        //     audio.src = url 
-        //     audio.crossOrigin="anonymous"
-        // } else{
-        //     audio.src = URL.createObjectURL(file) 
-        // }
-
-        // audio.play();
-
-        // analyser.connect(audioContext.destination);
-        // analyser.fftSize = fourierSize;
+    useEffect(() => {
+        console.log("viz useeffect")
+        if (url && audio.current) {
+            audio.current.stop();
+            audio.current.url = url;
+            console.log(audio.current.url)
+            setTimeout(() => {
+                audio.current.play();
+            }, 2000)
+        }
         
-        // loop = requestAnimationFrame(() => {
-        //     setData(analyser.getByteFrequencyData(dataArray))
-        //     console.log("data", data)
-        // })
-    }
+        return () => {
+
+        }
+    }, [url])
 
     const handleFileSubmitClick = () => {
         hiddenFileInput.current.click();
     }
 
     const stopPlaying = e => {
-        isPlaying = false;
     }
 
     const startPlaying = () => {
-        isPlaying = true;
     }
 
     const playFile = (file) => {
         console.log("playableFile?", file)
-        isPlaying = true;
-        url = URL.createObjectURL(file);
+        setURL(URL.createObjectURL(file));
     }
 
     return (
@@ -75,7 +70,12 @@ const Visualizer = ( { songUrl } ) => {
             </div>
             <div ref={ containerRef} id={ styles.container3D }>
                 <Canvas camera={{ position: [0, 0, 5], far: 50 }}>
-                    <PlaySound url={'/glimpse.mp3'} />
+                    <Suspense fallback={null}>
+                        {url &&
+                            <PositionalAudio autoplay ref={ audio } url={ url } /> 
+                        }
+                        <Analyzer audio={ audio } />
+                    </Suspense>
                     <ambientLight intensity={0.5} />
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                     <pointLight position={[-10, -10, -10]} />

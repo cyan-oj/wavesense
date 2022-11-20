@@ -3,13 +3,15 @@ import { useFrame } from '@react-three/fiber'
 import { AudioAnalyser } from 'three'
 import { Sphere } from '@react-three/drei'
 
-function Analyzer({ sound }) {
+function Analyzer({ audio }) {
   const mesh = useRef();
   const analyser = useRef();
-  useEffect(
-    () => void (analyser.current = new AudioAnalyser(sound.current, 32)),
-    []
-  );
+  ////
+  useEffect(() => {
+    if (audio.current) {
+      analyser.current = new AudioAnalyser(audio.current, 32);
+    }
+  }, [audio.current]);
 
   useFrame(() => {
     if (analyser.current) {
