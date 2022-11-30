@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { AudioAnalyser } from 'three'
 import { Sphere } from '@react-three/drei'
 
-function Analyzer({ audio }) {
+const Analyzer = ({ audio }) => {
   const mesh = useRef();
   const analyser = useRef();
 

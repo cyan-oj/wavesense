@@ -1,10 +1,8 @@
 import styles from './Visualizer.module.css';
 import React, { Suspense, useEffect, useRef, useState } from "react";
-import * as THREE from 'three'
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PositionalAudio } from '@react-three/drei'
 import GridViz from './gridViz';
-import PlaySound from './PlaySound';
 import Analyzer from './Analyzer';
 
 const Visualizer = ( { songUrl } ) => {
