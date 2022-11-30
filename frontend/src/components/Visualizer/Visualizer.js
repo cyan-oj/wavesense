@@ -17,13 +17,41 @@ const Visualizer = ({ songUrl }) => {
       audio.current.stop();
       audio.current.url = url;
       console.log(audio.current.url);
-      
-      setTimeout(() => { // needs something async to wait for new audio to load
-        audio.current.play();
-      }, 1000);
 
+      
     }
+
+    const timer = setTimeout(() => { // needs something async to wait for new audio to load
+      if(audio.current) audio.current.play();
+      console.log("url timer")
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer)
+    }
+
   }, [url]);
+
+  useEffect(() => {
+    if(songUrl){
+      setURL(songUrl);
+      if (url && audio.current) {
+        audio.current.stop();
+        audio.current.url = url;
+        console.log(audio.current.url);
+      }
+    }
+
+    const timer = setTimeout(() => { // redundant when other timeout is fixed
+      if(audio.current) audio.current.play();
+      console.log("songUrl timer")
+    }, 6000);
+
+    return () => {
+      clearTimeout(timer)
+    }
+
+  }, [songUrl])
 
   const handleFileSubmitClick = () => {
     hiddenFileInput.current.click();
