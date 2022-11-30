@@ -8,6 +8,7 @@ const Analyzer = ({ audio }) => {
   const analyser = useRef();
 
   useEffect(() => {
+    console.log("analyzer useEffect")
     if (audio.current) {
       analyser.current = new AudioAnalyser(audio.current, 32);
     }
