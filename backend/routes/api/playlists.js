@@ -79,14 +79,17 @@ router.patch('/:id', requireUser, async (req, res, next) => {
 
 // delete a playlist - Postman tested; works
 router.delete('/:id', requireUser, async (req, res, next) => {
-    try {
-        const playlist = await Playlist.findById(req.params.id)
-        await playlist.remove();
+    // try {
+        // const playlist = await Playlist.findById(req.params.id)
+        // await playlist.remove();
+
+        await Playlist.deleteOne({ _id: req.params.id});
+
         return res.json();
-    }
-    catch (err) {
-        next(err);
-    }
+    // }
+    // catch (err) {
+    //     next(err);
+    // }
 })
 
 
