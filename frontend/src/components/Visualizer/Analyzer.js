@@ -3,10 +3,13 @@ import { useFrame } from '@react-three/fiber'
 import { AudioAnalyser, Matrix4, Object3D, BoxGeometry, MeshStandardMaterial } from 'three'
 import { Sphere } from '@react-three/drei'
 
-const tempBoxes = new Object3D();
+const tempBar = new Object3D();
 
 const Analyzer = ({ audio }) => {
-  const boxesGeometry = new BoxGeometry(1, 1, 1);
+  const numBars = 3;
+  const barWidth = 0.7
+
+  const barGeo = new BoxGeometry(barWidth, 1, barWidth);
   const material = new MeshStandardMaterial({ color: "orange" });
 
   const grid = useRef();
@@ -14,31 +17,26 @@ const Analyzer = ({ audio }) => {
 
   const analyser = useRef();
 
-  // useLayoutEffect(() => {
-  //   grid.current.setMatrixAt(0, new Matrix4())
-  // }, [])
-
   useEffect(() => {
-    console.log("analyzer update:", audio)
-    if (audio.current) {
-      analyser.current = new AudioAnalyser(audio.current, 32);
+    console.log( "analyzer update:", audio )
+    if ( audio.current ) {
+      analyser.current = new AudioAnalyser( audio.current, 32 );
     }
-  }, [audio.current]);
+  }, [ audio.current ]);
 
   useFrame(() => {
-    if (analyser.current) {
+    if ( analyser.current ) {
       const data = analyser.current.getAverageFrequency();
       // mesh.current.material.color.setRGB(data / 100, 0, 0);
       
-      for ( let x = 0; x < 3; x++) {
-        tempBoxes.position.set(3/2 - x, 1, 1)
-        tempBoxes.rotation.y += .01
-        tempBoxes.updateMatrix();
-        grid.current.setMatrixAt(x, tempBoxes.matrix)
+      for ( let x = 0; x < numBars; x++) {
+        tempBar.position.set( numBars/2 - ( barWidth * x + numBars * barWidth ), 1, 1 )
+        tempBar.rotation.y += .01
+        tempBar.updateMatrix();
+        grid.current.setMatrixAt( x, tempBar.matrix )
       }
 
       grid.current.instanceMatrix.needsUpdate = true;
-
       grid.current.scale.y = data/100 * 2 + 0.1
     }
   });
@@ -47,13 +45,9 @@ const Analyzer = ({ audio }) => {
     <instancedMesh
       castShadow
       ref={grid}
-      args={[ boxesGeometry, material, 3]}
+      args={[ barGeo, material, numBars]}
     />
   );
 }
 
 export default Analyzer;
-
-      {/* <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={ 'orange' }/>
-    </instancedMesh> */}
