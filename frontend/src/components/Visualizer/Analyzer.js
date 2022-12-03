@@ -6,8 +6,8 @@ import { Sphere } from '@react-three/drei'
 const tempBar = new Object3D();
 
 const Analyzer = ({ audio }) => {
-  const numBars = 3;
-  const barWidth = 0.7
+  const numBars = 7
+  const barWidth = 1.5
 
   const barGeo = new BoxGeometry(barWidth, 1, barWidth);
   const material = new MeshStandardMaterial({ color: "orange" });
@@ -18,7 +18,7 @@ const Analyzer = ({ audio }) => {
   const analyser = useRef();
 
   useEffect(() => {
-    console.log( "analyzer update:", audio )
+    console.log( "analyzer update:", audio.current )
     if ( audio.current ) {
       analyser.current = new AudioAnalyser( audio.current, 32 );
     }
@@ -28,9 +28,9 @@ const Analyzer = ({ audio }) => {
     if ( analyser.current ) {
       const data = analyser.current.getAverageFrequency();
       // mesh.current.material.color.setRGB(data / 100, 0, 0);
-      
-      for ( let x = 0; x < numBars; x++) {
-        tempBar.position.set( numBars/2 - ( barWidth * x + numBars * barWidth ), 1, 1 )
+
+      for ( let x = 1; x <= numBars; x++) {
+        tempBar.position.set(( numBars * barWidth/2 - ( barWidth * x ) + barWidth/2 ), 0, 1 )
         tempBar.rotation.y += .01
         tempBar.updateMatrix();
         grid.current.setMatrixAt( x, tempBar.matrix )
@@ -45,7 +45,7 @@ const Analyzer = ({ audio }) => {
     <instancedMesh
       castShadow
       ref={grid}
-      args={[ barGeo, material, numBars]}
+      args={[ barGeo, material, numBars * 3 + 1]}
     />
   );
 }
