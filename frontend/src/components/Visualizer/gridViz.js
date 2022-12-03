@@ -1,7 +1,6 @@
 import { useRef, useState, useLayoutEffect, useEffect } from "react"
 import { useSelector } from "react-redux";
 import { useFrame } from '@react-three/fiber'
-import Box from "./Box";
 import * as THREE from "three";
 
 const GridViz = ( { scale, rotation, position} ) => {
