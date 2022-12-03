@@ -6,8 +6,8 @@ import { Sphere } from '@react-three/drei'
 const tempBar = new Object3D();
 
 const Analyzer = ({ audio }) => {
-  const numBars = 7
-  const barWidth = 1.5
+  const numBars = 4
+  const barWidth = 1.2
 
   const barGeo = new BoxGeometry(barWidth, 1, barWidth);
   const material = new MeshStandardMaterial({ color: "orange" });
@@ -15,6 +15,7 @@ const Analyzer = ({ audio }) => {
   const grid = useRef();
   const [hovered, hover] = useState(false);
 
+  // const data = new Uint8Array(16);
   const analyser = useRef();
 
   useEffect(() => {
@@ -26,18 +27,19 @@ const Analyzer = ({ audio }) => {
 
   useFrame(() => {
     if ( analyser.current ) {
-      const data = analyser.current.getAverageFrequency();
+      const data = analyser.current.getFrequencyData();
+      console.log(data)
       // mesh.current.material.color.setRGB(data / 100, 0, 0);
 
-      for ( let x = 1; x <= numBars; x++) {
-        tempBar.position.set(( numBars * barWidth/2 - ( barWidth * x ) + barWidth/2 ), 0, 1 )
+      for ( let x = 0; x < numBars; x++) {
+        tempBar.position.set((barWidth * (numBars/2 - x - 1/2 )), 0, 1 )
         tempBar.rotation.y += .01
         tempBar.updateMatrix();
         grid.current.setMatrixAt( x, tempBar.matrix )
       }
 
       grid.current.instanceMatrix.needsUpdate = true;
-      grid.current.scale.y = data/100 * 2 + 0.1
+      grid.current.scale.y = data[2]/100 * 2 + 0.1
     }
   });
 
