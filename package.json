@@ -12,7 +12,8 @@
     "frontend": "npm start --prefix frontend",
     "frontend-build": "npm run build --prefix frontend",
     "build": "npm run backend-install && npm run frontend-install && npm run frontend-build",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm start --prefix backend"
   },
   "keywords": [],
   "author": "BrianKatWillMay",
