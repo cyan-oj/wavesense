@@ -2,7 +2,7 @@ import styles from "./Visualizer.module.css";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PositionalAudio } from "@react-three/drei";
-import Analyzer from "./Analyzer";
+import Display from "./Display";
 
 const Visualizer = ({ songUrl }) => {
   const hiddenFileInput = useRef();
@@ -17,40 +17,22 @@ const Visualizer = ({ songUrl }) => {
       audio.current.stop();
       audio.current.url = url;
       console.log(audio.current.url);
-
-      
     }
-
-    const timer = setTimeout(() => { // needs something async to wait for new audio to load
-      if(audio.current) audio.current.play();
-      console.log("url timer")
-    }, 1000);
-
-    return () => {
-      clearTimeout(timer)
-    }
-
-  }, [url]);
-
-  useEffect(() => {
-    if(songUrl){
-      setURL(songUrl);
-      if (url && audio.current) {
-        audio.current.stop();
-        audio.current.url = url;
-        console.log(audio.current.url);
+    
+    const timer = setTimeout(() => { // needs something async to wait for new audio to load?
+      if( audio.current ) {
+        audio.current.play();
       }
-    }
-
-    const timer = setTimeout(() => { // redundant when other timeout is fixed
-      if(audio.current) audio.current.play();
-      console.log("songUrl timer")
-    }, 6000);
-
+      console.log("url timer")
+    }, 3000);
+    
     return () => {
       clearTimeout(timer)
     }
-
+  }, [url]);
+  
+  useEffect(() => {
+    if(songUrl) setURL(songUrl);
   }, [songUrl])
 
   const handleFileSubmitClick = () => {
@@ -91,7 +73,7 @@ const Visualizer = ({ songUrl }) => {
         { url && 
           <>
           <PositionalAudio ref={audio} url={url} />
-          <Analyzer audio={ audio } />
+          <Display audio={ audio } />
           </>
         }
       </Suspense>
