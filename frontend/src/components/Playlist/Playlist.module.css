@@ -138,14 +138,56 @@
     justify-content: flex-start;
 }
 
-.playPause {
+.addDelete {
     display: inline-block;
     justify-content: center;
+    border: none;
+    background-color: transparent;
+    color: black;
     text-align: center;
     margin-top: 30px;
     margin-right: 10px;
 }
 
-.playPause:hover {
+.addDelete:hover {
     cursor: pointer;
+    color: white;
 }
+
+#addToPlaylist {
+    margin-top: 90%;
+    font-size: large;
+}
+
+#trashcan {
+    height: 23px;
+    width: 23px;
+}
+
+#trashcan:hover {
+    color: white;
+}
+
+.dropDownMenuPlaylists {
+    position: absolute;
+    height: 40%;
+    scroll-behavior: auto;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.playlistListItems {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    background-color: rgb(56, 54, 54);
+    border: 2px solid rgb(101, 6, 127);
+    border-radius: 10px;
+    color: white;
+    padding: 10px 15px;
+    margin-left: 10px;
+    width: 8rem;
+}
+
