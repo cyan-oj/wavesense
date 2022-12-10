@@ -11,7 +11,6 @@ import { fetchPlaylists } from '../../store/playlists';
 import Playlists from '../Playlists/Playlists';
 import { PlaylistCreateForm } from '../PlaylistForm/PlaylistFormModal';
 import SongUploadForm from './SongUploadForm/SongUploadForm';
-import AddSongToPlaylistMenu from './AddSongToPlaylistMenu/AddSongToPlaylistMenu';
 
 const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
@@ -132,8 +131,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                                 <span className={styles.artistName}>{song.artist}</span>
                         </button>
                         <p className={styles.playPause} value={song} id={song._id} onClick={handleDelete}>DELETE</p>
-                        {/* <p className={styles.playPause} value={song._id} id={song._id} onClick={handleAdd}>+</p> */}
-                        <AddSongToPlaylistMenu song={song}/>
+                        <p className={styles.playPause} value={song._id} id={song._id} onClick={handleAdd}>+</p>
                     </div>
                 </li>
         )
