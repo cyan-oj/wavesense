@@ -46,7 +46,7 @@ const Visualizer = ({ songUrl }) => {
     audio.current.play();
   }
 
-  console.log("duration", audio.current.duration)
+  console.log("duration", audio.current.context.getOutputTimestamp())
   };
 
   const raiseGain = () => {
@@ -61,7 +61,6 @@ const Visualizer = ({ songUrl }) => {
 
   const setFile = () => {
     const file = hiddenFileInput.current.files[0]
-    console.log("playableFile?", file);
     setURL(URL.createObjectURL(file));
   };
 
