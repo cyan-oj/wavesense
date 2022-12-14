@@ -45,7 +45,19 @@ const Visualizer = ({ songUrl }) => {
   } else {
     audio.current.play();
   }
+
+  console.log("duration", audio.current.duration)
   };
+
+  const raiseGain = () => {
+    const currentVolume = audio.current.getVolume()
+    audio.current.setVolume( currentVolume + 1 ) 
+  }
+  
+  const lowerGain = () => {
+    const currentVolume = audio.current.getVolume()
+    audio.current.setVolume( currentVolume - 1 ) 
+  }
 
   const setFile = () => {
     const file = hiddenFileInput.current.files[0]
@@ -58,6 +70,8 @@ const Visualizer = ({ songUrl }) => {
     <div id={styles.controls}>
     <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>set local file</button>
     <button id={styles.fileUploadButton} onClick={playPause}>||</button>
+    <button id={styles.fileUploadButton} onClick={raiseGain}>+</button>
+    <button id={styles.fileUploadButton} onClick={lowerGain}>-</button>
     <input
       type="file"
       ref={hiddenFileInput}
