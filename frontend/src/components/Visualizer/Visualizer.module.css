@@ -44,3 +44,12 @@
     background-color: white;
     color: black;
 }
+
+time {
+    color: white;
+}
+
+#timer {
+    display: flex;
+    justify-content: space-between;
+}

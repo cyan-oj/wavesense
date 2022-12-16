@@ -3,6 +3,7 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PositionalAudio } from "@react-three/drei";
 import Display from "./Display";
+import TimeDisplay from "./TimeDisplay";
 
 const Visualizer = ({ songUrl }) => {
   const hiddenFileInput = useRef();
@@ -12,7 +13,8 @@ const Visualizer = ({ songUrl }) => {
 
   const [url, setURL] = useState();
 
-  const [playTime, setPlayTime] = useState();
+  const [playTime, setPlayTime] = useState(0);
+  let maxTime = 0
 
   useEffect(() => { // controls audio switching
     console.log("viz useeffect");
@@ -32,8 +34,6 @@ const Visualizer = ({ songUrl }) => {
 
     const interval = setInterval(() => {
       setPlayTime(hiddenAudio.current.currentTime);
-      console.log(hiddenAudio.current.currentTime)
-      console.log(playTime)
     }, 500)
     
     return () => {
@@ -51,15 +51,11 @@ const Visualizer = ({ songUrl }) => {
   };
 
   const playPause = () => {
-  if (audio.current.isPlaying) {
-    pause();
-  } else {
-    play();
-  }
-
-  console.log("currentTime", audio.current.context.getOutputTimestamp())
-  console.log("totalTime", audio.current.context.duration)
-  console.log("duration", hiddenAudio.current.duration)
+    if (audio.current.isPlaying) {
+      pause();
+    } else {
+      play();
+    }
   };
 
   const volUp = () => {
@@ -93,30 +89,37 @@ const Visualizer = ({ songUrl }) => {
 
   const stop = () => {
     audio.current.stop();
-    // hiddenAudio.current.stop();
   }
 
   return (
   <div id={styles.visualizerContainer}>
+
     <div id={styles.controls}>
       <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>set local file</button>
       <button id={styles.fileUploadButton} onClick={playPause}>||</button>
       <button id={styles.fileUploadButton} onClick={volUp}>+</button>
       <button id={styles.fileUploadButton} onClick={volDown}>-</button>
     </div>
+
     { hiddenAudio.current &&
-      <input type="range" value={playTime} min={0} max={Number(hiddenAudio.current.duration)} onChange={e => setTime(e.target.value)}/>
+      <div>
+        <input type="range" value={playTime} min={0} max={Number(hiddenAudio.current.duration)} onChange={e => setTime(e.target.value)}/>
+        <div>
+          <TimeDisplay song={hiddenAudio.current} />
+        </div>
+      </div>
     }
     <audio ref={hiddenAudio} src={url} muted={true}/>
-    <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }}
-    />
+
+    <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }} />
+
     <div ref={containerRef} id={styles.container3D}>
       <Canvas camera={{ position: [0, 0, 5], far: 50 }}>
         <Suspense fallback={ null }>
           { url && 
             <>
-            <PositionalAudio ref={audio} url={url} />
-            <Display audio={ audio } />
+              <PositionalAudio ref={audio} url={url} />
+              <Display audio={ audio } />
             </>
           }
         </Suspense>
