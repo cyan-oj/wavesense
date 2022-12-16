@@ -6,28 +6,39 @@ import Display from "./Display";
 
 const Visualizer = ({ songUrl }) => {
   const hiddenFileInput = useRef();
+  const hiddenAudio = useRef();
   const containerRef = useRef();
   const audio = useRef();
 
   const [url, setURL] = useState();
 
-  useEffect(() => {
+  const [playTime, setPlayTime] = useState();
+
+  useEffect(() => { // controls audio switching
     console.log("viz useeffect");
     if (url && audio.current) {
-      audio.current.stop();
+      stop();
       audio.current.url = url;
+      hiddenAudio.current.src = url;
       console.log(audio.current.url);
     }
     
-    const timer = setTimeout(() => { // needs something async to wait for new audio to load?
+    const timer = setTimeout(() => { // needs something async to wait for new audio to load? AudioContext.statechage? canplaythrough event listener?
       if( audio.current ) {
-        audio.current.play();
+        play();
       }
       console.log("url timer")
     }, 3000);
+
+    const interval = setInterval(() => {
+      setPlayTime(hiddenAudio.current.currentTime);
+      console.log(hiddenAudio.current.currentTime)
+      console.log(playTime)
+    }, 500)
     
     return () => {
       clearTimeout(timer)
+      clearInterval(interval)
     }
   }, [url]);
   
@@ -41,20 +52,22 @@ const Visualizer = ({ songUrl }) => {
 
   const playPause = () => {
   if (audio.current.isPlaying) {
-    audio.current.pause();
+    pause();
   } else {
-    audio.current.play();
+    play();
   }
 
-  console.log("duration", audio.current.context.getOutputTimestamp())
+  console.log("currentTime", audio.current.context.getOutputTimestamp())
+  console.log("totalTime", audio.current.context.duration)
+  console.log("duration", hiddenAudio.current.duration)
   };
 
-  const raiseGain = () => {
+  const volUp = () => {
     const currentVolume = audio.current.getVolume()
     audio.current.setVolume( currentVolume + 1 ) 
   }
   
-  const lowerGain = () => {
+  const volDown = () => {
     const currentVolume = audio.current.getVolume()
     audio.current.setVolume( currentVolume - 1 ) 
   }
@@ -64,37 +77,54 @@ const Visualizer = ({ songUrl }) => {
     setURL(URL.createObjectURL(file));
   };
 
+  const setTime = (value) => {
+    console.log("scrubber value", value)
+  }
+
+  const play = () => {
+    audio.current.play();
+    hiddenAudio.current.play();
+  }
+
+  const pause = () => {
+    audio.current.pause();
+    hiddenAudio.current.pause();
+  }
+
+  const stop = () => {
+    audio.current.stop();
+    // hiddenAudio.current.stop();
+  }
+
   return (
   <div id={styles.visualizerContainer}>
     <div id={styles.controls}>
-    <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>set local file</button>
-    <button id={styles.fileUploadButton} onClick={playPause}>||</button>
-    <button id={styles.fileUploadButton} onClick={raiseGain}>+</button>
-    <button id={styles.fileUploadButton} onClick={lowerGain}>-</button>
-    <input
-      type="file"
-      ref={hiddenFileInput}
-      id="fileupload"
-      accept="audio/*"
-      onChange={ setFile }
-      style={{ display: "none" }}
-    />
+      <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>set local file</button>
+      <button id={styles.fileUploadButton} onClick={playPause}>||</button>
+      <button id={styles.fileUploadButton} onClick={volUp}>+</button>
+      <button id={styles.fileUploadButton} onClick={volDown}>-</button>
     </div>
+    { hiddenAudio.current &&
+      <input type="range" value={playTime} min={0} max={Number(hiddenAudio.current.duration)} onChange={e => setTime(e.target.value)}/>
+    }
+    <audio ref={hiddenAudio} src={url} muted={true}/>
+    <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }}
+    />
     <div ref={containerRef} id={styles.container3D}>
-    <Canvas camera={{ position: [0, 0, 5], far: 50 }}>
-      <Suspense fallback={ null }>
-        { url && 
-          <>
-          <PositionalAudio ref={audio} url={url} />
-          <Display audio={ audio } />
-          </>
-        }
-      </Suspense>
-      <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-      <pointLight position={[-10, -10, -10]} />
-      <OrbitControls />
-    </Canvas>
+      <Canvas camera={{ position: [0, 0, 5], far: 50 }}>
+        <Suspense fallback={ null }>
+          { url && 
+            <>
+            <PositionalAudio ref={audio} url={url} />
+            <Display audio={ audio } />
+            </>
+          }
+        </Suspense>
+        <ambientLight intensity={0.5} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+        <pointLight position={[-10, -10, -10]} />
+        <OrbitControls />
+      </Canvas>
     </div>
   </div>
   );

@@ -25,8 +25,6 @@ const Display = ({ audio }) => {
   useFrame(() => {
     if ( analyser.current ) {
       const data = analyser.current.getFrequencyData();
-
-      // console.log("gain?", audio.current.gain)
       
       tempBar.position.set(0, 0, 1 )
       tempBar.scale.y = data[0]/50 + .001
