@@ -17,7 +17,6 @@ const TimeDisplay = ({ song }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(timeFormat(song.currentTime))
-      console.log(song.currentTime)
     }, 1000);
 
     return () => {

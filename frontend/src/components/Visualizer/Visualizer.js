@@ -12,10 +12,8 @@ const Visualizer = ({ songUrl }) => {
   const audio = useRef();
 
   const [url, setURL] = useState();
-
   const [playTime, setPlayTime] = useState(0);
-  let maxTime = 0
-
+  
   useEffect(() => { // controls audio switching
     console.log("viz useeffect");
     if (url && audio.current) {
@@ -109,7 +107,7 @@ const Visualizer = ({ songUrl }) => {
         </div>
       </div>
     }
-    <audio ref={hiddenAudio} src={url} muted={true}/>
+    <audio ref={hiddenAudio} src={url} muted={true} />
 
     <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }} />
 
