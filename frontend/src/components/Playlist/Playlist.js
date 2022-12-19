@@ -11,6 +11,7 @@ import { fetchPlaylists } from '../../store/playlists';
 import Playlists from '../Playlists/Playlists';
 import { PlaylistCreateForm } from '../PlaylistForm/PlaylistFormModal';
 import SongUploadForm from './SongUploadForm/SongUploadForm';
+import AddSongToPlaylistMenu from './AddSongToPlaylistMenu/AddSongToPlaylistMenu';
 
 const Playlist = ({ songUrl, setSongUrl }) => {
     const dispatch = useDispatch();
@@ -193,6 +194,10 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                     {playlistTab()}
                 </div>
                 <aside id={styles.playlistContainer}>
+                    <div id={styles.playlistInfo} >
+                        <div id={styles.currentPlaylistTitle}> {selectedPlaylist && !showPlaylists ? selectedPlaylist.title : null}</div>
+                        <div id={styles.currentPlaylistDescription}> {selectedPlaylist && !showPlaylists ? selectedPlaylist.description : null}</div>
+                    </div>
                     <ul id={styles.songList}>
                         {showMenu()}
                     </ul>
