@@ -31,7 +31,7 @@ const Visualizer = ({ songUrl }) => {
     }, 3000);
 
     const interval = setInterval(() => {
-      setPlayTime(hiddenAudio.current.currentTime);
+      if (hiddenAudio.current) setPlayTime(hiddenAudio.current.currentTime);
     }, 500)
     
     return () => {
@@ -73,13 +73,19 @@ const Visualizer = ({ songUrl }) => {
 
   const setTime = (value) => {
     console.log("scrubber value", value)
+    console.log(audio.current.context.currentTime)
+    audio.current.stop();
+    audio.current.offset = value;
+    hiddenAudio.current.currentTime = value;
+    audio.current.play();
+    hiddenAudio.current.play();
   }
 
   const play = () => {
     audio.current.play();
     hiddenAudio.current.play();
   }
-
+  
   const pause = () => {
     audio.current.pause();
     hiddenAudio.current.pause();
