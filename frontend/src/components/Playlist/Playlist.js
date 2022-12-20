@@ -62,10 +62,17 @@ const Playlist = ({ songUrl, setSongUrl }) => {
         }
     }
 
+    const displayAllSongs = (e) => {
+        e.preventDefault();
+        setShowPlaylists(false); 
+        setSelectedPlaylist(null);
+    }
+
+
     const addPlaylistForm = () => {
         return (
             <div id={styles.addSongForm}>
-                <button className={styles.addSong} onClick={() => setShowPlaylists(false) && setSelectedPlaylist(null)}>Show All Songs</button>
+                <button className={styles.addSong} onClick={displayAllSongs}>Show All Songs</button>
                 { currentUser && <button className={styles.addSong} onClick={() => setShowPlaylistFormModal(true) }> Create Playlist</button>}
                 {/* <button className={styles.addSong} onClick={() => } >  </button> */}
                 {showPlaylistFormModal && <Modal onClose={() => setShowPlaylistFormModal(false)}> <PlaylistCreateForm setShowPlaylistFormModal={setShowPlaylistFormModal}/> </Modal> }
@@ -184,7 +191,7 @@ const Playlist = ({ songUrl, setSongUrl }) => {
     }
 
 
-
+    
     return (
         <>
             <div id={styles.allOfPlaylist} className={minimize ? styles.mini : ''}>
