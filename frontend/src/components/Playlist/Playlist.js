@@ -194,6 +194,10 @@ const Playlist = ({ songUrl, setSongUrl }) => {
                     {playlistTab()}
                 </div>
                 <aside id={styles.playlistContainer}>
+                    <div id={styles.playlistInfo} >
+                        <div id={styles.currentPlaylistTitle}> {selectedPlaylist && !showPlaylists ? selectedPlaylist.title : null}</div>
+                        <div id={styles.currentPlaylistDescription}> {selectedPlaylist && !showPlaylists ? selectedPlaylist.description : null}</div>
+                    </div>
                     <ul id={styles.songList}>
                         {showMenu()}
                     </ul>
