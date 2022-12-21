@@ -102,18 +102,20 @@ const Visualizer = ({ songUrl }) => {
     <div id={styles.controls}>
       <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>set local file</button>
       { hiddenAudio.current &&
+      <>
         <div>
           <input type="range" value={playTime} min={0} max={Number(hiddenAudio.current.duration)} onChange={e => setTime(e.target.value)}/>
           <div>
             <TimeDisplay song={hiddenAudio.current} />
           </div>
         </div>
+        <div id={styles.playbackControls}>
+          <button id={styles.playbackControlButton} onClick={playPause}>⏯</button>
+          <button id={styles.playbackControlButton} onClick={volDown}>-</button>
+          <button id={styles.playbackControlButton} onClick={volUp}>+</button>
+        </div>
+      </>
       }
-      <div id={styles.playbackControls}>
-        <button id={styles.playbackControlButton} onClick={playPause}>⏯</button>
-        <button id={styles.playbackControlButton} onClick={volDown}>-</button>
-        <button id={styles.playbackControlButton} onClick={volUp}>+</button>
-      </div>
     </div>
 
 

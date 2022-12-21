@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { AudioAnalyser, Object3D, BoxGeometry, MeshStandardMaterial, Color } from 'three'
+import { Plane } from '@react-three/drei'
 
 const tempBar = new Object3D();
 const tempColor = new Color();
@@ -50,11 +51,14 @@ const Display = ({ audio }) => {
   });
 
   return (
+  <>
     <instancedMesh
       castShadow
       ref={grid}
       args={[ barGeo, material, numBars * 3 + 1]}
-    />
+      />
+           <Plane args={[16, 16]}/>
+  </>
   );
 }
 
