@@ -19,6 +19,7 @@ const Visualizer = ({ songUrl }) => {
     if (url && audio.current) {
       stop();
       audio.current.url = url;
+      audio.current.offset = 0;
       hiddenAudio.current.src = url;
       console.log(audio.current.url);
     }
@@ -100,21 +101,23 @@ const Visualizer = ({ songUrl }) => {
 
     <div id={styles.controls}>
       <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>set local file</button>
-      <button id={styles.fileUploadButton} onClick={playPause}>||</button>
-      <button id={styles.fileUploadButton} onClick={volUp}>+</button>
-      <button id={styles.fileUploadButton} onClick={volDown}>-</button>
+      { hiddenAudio.current &&
+        <div>
+          <input type="range" value={playTime} min={0} max={Number(hiddenAudio.current.duration)} onChange={e => setTime(e.target.value)}/>
+          <div>
+            <TimeDisplay song={hiddenAudio.current} />
+          </div>
+        </div>
+      }
+      <div id={styles.playbackControls}>
+        <button id={styles.playbackControlButton} onClick={playPause}>⏯</button>
+        <button id={styles.playbackControlButton} onClick={volDown}>-</button>
+        <button id={styles.playbackControlButton} onClick={volUp}>+</button>
+      </div>
     </div>
 
-    { hiddenAudio.current &&
-      <div>
-        <input type="range" value={playTime} min={0} max={Number(hiddenAudio.current.duration)} onChange={e => setTime(e.target.value)}/>
-        <div>
-          <TimeDisplay song={hiddenAudio.current} />
-        </div>
-      </div>
-    }
-    <audio ref={hiddenAudio} src={url} muted={true} />
 
+    <audio ref={hiddenAudio} src={url} muted={true} />
     <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }} />
 
     <div ref={containerRef} id={styles.container3D}>

@@ -3,8 +3,8 @@ import styles from "./Visualizer.module.css";
 
 const TimeDisplay = ({ song }) => {
 
-  const [time, setTime] = useState("0:00");
-  let totalTime = "0:00"
+  let time = "0:00";
+  let totalTime = "0:00";
 
   const timeFormat = (seconds) => {
     const mins = Math.floor(seconds/60);
@@ -15,17 +15,8 @@ const TimeDisplay = ({ song }) => {
     return `${mins}:${secs}`;
   }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime()
-    }, 300);
-
-    return () => {
-      clearInterval(interval);
-    }
-  }, [song])
-
-  totalTime = timeFormat(song.currentTime)
+  time = timeFormat(song.currentTime)
+  totalTime = timeFormat(song.duration)
   
 
   return(
