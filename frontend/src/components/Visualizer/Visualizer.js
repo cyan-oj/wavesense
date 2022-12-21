@@ -14,14 +14,12 @@ const Visualizer = ({ songUrl }) => {
   const [url, setURL] = useState();
   const [playTime, setPlayTime] = useState(0);
   
-  useEffect(() => { // controls audio switching
-    console.log("viz useeffect");
+  useEffect(() => {
     if (url && audio.current) {
       stop();
       audio.current.url = url;
       audio.current.offset = 0;
       hiddenAudio.current.src = url;
-      console.log(audio.current.url);
     }
     
     const timer = setTimeout(() => { // needs something async to wait for new audio to load? AudioContext.statechage? canplaythrough event listener?
@@ -132,7 +130,6 @@ const Visualizer = ({ songUrl }) => {
             </>
           }
         </Suspense>
-
       </Canvas>
     </div>
   </div>

@@ -91,22 +91,17 @@ const Display = ({ audio }) => {
       <meshLambertMaterial color={"magenta"} transparent={true} opacity={0.5}/>
     </Plane>
     
-    <RoundedBox ref={box} args={[boxScale, boxScale, boxScale]} radius={Math.min(radius, .034)} position={[0, .04, 2.8]} rotation={[0, 0, 0]}>
+    <RoundedBox ref={box} args={[boxScale, boxScale, boxScale]} radius={Math.min(Math.max(radius, .001), .04)} position={[0, .04, 2.8]} rotation={[0, 0, 0]}>
       <meshLambertMaterial ref={boxColor} color={"blue"} transparent={true} opacity={0.5}/>
     </RoundedBox>
 
-    {/* <RoundedBox ref={boxMesh} args={[boxScale, boxScale, boxScale]} radius={Math.min(radius, .034)} position={[0, .02, 2.8]} rotation={[0, 0, 0]}>
-      <meshBasicMaterial wireframe color={"blue"} />
-    </RoundedBox> */}
-
-    <RoundedBox ref={boxMirror} args={[boxScale, boxScale, boxScale]} radius={ Math.min(radius, .099) } position={[0, -.3, 2.8]} rotation={[0, 0, 0]}>
+    <RoundedBox ref={boxMirror} args={[boxScale, boxScale, boxScale]} radius={ Math.min(Math.max(radius, .001), .04)} position={[0, -.3, 2.8]} rotation={[0, 0, 0]}>
       <meshLambertMaterial color={"blue"} />
     </RoundedBox>
 
     <pointLight ref={point} distance={3} decay={1} intensity={1} position={[0, -.1, 2.9]} />
     <spotLight position={[0, 1, 10]} intensity={0.3} decay={2} angle={0.52} />
     <hemisphereLight args={[0x000000, 0xed289b, 0.4]}/>
-        {/* <OrbitControls /> */}
   </>
   );
 }
