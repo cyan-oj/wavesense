@@ -57,7 +57,9 @@ const Display = ({ audio }) => {
       ref={grid}
       args={[ barGeo, material, numBars * 3 + 1]}
       />
-           <Plane args={[16, 16]}/>
+    <Plane args={[100, 100]} rotation={[30, 0, 0]}>
+      <meshBasicMaterial color={"blue"} transparent={true} opacity={0.5}/>
+    </Plane>
   </>
   );
 }
