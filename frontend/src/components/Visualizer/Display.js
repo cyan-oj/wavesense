@@ -8,7 +8,7 @@ const tempBar = new Object3D();
 const Display = ({ audio }) => {
   const [radius, setRadius] = useState(0.005);
 
-  const numBars = 64
+  const numBars = 32
   const barWidth = 0.022
 
   const barGeo = new BoxGeometry(barWidth, 1, barWidth);
@@ -35,7 +35,7 @@ const Display = ({ audio }) => {
       const data = analyser.current.getFrequencyData();
       const average = analyser.current.getAverageFrequency();
       
-      tempBar.position.set(0, 0, 1 )
+      tempBar.position.set(0, 0, 1)
       tempBar.scale.y = data[0]/40
       
       tempBar.updateMatrix();

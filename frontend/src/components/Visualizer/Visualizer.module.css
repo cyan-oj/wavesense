@@ -35,14 +35,24 @@
 }
 
 #playbackControls {
-    margin: auto;
+    margin-left: 38%;
 }
 
 #playbackControlButton {
     color: white;
-    font-size: 32px;
-    background-color: rgba(0, 0, 0, 0);
-    border: none;
+    background-color: rgb(56, 54, 54);
+    border: 2px solid rgb(101, 6, 127);
+    border-radius: 10px;
+    padding: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin: 4px;
+}
+
+#playbackControlButton:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
 }
 
 #fileUploadButton:hover {
