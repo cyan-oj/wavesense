@@ -133,8 +133,9 @@ const Visualizer = ({ songUrl }) => {
           }
         </Suspense>
         <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+        <spotLight position={[0, 3, 5]} angle={0.30} />
         <pointLight position={[-10, -10, -10]} />
+        <hemisphereLight color={"red"} position={[0, 2, 0]}/>
         <OrbitControls />
       </Canvas>
     </div>

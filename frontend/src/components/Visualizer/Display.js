@@ -7,8 +7,8 @@ const tempBar = new Object3D();
 const tempColor = new Color();
 
 const Display = ({ audio }) => {
-  const numBars = 64
-  const barWidth = 0.2
+  const numBars = 256
+  const barWidth = 0.021
 
   const barGeo = new BoxGeometry(barWidth, 1, barWidth);
   const material = new MeshStandardMaterial({ color: "orange" });
@@ -28,12 +28,12 @@ const Display = ({ audio }) => {
       const data = analyser.current.getFrequencyData();
       
       tempBar.position.set(0, 0, 1 )
-      tempBar.scale.y = data[0]/50 + .001
+      tempBar.scale.y = data[0]/40 + .001
       
       tempBar.updateMatrix();
       grid.current.setMatrixAt( 0, tempBar.matrix )
       
-      for ( let x = 1; x < numBars; x++ ) {
+      for ( let x = 0; x < numBars; x++ ) {
         tempBar.position.set((barWidth * (x)), 0, 1 )
         tempBar.updateMatrix();
         grid.current.setMatrixAt( x, tempBar.matrix )
@@ -57,9 +57,13 @@ const Display = ({ audio }) => {
       ref={grid}
       args={[ barGeo, material, numBars * 3 + 1]}
       />
-    <Plane args={[100, 100]} rotation={[30, 0, 0]}>
-      <meshBasicMaterial color={"blue"} transparent={true} opacity={0.5}/>
+    <Plane args={[100, 100]} rotation={[-1, 0, 0]} position={[0, .651, 0]}>
+      <meshLambertMaterial color={"blue"} transparent={true} opacity={0.5}/>
     </Plane>
+    <Plane args={[100, 100]} rotation={[0, 0, 0]} position={[0, 0, 0.8]}>
+      <meshLambertMaterial color={"blue"} transparent={false} opacity={1}/>
+    </Plane>
+
   </>
   );
 }
