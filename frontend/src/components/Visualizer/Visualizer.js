@@ -33,7 +33,7 @@ const Visualizer = ({ songUrl }) => {
 
     const interval = setInterval(() => {
       if (hiddenAudio.current) setPlayTime(hiddenAudio.current.currentTime);
-    }, 500)
+    }, 1000)
     
     return () => {
       clearTimeout(timer)
@@ -100,7 +100,7 @@ const Visualizer = ({ songUrl }) => {
   <div id={styles.visualizerContainer}>
 
     <div id={styles.controls}>
-      <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>set local file</button>
+      <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>play local file</button>
       { hiddenAudio.current &&
       <>
         <div>
@@ -123,7 +123,7 @@ const Visualizer = ({ songUrl }) => {
     <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }} />
 
     <div ref={containerRef} id={styles.container3D}>
-      <Canvas camera={{ position: [0, -.06, 3.4], far: 50, rotation: [.28, 0, 0] }}>
+      <Canvas camera={{ position: [0, -.06, 3.4], far: 100, fov: 70, rotation: [.28, 0, 0] }}>
         <Suspense fallback={ null }>
           { url && 
             <>
@@ -132,8 +132,7 @@ const Visualizer = ({ songUrl }) => {
             </>
           }
         </Suspense>
-        <spotLight position={[0, 1, 10]} angle={0.52} />
-        <hemisphereLight args={[0x000000, 0xed289b, 0.4]}/>
+
       </Canvas>
     </div>
   </div>
