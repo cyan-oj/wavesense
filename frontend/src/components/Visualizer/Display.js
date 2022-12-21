@@ -18,7 +18,10 @@ const Display = ({ audio }) => {
   const analyser = useRef();
 
   const box = useRef();
+  const boxMesh = useRef();
   const boxColor = useRef();
+
+  const point = useRef();
 
   useEffect(() => {
     if ( audio.current ) {
@@ -32,7 +35,7 @@ const Display = ({ audio }) => {
       const average = analyser.current.getAverageFrequency();
       
       tempBar.position.set(0, 0, 1 )
-      tempBar.scale.y = data[0]/40 + .001
+      tempBar.scale.y = data[0]/40
       
       tempBar.updateMatrix();
       grid.current.setMatrixAt( 0, tempBar.matrix )
@@ -46,7 +49,7 @@ const Display = ({ audio }) => {
         tempBar.updateMatrix();
         grid.current.setMatrixAt( x+numBars, tempBar.matrix )
         
-        tempBar.scale.y = data[x]/50 + .001
+        tempBar.scale.y = data[x]/50
         tempBar.rotation.y += .0001
       }
 
@@ -58,6 +61,13 @@ const Display = ({ audio }) => {
       box.current.rotation.z += average/2000
       boxColor.current.opacity = 1 - average/95
       setRadius(0.045 - average/(scaleMod * 850))
+
+      boxMesh.current.scale.x = boxMesh.current.scale.y = boxMesh.current.scale.z = scaleMod
+      boxMesh.current.rotation.x += average/2000
+      boxMesh.current.rotation.y += average/2000
+      boxMesh.current.rotation.z += average/2000
+
+      point.current.intensity = average/8
 
       grid.current.instanceMatrix.needsUpdate = true;
     }
@@ -73,17 +83,16 @@ const Display = ({ audio }) => {
     <Plane args={[999, 999]} rotation={[0, 0, 0]} position={[0, 0, -9]}>
       <meshLambertMaterial color={"blue"} />
     </Plane>
-
     <Plane args={[100, 100]} rotation={[-1.5, 0, 0]} position={[0, 0.08, 0]}>
       <meshLambertMaterial color={"magenta"} transparent={true} opacity={0.5}/>
     </Plane>
-    
-    <RoundedBox ref={box} args={[0.1, 0.1, 0.1]} radius={radius} position={[0, 0, 3]}>
-      <meshLambertMaterial ref={boxColor} color={"blue"} transparent={true} opacity={0.5}/>
+    <RoundedBox ref={box} args={[0.1, 0.1, 0.1]} radius={radius} position={[0, 0, 3]} rotation={[0, 0, 0]}>
+      <meshLambertMaterial ref={boxColor} color={"blue"} transparent={true} opacity={1}/>
     </RoundedBox>
-    
-
-    <pointLight args={[0xfff352, 1, 400, 3]} position={[2, 2, -2]} />
+    <RoundedBox ref={boxMesh} args={[0.1, 0.1, 0.1]} radius={radius} position={[0, 0, 3]} rotation={[0, 0, 0]}>
+      <meshBasicMaterial wireframe color={"blue"} />
+    </RoundedBox>
+    <pointLight ref={point} distance={1} decay={1} intensity={1} position={[0, -.1, 3.1]} />
   </>
   );
 }
