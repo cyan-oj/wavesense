@@ -1,7 +1,7 @@
 import styles from "./Visualizer.module.css";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, PositionalAudio } from "@react-three/drei";
+import { OrbitControls, PositionalAudio, Plane, RoundedBox } from "@react-three/drei";
 import Display from "./Display";
 import TimeDisplay from "./TimeDisplay";
 
@@ -123,7 +123,7 @@ const Visualizer = ({ songUrl }) => {
     <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }} />
 
     <div ref={containerRef} id={styles.container3D}>
-      <Canvas camera={{ position: [0, 0, 5], far: 50 }}>
+      <Canvas camera={{ position: [0, -.06, 3.4], far: 50, rotation: [.28, 0, 0] }}>
         <Suspense fallback={ null }>
           { url && 
             <>
@@ -132,11 +132,9 @@ const Visualizer = ({ songUrl }) => {
             </>
           }
         </Suspense>
-        {/* <ambientLight intensity={0.5} /> */}
         <spotLight position={[0, 1, 10]} angle={0.52} />
-        {/* <pointLight position={[-10, -10, -10]} /> */}
-        {/* <hemisphereLight color={"red"} position={[0, 2, 0]}/> */}
-        <OrbitControls />
+        <hemisphereLight args={[0x000000, 0xed289b, 0.5]}/>
+      {/* <OrbitControls /> */}
       </Canvas>
     </div>
   </div>
