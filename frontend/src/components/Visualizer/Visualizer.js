@@ -1,281 +1,139 @@
-import styles from './Visualizer.module.css';
-import React, { useEffect, useRef, useState } from "react";
-import * as THREE from 'three'
+import styles from "./Visualizer.module.css";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, PositionalAudio, Plane, RoundedBox } from "@react-three/drei";
+import Display from "./Display";
+import TimeDisplay from "./TimeDisplay";
 
-const Visualizer = ( { songUrl } ) => {
+const Visualizer = ({ songUrl }) => {
+  const hiddenFileInput = useRef();
+  const hiddenAudio = useRef();
+  const containerRef = useRef();
+  const audio = useRef();
+
+  const [url, setURL] = useState();
+  const [playTime, setPlayTime] = useState(0);
+  
+  useEffect(() => {
+    if (url && audio.current) {
+      stop();
+      audio.current.url = url;
+      audio.current.offset = 0;
+      hiddenAudio.current.src = url;
+    }
     
-    let url = songUrl  
-    const hiddenFileInput = useRef(null)
-    const containerRef = useRef(null) // grabs container so visualizer can be made to fit parent visualizer element 
-    const audioRef = useRef(null) // will be used to hold reference to audio element
+    const timer = setTimeout(() => { // needs something async to wait for new audio to load? AudioContext.statechage? canplaythrough event listener?
+      if( audio.current ) {
+        play();
+      }
+      console.log("url timer")
+    }, 3000);
 
-    const audioContextRef = useRef(null)
-
-    const canvasRef = useRef(null) // holds visualiser canvas 
-
-    const fourierSize = 32; // should eventually be passed in as prop? used to set detail level of audio data
-    const [dataArray, setDataArray] = useState(new Uint8Array(fourierSize/2)); // used to store raw audio data
-    let isPlaying = true;
-
-    let loop;
-    let listener;
-    let audioSource;
-    let analyser;
-    let renderer;
-    let scene;
-    let camera;
-
-    let scaleX;
-    let scaleY;
-    let scaleZ;
+    const interval = setInterval(() => {
+      if (hiddenAudio.current) setPlayTime(hiddenAudio.current.currentTime);
+    }, 1000)
     
-    let plane;
-    let groundPlane;
-    
-    let spotlight;
-    let yellowPoint;
-
-    useEffect(() => {
-        psychoticHelperFunction();
-        return cancelAnimationFrame( loop );
-    }, [])
-    
-    useEffect(() => {
-        audioContextRef.current = new AudioContext;
-        const file = hiddenFileInput.current.files[0]
-        psychoticHelperFunction();
-        if( url && isPlaying ) {
-            play();
-        } else if ( file ) {
-            play( file )
-        }
-        return () => {
-            cancelAnimationFrame( loop );
-            audioContextRef.current.close();
-        }
-    }, [url, isPlaying]);
-    
-    const psychoticHelperFunction = () => {
-        const container = containerRef.current 
-        
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera( 75, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
-        camera.position.z = 4;  
-        renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, antialias: true });
-        renderer.setSize( container.offsetWidth, container.offsetHeight );
-        container.appendChild( renderer.domElement );
-
-        listener = new THREE.AudioListener();
-        camera.add( listener );
-
-        const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-        const material = new THREE.MeshLambertMaterial({ color: 0x65b2ab });
-        const cubeMaterial = new THREE.MeshLambertMaterial({ color: 0x65b2ab, transparent: true, opacity: .8 });
-        const wireMaterial = new THREE.MeshBasicMaterial({ color: 0x65b2ab, wireframe: true });
-
-        for (let i = 0; i < fourierSize/2; i++) {
-            const bar = new THREE.Mesh( geometry, material );
-            bar.position.z = -8
-            bar.position.x = 1.5*i - fourierSize/2.8
-            bar.rotation.x = .4
-            bar.scale.x = .2
-            bar.scale.z = .2
-            bar.name = `bar${i}`
-            scene.add( bar )
-        }
-
-        for (let i = 0; i < 2; i++) {
-            const box = new THREE.Mesh( geometry, wireMaterial );
-            box.position.z = 3
-            box.position.x = 2*i - 1
-            box.rotation.x = i - .5
-            box.scale.x = 1
-            box.scale.z = 1
-            box.name = `box${i}`
-            scene.add( box )
-        }
-
-        const cubeGeo = new THREE.BoxGeometry(1, 1, 1)
-        const cube = new THREE.Mesh( cubeGeo, cubeMaterial );
-        cube.scale.set(.01, .01, .01)
-        cube.position.z = 3
-        cube.rotation.y = Math.PI/3.4
-        cube.rotation.z = Math.PI/2.8
-        cube.rotation.x = Math.PI/3.1
-        cube.castShadow = true
-        cube.name = "cube"
-        scene.add( cube );
-
-        const planeGeo = new THREE.PlaneGeometry(1, 1, 1);
-        const planeMat = new THREE.MeshLambertMaterial({ color: 0x2825f5 });
-        plane = new THREE.Mesh( planeGeo, planeMat );
-        plane.position.z = -400
-        plane.scale.set( 2000, 2000, 2000 )
-        plane.name = "backdrop"
-        scene.add( plane );
-
-        const groundGeo = new THREE.PlaneGeometry(16, 16, 16);
-        const groundMat = new THREE.MeshLambertMaterial({ color: 0xb826f6, transparent: true, opacity: 0.5  });
-        groundPlane = new THREE.Mesh( groundGeo, groundMat );
-        groundPlane.rotation.x = 1.6
-        groundPlane.position.z = -10
-        groundPlane.material.side = THREE.DoubleSide;
-        groundPlane.scale.set( 300, 300, 300 )
-        groundPlane.name = "ground"
-        scene.add( groundPlane );
-
-        yellowPoint = new THREE.PointLight( 0xfff352, 1, 400, 3 );
-        yellowPoint.position.set(0, 5, -4)
-        scene.add( yellowPoint )
-
-        const light = new THREE.HemisphereLight(0x000000, 0xed289b, 1)
-        scene.add(light)
-
-        spotlight = new THREE.SpotLight(0xffffff);
-        spotlight.position.set (0, 30, 50);
-        scene.add(spotlight);
-
-        renderer.render( scene, camera ); 
+    return () => {
+      clearTimeout(timer)
+      clearInterval(interval)
     }
+  }, [url]);
+  
+  useEffect(() => {
+    if(songUrl) setURL(songUrl);
+  }, [songUrl])
 
-    const average = array => array.reduce((a, b) => a + b)/array.length
+  const handleFileSubmitClick = () => {
+    hiddenFileInput.current.click();
+  };
 
-    const play = (file) => {
-        
-        const audio = audioRef.current 
-        const audioContext = audioContextRef.current
-
-        if(!file){
-            psychoticHelperFunction();
-            audio.src = url 
-            audio.crossOrigin="anonymous"
-        } else{
-            psychoticHelperFunction();
-            audio.src = URL.createObjectURL(file) 
-        }
-
-        audio.play();
-
-        const streamDestination = audioContext.createMediaStreamDestination();
-        audioSource = audioContext.createMediaElementSource(audio);
-        analyser = audioContext.createAnalyser();
-        audioSource.connect(streamDestination)
-        audioSource.connect(analyser);
-        analyser.connect(audioContext.destination);
-        analyser.fftSize = fourierSize;
-        
-        const animate = () => {
-            analyser.getByteFrequencyData(dataArray);
-            const xAvg = average(dataArray.slice( 0, 5 ))/8000
-            const yAvg = average(dataArray.slice( 6, 10 ))/8000
-            const zAvg = average(dataArray.slice( 11, 15))/4000
-            const totalAvg = average(dataArray)/100
-            scaleX = xAvg;
-            scaleY = yAvg; 
-            scaleZ = zAvg; 
-
-            scene.children.forEach(child => {
-                switch(child.name){ 
-                    case "bar0": 
-                    case "bar15":
-                        child.scale.y = average([dataArray[15], dataArray[14]])/6 + .5
-                        break;
-                    case "bar1":
-                    case "bar14":
-                        child.scale.y = average( [dataArray[13], dataArray[12]])/7 + .5
-                        break;
-                    case "bar2":
-                    case "bar13":
-                        child.scale.y = average( [dataArray[11], dataArray[10]])/8 + .5
-                        break;
-                    case "bar3":
-                    case "bar12":
-                        child.scale.y = average( [dataArray[9], dataArray[8]])/9 + .5
-                        break;
-                    case "bar4": 
-                    case "bar11":
-                        child.scale.y = average([dataArray[7], dataArray[6]])/10 + .5
-                        break;
-                    case "bar5":
-                    case "bar10":
-                        child.scale.y = average( [dataArray[5], dataArray[4]])/10 + .5
-                        break;
-                    case "bar6":
-                    case "bar9":
-                        child.scale.y = average( [dataArray[3], dataArray[2]])/11 + .5
-                        break;
-                    case "bar7":
-                    case "bar8":
-                        child.scale.y = average( [dataArray[1], dataArray[0]])/12 + .5
-                        break;
-                    case "box0":
-                    case "box1":
-                        child.rotation.y += scaleY/4 
-                        child.rotation.x += scaleX/4 
-                        child.rotation.z += scaleZ/4
-                        child.scale.set(scaleX*40, scaleY*40, scaleZ*40)
-                        break;
-                    case "cube":
-                        child.rotation.x += (scaleX) 
-                        child.rotation.y += (scaleY) 
-                        child.rotation.z += (scaleZ)
-                        child.scale.set((scaleX*15 + .01), (scaleY*15 + .01), (scaleZ*15 + .01))
-                        break;
-                    default:
-                        break;
-                }
-            })
-            yellowPoint.intensity = totalAvg;
-
-            loop = requestAnimationFrame( animate );
-            renderer.render( scene, camera );
-        }
-        animate();
+  const playPause = () => {
+    if (audio.current.isPlaying) {
+      pause();
+    } else {
+      play();
     }
+  };
 
-    const handleFileSubmitClick = () => {
-        hiddenFileInput.current.click();
-    }
+  const volUp = () => {
+    const currentVolume = audio.current.getVolume()
+    audio.current.setVolume( currentVolume + 1 ) 
+  }
+  
+  const volDown = () => {
+    const currentVolume = audio.current.getVolume()
+    audio.current.setVolume( currentVolume - 1 ) 
+  }
 
-    const stopPlaying = e => {
-        isPlaying = false;
-    }
+  const setFile = () => {
+    const file = hiddenFileInput.current.files[0]
+    setURL(URL.createObjectURL(file));
+  };
 
-    const startPlaying = () => {
-        isPlaying = true;
-    }
+  const setTime = (value) => {
+    console.log("scrubber value", value)
+    console.log(audio.current.context.currentTime)
+    audio.current.stop();
+    audio.current.offset = value;
+    hiddenAudio.current.currentTime = value;
+    audio.current.play();
+    hiddenAudio.current.play();
+  }
 
-    const playFile = (file) => {
-        console.log("playableFile?", file)
-        isPlaying = true;
-        url = (null);
-        console.log("isPlaying in playFile?", isPlaying);
-        play(file);
-    }
+  const play = () => {
+    audio.current.play();
+    hiddenAudio.current.play();
+  }
+  
+  const pause = () => {
+    audio.current.pause();
+    hiddenAudio.current.pause();
+  }
 
-    return (
-        <div id={styles.visualizerContainer}>
-            <div id={styles.controls}>
-                <audio ref={ audioRef } id="test-audio" controls
-                    onPlay={ startPlaying }
-                    onPause={ stopPlaying }
-                    onEnded={ stopPlaying }
-                ></audio>
-                <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>Play Local File</button>
-                <input 
-                    type="file"
-                    ref={hiddenFileInput}
-                    id="fileupload"
-                    accept="audio/*"
-                    onChange={e => playFile(e.currentTarget.files[0]) }
-                    style={ {display: 'none'}}
-                />
-            </div>
-            <div ref={ containerRef} id={ styles.container3D }>
-                <canvas ref={ canvasRef }></canvas>
-            </div>
+  const stop = () => {
+    audio.current.stop();
+  }
+
+  return (
+  <div id={styles.visualizerContainer}>
+
+    <div id={styles.controls}>
+      <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>play local file</button>
+      { hiddenAudio.current &&
+      <>
+        <div>
+          <input type="range" value={playTime} min={0} max={Number(hiddenAudio.current.duration)} onChange={e => setTime(e.target.value)}/>
+          <div>
+            <TimeDisplay song={hiddenAudio.current} />
+          </div>
         </div>
-    );
+        <div id={styles.playbackControls}>
+          <button id={styles.playbackControlButton} onClick={playPause}>⏯</button>
+          <button id={styles.playbackControlButton} onClick={volDown}>-</button>
+          <button id={styles.playbackControlButton} onClick={volUp}>+</button>
+        </div>
+      </>
+      }
+    </div>
+
+
+    <audio ref={hiddenAudio} src={url} muted={true} />
+    <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }} />
+
+    <div ref={containerRef} id={styles.container3D}>
+      <Canvas camera={{ position: [0, -.06, 3.4], far: 100, fov: 70, rotation: [.28, 0, 0] }}>
+        <Suspense fallback={ null }>
+          { url && 
+            <>
+              <PositionalAudio ref={audio} url={url} />
+              <Display audio={ audio } />
+            </>
+          }
+        </Suspense>
+      </Canvas>
+    </div>
+  </div>
+  );
 };
 
 export default Visualizer;
