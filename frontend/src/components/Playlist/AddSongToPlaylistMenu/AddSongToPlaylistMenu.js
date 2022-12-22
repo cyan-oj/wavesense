@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getPlaylists, updatePlaylist } from '../../../store/playlists';
 import styles from '../Playlist.module.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSquarePlus } from '@fortawesome/free-regular-svg-icons'
 
 const { useState, useEffect } = require("react")
 
@@ -14,7 +16,7 @@ const AddSongToPlaylistMenu = ({song}) => {
     const ensureCurrentUser = () => {
         return (
             <div>
-                <button onClick={openPlaylistsMenu} className={styles.addDelete} id={styles.addToPlaylist}>+</button>
+                <button onClick={openPlaylistsMenu} className={styles.addDelete} id={styles.addToPlaylist}><FontAwesomeIcon icon={faSquarePlus} size="xl" /></button>
                 <ul className={styles.dropDownMenuPlaylists}>
                     {showPlaylistsMenu && currentUserPlaylists}
                 </ul>

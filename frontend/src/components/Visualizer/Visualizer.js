@@ -4,6 +4,11 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PositionalAudio, Plane, RoundedBox } from "@react-three/drei";
 import Display from "./Display";
 import TimeDisplay from "./TimeDisplay";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faVolumeLow } from '@fortawesome/free-solid-svg-icons';
+import { faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
+import { faPause } from '@fortawesome/free-solid-svg-icons';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 const Visualizer = ({ songUrl }) => {
   const hiddenFileInput = useRef();
@@ -108,9 +113,9 @@ const Visualizer = ({ songUrl }) => {
           </div>
         </div>
         <div id={styles.playbackControls}>
-          <button id={styles.playbackControlButton} onClick={playPause}>⏯</button>
-          <button id={styles.playbackControlButton} onClick={volDown}>-</button>
-          <button id={styles.playbackControlButton} onClick={volUp}>+</button>
+            <button id={styles.playbackControlButton} onClick={playPause}><FontAwesomeIcon icon={faPlay} size="sm" /><FontAwesomeIcon icon={faPause} size="sm" /></button>
+            <button id={styles.playbackControlButton} onClick={volDown}><FontAwesomeIcon icon={faVolumeLow} size="sm" /></button>
+            <button id={styles.playbackControlButton} onClick={volUp}><FontAwesomeIcon icon={faVolumeHigh} size="sm" /></button>
         </div>
       </>
       }
