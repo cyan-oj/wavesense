@@ -13,10 +13,10 @@ const AddSongToPlaylistMenu = ({song}) => {
 
     const ensureCurrentUser = () => {
         return (
-            <div>
+            <div className={styles.addButton}>
                 <button onClick={openPlaylistsMenu} className={styles.addDelete} id={styles.addToPlaylist}>+</button>
-                <ul className={styles.dropDownMenuPlaylists}>
-                    {showPlaylistsMenu && currentUserPlaylists}
+                <ul id={showPlaylistsMenu && styles.dropDownNotHidden} className={styles.dropDownMenuPlaylists}>
+                    {currentUserPlaylists}
                 </ul>
             </div>
         )
@@ -62,7 +62,6 @@ const AddSongToPlaylistMenu = ({song}) => {
 
     useEffect(() => {
         if (!showPlaylistsMenu) return;
-
         const closePlaylistsMenu = () => {
             setShowPlaylistsMenu(false);
         };
