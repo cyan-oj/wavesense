@@ -165,19 +165,6 @@
     color: white;
 }
 
-#addToPlaylist {
-    margin-top: 90%;
-    font-size: large;
-}
-
-#trashcan {
-    height: 23px;
-    width: 23px;
-}
-
-#trashcan:hover {
-    color: white;
-}
 
 .dropDownMenuPlaylists {
     position: absolute;

@@ -48,3 +48,27 @@
 .playlistUpdate {
     padding: 0;
 }
+
+.titleName {
+    pointer-events: none;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.playlistUpdate, 
+#deleteAPlaylist {
+    display: inline-block;
+    /* justify-content: center; */
+    border: none;
+    background-color: transparent;
+    color: black;
+    text-align: center;
+    margin:0px;
+    padding-right: 10px;
+}
+
+.playlistUpdate:hover,
+#deleteAPlaylist:hover {
+    cursor: pointer;
+    color: white;
+}

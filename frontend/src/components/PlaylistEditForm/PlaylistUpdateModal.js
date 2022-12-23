@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Modal } from "../../context/Modal";
 import { updatePlaylist } from "../../store/playlists";
-import styles from '../Playlists/Playlists.module.css'
+import styles from '../Playlists/Playlists.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-regular-svg-icons'
 
 
 const PlaylistUpdateForm = ({ setShowPlaylistUpdateModal, playlist }) => {
@@ -42,8 +44,8 @@ const PlaylistUpdateModal = ({playlist}) => {
     const [showPlaylistUpdateModal, setShowPlaylistUpdateModal] = useState(false);
 
     return (
-        <div id='update-playlist-modal'>
-            <button onClick={() => setShowPlaylistUpdateModal(true)} className={styles.playlistUpdate}> UPDATE </button>
+        <div id={styles.updatePlaylistModal}>
+            <button onClick={() => setShowPlaylistUpdateModal(true)} className={styles.playlistUpdate}> <FontAwesomeIcon icon={faPenToSquare} size="xl"/></button>
             {showPlaylistUpdateModal && <Modal onClose={() => setShowPlaylistUpdateModal(false)}><PlaylistUpdateForm setShowPlaylistUpdateModal={setShowPlaylistUpdateModal} playlist={playlist} /></Modal>}
         </div>
     )

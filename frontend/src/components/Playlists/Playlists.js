@@ -5,7 +5,8 @@ import { useEffect } from 'react';
 import PlaylistUpdateModal from '../PlaylistEditForm/PlaylistUpdateModal';
 import { deletePlaylist } from '../../store/playlists';
 import { useState } from 'react';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
 
 
 
@@ -31,9 +32,9 @@ const Playlists = ({handlePlaylistItemClick}) => {
 
         if (currentUser && (playlist.creator._id === currentUser._id)) {
             return (
-                <div className='editPlaylist'>
+                <div className={styles.editPlaylist}>
                     <PlaylistUpdateModal playlist={playlist} />
-                    <button onClick={handleDelete} className={styles.playPause}>DELETE</button>
+                    <button onClick={handleDelete} className={styles.playPause} id={styles.deleteAPlaylist}><FontAwesomeIcon icon={faTrashCan} size="xl" /></button>
                 </div>
             )
         } else {
