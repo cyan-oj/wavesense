@@ -107,7 +107,7 @@ const Visualizer = ({ songUrl }) => {
       { hiddenAudio.current &&
       <>
         <div>
-          <input type="range" value={playTime} min={0} max={Number(hiddenAudio.current.duration)} onChange={e => setTime(e.target.value)}/>
+            <input type="range" value={playTime} min={0} max={ hiddenAudio.current.duration ? Number(hiddenAudio.current.duration) : '' } onChange={e => setTime(e.target.value)}/>
           <div>
             <TimeDisplay song={hiddenAudio.current} />
           </div>
