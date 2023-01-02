@@ -1,6 +1,6 @@
 import styles from "./Visualizer.module.css";
 
-const TimeDisplay = ({ song }) => {
+const TimeDisplay = ({ song, startTime }) => {
 
   let time = "0:00";
   let totalTime = "0:00";
@@ -14,7 +14,7 @@ const TimeDisplay = ({ song }) => {
     return `${mins}:${secs}`;
   }
 
-  time = timeFormat(song.currentTime)
+  time = timeFormat(song.context.currentTime - startTime)
   if (song.buffer.duration) totalTime = timeFormat(song.buffer.duration)
   
 

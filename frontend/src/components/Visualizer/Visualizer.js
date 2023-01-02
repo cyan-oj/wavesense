@@ -12,17 +12,19 @@ const Visualizer = ({ songUrl }) => {
   
   const [url, setURL] = useState();
   const [playTime, setPlayTime] = useState(0);
+  const [startTime, setStartTime] = useState(0);
 
   const [maxTime, setMaxTime] = useState(0);
   
   useEffect(() => {
     if (url && audio.current) {
-      stop();
+      audio.current.stop();
       audio.current.url = url;
       audio.current.offset = 0;
+      setStartTime(audio.current.context.currentTime);
+      setPlayTime(audio.current.context.currentTime - startTime);
       console.log(audio.current)
     }
-
 
     const interval = setInterval(() => {
       if (audio.current) {
@@ -30,6 +32,7 @@ const Visualizer = ({ songUrl }) => {
         if (currentDuration != maxTime) {
           setMaxTime(currentDuration);
         }
+        setPlayTime(audio.current.context.currentTime - startTime);
       }
     }, 200)
     
@@ -43,7 +46,7 @@ const Visualizer = ({ songUrl }) => {
   }, [songUrl])
 
   useEffect(() => {
-    if (audio.current) play();
+    if (audio.current) audio.current.play();
   }, [maxTime])
 
   const handleFileSubmitClick = () => {
@@ -52,9 +55,9 @@ const Visualizer = ({ songUrl }) => {
 
   const playPause = () => {
     if (audio.current.isPlaying) {
-      pause();
+      audio.current.pause();
     } else {
-      play();
+      audio.current.play();
     }
   };
 
@@ -74,23 +77,13 @@ const Visualizer = ({ songUrl }) => {
   };
 
   const setTime = (value) => {
+    console.log(value)
     audio.current.stop();
     audio.current.offset = value;
+    setStartTime(audio.current.context.currentTime - value)
+    setPlayTime(audio.current.context.currentTime - startTime + value)
     audio.current.play();
   }
-
-  const play = () => {
-    audio.current.play();
-  }
-  
-  const pause = () => {
-    audio.current.pause();
-  }
-
-  const stop = () => {
-    audio.current.stop();
-  }
-
 
   return (
   <div id={styles.visualizerContainer}>
@@ -102,7 +95,7 @@ const Visualizer = ({ songUrl }) => {
           <input type="range" value={ playTime } min={0} max={ maxTime } onChange={e => setTime(e.target.value)}/>
           {audio.current &&
           <div>
-            <TimeDisplay song={audio.current} />
+            <TimeDisplay song={audio.current} startTime={startTime}/>
           </div>
           }
         </div>
@@ -122,7 +115,7 @@ const Visualizer = ({ songUrl }) => {
           { url && 
             <>
               <PositionalAudio ref={audio} url={url} />
-              <Display audio={ audio } play={ play }/>
+              <Display audio={ audio } />
             </>
           }
         </Suspense>
