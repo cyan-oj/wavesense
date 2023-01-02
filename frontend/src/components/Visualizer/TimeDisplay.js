@@ -15,7 +15,7 @@ const TimeDisplay = ({ song }) => {
   }
 
   time = timeFormat(song.currentTime)
-  if (song.duration) totalTime = timeFormat(song.duration)
+  if (song.buffer.duration) totalTime = timeFormat(song.buffer.duration)
   
 
   return(

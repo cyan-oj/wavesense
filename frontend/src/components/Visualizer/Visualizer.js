@@ -7,41 +7,33 @@ import TimeDisplay from "./TimeDisplay";
 
 const Visualizer = ({ songUrl }) => {
   const hiddenFileInput = useRef();
-  const hiddenAudio = useRef();
   const containerRef = useRef();
   const audio = useRef();
-
+  
   const [url, setURL] = useState();
   const [playTime, setPlayTime] = useState(0);
-  const [maxTime, setMaxTime] = useState(1);
+
+  const [maxTime, setMaxTime] = useState(0);
   
   useEffect(() => {
     if (url && audio.current) {
       stop();
       audio.current.url = url;
       audio.current.offset = 0;
-      hiddenAudio.current.src = url;
+      console.log(audio.current)
     }
 
-    const timer = setTimeout(() => { // needs something async to wait for new audio to load? AudioContext.statechage? canplaythrough event listener?
-      if( audio.current ) {
-        play();
-      }
-    }, 3000);
-
-    // const loaded = document.getElementById("hiddenAudio").addEventListener("statechange", (event) => { 
-    //   console.log("statechange", event)
-    // })
 
     const interval = setInterval(() => {
-      if (hiddenAudio.current) {
-        setPlayTime(hiddenAudio.current.currentTime);
-        setMaxTime(hiddenAudio.current.duration);
+      if (audio.current) {
+        const currentDuration = audio.current.buffer.duration
+        if (currentDuration != maxTime) {
+          setMaxTime(currentDuration);
+        }
       }
-    }, 1000)
+    }, 200)
     
     return () => {
-      clearTimeout(timer)
       clearInterval(interval)
     }
   }, [url]);
@@ -49,6 +41,10 @@ const Visualizer = ({ songUrl }) => {
   useEffect(() => {
     if(songUrl) setURL(songUrl);
   }, [songUrl])
+
+  useEffect(() => {
+    if (audio.current) play();
+  }, [maxTime])
 
   const handleFileSubmitClick = () => {
     hiddenFileInput.current.click();
@@ -79,44 +75,36 @@ const Visualizer = ({ songUrl }) => {
 
   const setTime = (value) => {
     audio.current.stop();
-
     audio.current.offset = value;
-    hiddenAudio.current.currentTime = value;
-
     audio.current.play();
-    hiddenAudio.current.play();
   }
 
   const play = () => {
     audio.current.play();
-    hiddenAudio.current.play();
   }
   
   const pause = () => {
     audio.current.pause();
-    hiddenAudio.current.pause();
   }
 
   const stop = () => {
     audio.current.stop();
   }
 
-  const stateChange = (e) => {
-    console.log("hidden audio state change", e)
-  }
 
   return (
   <div id={styles.visualizerContainer}>
 
     <div id={styles.controls}>
       <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>play local file</button>
-      { hiddenAudio.current &&
       <>
         <div>
           <input type="range" value={ playTime } min={0} max={ maxTime } onChange={e => setTime(e.target.value)}/>
+          {audio.current &&
           <div>
-            <TimeDisplay song={hiddenAudio.current} />
+            <TimeDisplay song={audio.current} />
           </div>
+          }
         </div>
         <div id={styles.playbackControls}>
           <button id={styles.playbackControlButton} onClick={playPause}>⏯</button>
@@ -124,11 +112,8 @@ const Visualizer = ({ songUrl }) => {
           <button id={styles.playbackControlButton} onClick={volUp}>+</button>
         </div>
       </>
-      }
     </div>
 
-
-    <audio id="hiddenAudio"ref={hiddenAudio} src={url} muted={true} />
     <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }} />
 
     <div ref={containerRef} id={styles.container3D}>
@@ -137,7 +122,7 @@ const Visualizer = ({ songUrl }) => {
           { url && 
             <>
               <PositionalAudio ref={audio} url={url} />
-              <Display audio={ audio } />
+              <Display audio={ audio } play={ play }/>
             </>
           }
         </Suspense>
