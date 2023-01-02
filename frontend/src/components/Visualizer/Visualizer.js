@@ -67,12 +67,14 @@ const Visualizer = ({ songUrl }) => {
 
   const volUp = () => {
     const currentVolume = audio.current.getVolume()
-    audio.current.setVolume( currentVolume + 1 ) 
+    audio.current.setVolume( currentVolume - 1 ) 
+    console.log(audio.current)
   }
   
   const volDown = () => {
     const currentVolume = audio.current.getVolume()
-    audio.current.setVolume( currentVolume - 1 ) 
+    audio.current.setVolume( currentVolume + 1 ) 
+    console.log(audio.current)
   }
 
   const setFile = () => {
@@ -94,9 +96,9 @@ const Visualizer = ({ songUrl }) => {
     <div id={styles.controls}>
       <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>play local file</button>
         <div>
-            <input id={styles.inputRange} type="range" value={ playTime } min={0} max={ audio.current.buffer.duration ?  audio.current.buffer.duration : '' } onChange={e => setTime(e.target.value)}/>
           {audio.current &&
           <div>
+            <input id={styles.inputRange} type="range" value={ playTime } min={0} max={ audio.current.buffer.duration ?  audio.current.buffer.duration : '' } onChange={e => setTime(e.target.value)}/>
             <TimeDisplay song={ audio.current } startTime={startTime}/>
           </div>
           }
