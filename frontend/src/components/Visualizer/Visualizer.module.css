@@ -75,7 +75,7 @@ input[type=range] {
     -webkit-appearance: none;
     width: 100%;
     height: 3px;
-    margin: 6px 0px 6px 0px;
+    margin: 12px 0px 6px 0px;
     background: white;
     border: none;
     border-radius: 3px;
@@ -95,4 +95,21 @@ input[type=range]::-webkit-slider-thumb:hover {
     background: white;
     width: 20px;
     height: 20px;
+}
+
+#inputRange {
+    position: absolute;
+    z-index: 50;
+    height: 40px;
+    top: 25px;
+    background: transparent;
+}
+
+#inputRange::-webkit-slider-thumb {
+    background: transparent;
+    border: none;
+}
+#inputRange::-moz-range-thumb{
+    background: transparent;
+    border: none;
 }

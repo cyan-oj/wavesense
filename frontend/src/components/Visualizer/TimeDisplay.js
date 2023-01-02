@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import styles from "./Visualizer.module.css";
 
-const TimeDisplay = ({ song }) => {
+const TimeDisplay = ({ song, startTime }) => {
 
   let time = "0:00";
   let totalTime = "0:00";
@@ -15,13 +14,22 @@ const TimeDisplay = ({ song }) => {
     return `${mins}:${secs}`;
   }
 
-  time = timeFormat(song.currentTime)
-  totalTime = song.duration ? timeFormat(song.duration) : 'please wait - loading'
+  time = timeFormat(song.context.currentTime - startTime)
+  totalTime = song.buffer.duration ? timeFormat(song.buffer.duration) : 'please wait - loading'
 
   return(
-    <div id={styles.timer}>
-      <time>{time}</time>
-      <time>{totalTime}</time>
+    <div>
+      <input 
+        type="range" 
+        value={ song.context.currentTime - startTime } 
+        readOnly={true}
+        min={0} 
+        max={ song.buffer.duration }
+      />
+      <div id={styles.timer}>
+        <time>{time}</time>
+        <time>{totalTime}</time>
+      </div>
     </div>
   )
 }
