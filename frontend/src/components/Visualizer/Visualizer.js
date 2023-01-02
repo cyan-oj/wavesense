@@ -4,6 +4,11 @@ import { Canvas } from "@react-three/fiber";
 import { PositionalAudio } from "@react-three/drei";
 import Display from "./Display";
 import TimeDisplay from "./TimeDisplay";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faVolumeLow } from '@fortawesome/free-solid-svg-icons';
+import { faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
+import { faPause } from '@fortawesome/free-solid-svg-icons';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 const Visualizer = ({ songUrl }) => {
   const hiddenFileInput = useRef();
@@ -89,7 +94,7 @@ const Visualizer = ({ songUrl }) => {
     <div id={styles.controls}>
       <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>play local file</button>
         <div>
-          <input id={styles.inputRange} type="range" value={ playTime } min={0} max={ maxTime } onChange={e => setTime(e.target.value)}/>
+            <input id={styles.inputRange} type="range" value={ playTime } min={0} max={ audio.current.buffer.duration ?  audio.current.buffer.duration : '' } onChange={e => setTime(e.target.value)}/>
           {audio.current &&
           <div>
             <TimeDisplay song={ audio.current } startTime={startTime}/>
@@ -97,9 +102,9 @@ const Visualizer = ({ songUrl }) => {
           }
         </div>
         <div id={styles.playbackControls}>
-          <button id={styles.playbackControlButton} onClick={playPause}>⏯</button>
-          <button id={styles.playbackControlButton} onClick={volDown}>-</button>
-          <button id={styles.playbackControlButton} onClick={volUp}>+</button>
+            <button id={styles.playbackControlButton} onClick={playPause}><FontAwesomeIcon icon={faPlay} size="sm" /><FontAwesomeIcon icon={faPause} size="sm" /></button>
+            <button id={styles.playbackControlButton} onClick={volDown}><FontAwesomeIcon icon={faVolumeLow} size="sm" /></button>
+            <button id={styles.playbackControlButton} onClick={volUp}><FontAwesomeIcon icon={faVolumeHigh} size="sm" /></button>
         </div>
     </div>
 

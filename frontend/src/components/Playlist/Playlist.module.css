@@ -54,9 +54,20 @@
     border: 2px solid rgb(101, 6, 127);
     border-radius: 20px;
     overflow-y: scroll;
+    overflow-x: hidden;
     scrollbar-width: thin;
     -ms-overflow-style: none;
 }
+
+#playlistContainer::-webkit-scrollbar {
+    width: 3px;
+    border-radius: 5px;
+}
+
+#playlistContainer::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
 
 .addSong {
     color: white;
@@ -92,10 +103,6 @@
 
 #songList {
     text-decoration: none;
-}
-
-#songList::-webkit-scrollbar {
-    display: hidden;
 }
 
 .songListItems {
@@ -149,35 +156,48 @@
     margin-right: 10px;
 }
 
+.summonedPlaylists {
+    background-color: brown;
+}
+
 .addDelete:hover {
     cursor: pointer;
     color: white;
 }
 
-#addToPlaylist {
-    margin-top: 90%;
-    font-size: large;
-}
-
-#trashcan {
-    height: 23px;
-    width: 23px;
-}
-
-#trashcan:hover {
-    color: white;
-}
 
 .dropDownMenuPlaylists {
     position: absolute;
-    height: 40%;
+    height: 30%;
+    width: 80%;
+    top: 50vh;
+    left: 310px;
     scroll-behavior: auto;
+    visibility: hidden;
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    background-color: rgb(56, 54, 54);
+    border: 2px solid rgb(101, 6, 127);
+    border-radius: 10px;
 }
 
-.playlistListItems {
+.dropDownMenuPlaylists::-webkit-scrollbar {
+    width: 3px;
+}
+
+.dropDownMenuPlaylists::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
+
+#dropDownNotHidden {
+    top: 30px;
+    transition-duration: 0.5s;
+    visibility: visible;
+}
+
+/* .playlistListItems {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -189,7 +209,7 @@
     padding: 10px 15px;
     margin-left: 10px;
     width: 8rem;
-}
+} */
 
 
  #playlistInfo {

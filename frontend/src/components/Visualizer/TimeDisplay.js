@@ -15,7 +15,7 @@ const TimeDisplay = ({ song, startTime }) => {
   }
 
   time = timeFormat(song.context.currentTime - startTime)
-  if (song.buffer.duration) totalTime = timeFormat(song.buffer.duration)
+  totalTime = song.buffer.duration ? timeFormat(song.buffer.duration) : 'please wait - loading'
 
   return(
     <div>
