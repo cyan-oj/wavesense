@@ -23,8 +23,9 @@ const TimeDisplay = ({ song, startTime }) => {
       <input 
         type="range" 
         value={ song.context.currentTime - startTime } 
+        readOnly={true}
         min={0} 
-        max={ song.buffer.duration } 
+        max={ song.buffer.duration }
       />
       <div id={styles.timer}>
         <time>{time}</time>

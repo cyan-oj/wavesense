@@ -33,7 +33,7 @@ const Visualizer = ({ songUrl }) => {
         }
         if (audio.current.isPlaying) setPlayTime(audio.current.context.currentTime - startTime);
       }
-    }, 200)
+    }, 100)
     
     return () => {
       clearInterval(interval)
@@ -76,7 +76,6 @@ const Visualizer = ({ songUrl }) => {
   };
 
   const setTime = (value) => {
-    console.log(value)
     audio.current.stop();
     audio.current.offset = value;
     setStartTime(audio.current.context.currentTime - value)
@@ -93,7 +92,7 @@ const Visualizer = ({ songUrl }) => {
           <input id={styles.inputRange} type="range" value={ playTime } min={0} max={ maxTime } onChange={e => setTime(e.target.value)}/>
           {audio.current &&
           <div>
-            <TimeDisplay song={audio.current} startTime={startTime}/>
+            <TimeDisplay song={ audio.current } startTime={startTime}/>
           </div>
           }
         </div>
