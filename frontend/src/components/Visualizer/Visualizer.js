@@ -38,7 +38,7 @@ const Visualizer = ({ songUrl }) => {
         }
         if (audio.current.isPlaying) setPlayTime(audio.current.context.currentTime - startTime);
       }
-    }, 100)
+    }, 50)
     
     return () => {
       clearInterval(interval)
