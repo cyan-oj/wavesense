@@ -16,8 +16,7 @@ const TimeDisplay = ({ song }) => {
   }
 
   time = timeFormat(song.currentTime)
-  totalTime = timeFormat(song.duration)
-  
+  totalTime = song.duration ? timeFormat(song.duration) : 'please wait - loading'
 
   return(
     <div id={styles.timer}>
