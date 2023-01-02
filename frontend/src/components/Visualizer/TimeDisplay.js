@@ -19,9 +19,17 @@ const TimeDisplay = ({ song, startTime }) => {
   
 
   return(
-    <div id={styles.timer}>
-      <time>{time}</time>
-      <time>{totalTime}</time>
+    <div>
+      <input 
+        type="range" 
+        value={ song.context.currentTime - startTime } 
+        min={0} 
+        max={ song.buffer.duration } 
+      />
+      <div id={styles.timer}>
+        <time>{time}</time>
+        <time>{totalTime}</time>
+      </div>
     </div>
   )
 }

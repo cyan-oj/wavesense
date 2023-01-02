@@ -90,7 +90,6 @@ const Visualizer = ({ songUrl }) => {
 
     <div id={styles.controls}>
       <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>play local file</button>
-      <>
         <div>
           <input type="range" value={ playTime } min={0} max={ maxTime } onChange={e => setTime(e.target.value)}/>
           {audio.current &&
@@ -104,7 +103,6 @@ const Visualizer = ({ songUrl }) => {
           <button id={styles.playbackControlButton} onClick={volDown}>-</button>
           <button id={styles.playbackControlButton} onClick={volUp}>+</button>
         </div>
-      </>
     </div>
 
     <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }} />
