@@ -72,7 +72,6 @@ time {
 }
 
 input[type=range] {
-    -webkit-appearance: none;
     width: 100%;
     height: 3px;
     margin: 12px 0px 6px 0px;
