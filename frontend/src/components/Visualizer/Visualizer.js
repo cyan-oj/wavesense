@@ -67,16 +67,16 @@ const Visualizer = ({ songUrl }) => {
 
   const volUp = () => {
     const currentVolume = audio.current.getVolume()
-    audio.current.setVolume( currentVolume - 1 ) 
-    console.log(audio.current)
+    audio.current.setVolume( Math.abs(currentVolume + 1) ) 
+    console.log(currentVolume)
   }
   
   const volDown = () => {
     const currentVolume = audio.current.getVolume()
-    audio.current.setVolume( currentVolume + 1 ) 
-    console.log(audio.current)
+    audio.current.setVolume( Math.abs(currentVolume - 1)) 
+    console.log(currentVolume)
   }
-
+  
   const setFile = () => {
     const file = hiddenFileInput.current.files[0]
     setURL(URL.createObjectURL(file));
@@ -95,19 +95,21 @@ const Visualizer = ({ songUrl }) => {
 
     <div id={styles.controls}>
       <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>play local file</button>
-        <div>
-          {audio.current &&
+        {audio.current &&
+        <>
           <div>
-            <input id={styles.inputRange} type="range" value={ playTime } min={0} max={ audio.current.buffer.duration ?  audio.current.buffer.duration : '' } onChange={e => setTime(e.target.value)}/>
-            <TimeDisplay song={ audio.current } startTime={startTime}/>
+            <div>
+              <input id={styles.inputRange} type="range" value={ playTime } min={0} max={ audio.current.buffer.duration ?  audio.current.buffer.duration : '' } onChange={e => setTime(e.target.value)}/>
+              <TimeDisplay song={ audio.current } startTime={startTime}/>
+            </div>
           </div>
-          }
-        </div>
-        <div id={styles.playbackControls}>
-            <button id={styles.playbackControlButton} onClick={playPause}><FontAwesomeIcon icon={faPlay} size="sm" /><FontAwesomeIcon icon={faPause} size="sm" /></button>
-            <button id={styles.playbackControlButton} onClick={volDown}><FontAwesomeIcon icon={faVolumeLow} size="sm" /></button>
-            <button id={styles.playbackControlButton} onClick={volUp}><FontAwesomeIcon icon={faVolumeHigh} size="sm" /></button>
-        </div>
+          <div id={styles.playbackControls}>
+              <button id={styles.playbackControlButton} onClick={playPause}><FontAwesomeIcon icon={faPlay} size="sm" /><FontAwesomeIcon icon={faPause} size="sm" /></button>
+              <button id={styles.playbackControlButton} onClick={volDown}><FontAwesomeIcon icon={faVolumeLow} size="sm" /></button>
+              <button id={styles.playbackControlButton} onClick={volUp}><FontAwesomeIcon icon={faVolumeHigh} size="sm" /></button>
+          </div>
+        </>
+        }
     </div>
 
     <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }} />
