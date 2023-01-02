@@ -11,9 +11,9 @@ const Visualizer = ({ songUrl }) => {
   const audio = useRef();
   
   const [url, setURL] = useState();
+
   const [playTime, setPlayTime] = useState(0);
   const [startTime, setStartTime] = useState(0);
-
   const [maxTime, setMaxTime] = useState(0);
   
   useEffect(() => {
@@ -23,7 +23,6 @@ const Visualizer = ({ songUrl }) => {
       audio.current.offset = 0;
       setStartTime(audio.current.context.currentTime);
       setPlayTime(audio.current.context.currentTime - startTime);
-      console.log(audio.current)
     }
 
     const interval = setInterval(() => {
@@ -32,7 +31,7 @@ const Visualizer = ({ songUrl }) => {
         if (currentDuration != maxTime) {
           setMaxTime(currentDuration);
         }
-        setPlayTime(audio.current.context.currentTime - startTime);
+        if (audio.current.isPlaying) setPlayTime(audio.current.context.currentTime - startTime);
       }
     }, 200)
     
@@ -91,7 +90,7 @@ const Visualizer = ({ songUrl }) => {
     <div id={styles.controls}>
       <button id={styles.fileUploadButton} onClick={handleFileSubmitClick}>play local file</button>
         <div>
-          <input type="range" value={ playTime } min={0} max={ maxTime } onChange={e => setTime(e.target.value)}/>
+          <input id={styles.inputRange} type="range" value={ playTime } min={0} max={ maxTime } onChange={e => setTime(e.target.value)}/>
           {audio.current &&
           <div>
             <TimeDisplay song={audio.current} startTime={startTime}/>

@@ -96,3 +96,10 @@ input[type=range]::-webkit-slider-thumb:hover {
     width: 20px;
     height: 20px;
 }
+
+#inputRange {
+    position: absolute;
+    z-index: 50;
+    height: 18px;
+    background: transparent;
+}
