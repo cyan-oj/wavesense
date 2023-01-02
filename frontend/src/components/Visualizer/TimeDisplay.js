@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import styles from "./Visualizer.module.css";
 
 const TimeDisplay = ({ song }) => {
@@ -16,7 +15,7 @@ const TimeDisplay = ({ song }) => {
   }
 
   time = timeFormat(song.currentTime)
-  totalTime = timeFormat(song.duration)
+  if (song.duration) totalTime = timeFormat(song.duration)
   
 
   return(

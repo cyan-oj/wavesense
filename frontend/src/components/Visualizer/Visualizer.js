@@ -1,7 +1,7 @@
 import styles from "./Visualizer.module.css";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, PositionalAudio, Plane, RoundedBox } from "@react-three/drei";
+import { PositionalAudio } from "@react-three/drei";
 import Display from "./Display";
 import TimeDisplay from "./TimeDisplay";
 
@@ -13,6 +13,7 @@ const Visualizer = ({ songUrl }) => {
 
   const [url, setURL] = useState();
   const [playTime, setPlayTime] = useState(0);
+  const [maxTime, setMaxTime] = useState(1);
   
   useEffect(() => {
     if (url && audio.current) {
@@ -21,16 +22,22 @@ const Visualizer = ({ songUrl }) => {
       audio.current.offset = 0;
       hiddenAudio.current.src = url;
     }
-    
+
     const timer = setTimeout(() => { // needs something async to wait for new audio to load? AudioContext.statechage? canplaythrough event listener?
       if( audio.current ) {
         play();
       }
-      console.log("url timer")
     }, 3000);
 
+    // const loaded = document.getElementById("hiddenAudio").addEventListener("statechange", (event) => { 
+    //   console.log("statechange", event)
+    // })
+
     const interval = setInterval(() => {
-      if (hiddenAudio.current) setPlayTime(hiddenAudio.current.currentTime);
+      if (hiddenAudio.current) {
+        setPlayTime(hiddenAudio.current.currentTime);
+        setMaxTime(hiddenAudio.current.duration);
+      }
     }, 1000)
     
     return () => {
@@ -71,11 +78,11 @@ const Visualizer = ({ songUrl }) => {
   };
 
   const setTime = (value) => {
-    console.log("scrubber value", value)
-    console.log(audio.current.context.currentTime)
     audio.current.stop();
+
     audio.current.offset = value;
     hiddenAudio.current.currentTime = value;
+
     audio.current.play();
     hiddenAudio.current.play();
   }
@@ -94,6 +101,10 @@ const Visualizer = ({ songUrl }) => {
     audio.current.stop();
   }
 
+  const stateChange = (e) => {
+    console.log("hidden audio state change", e)
+  }
+
   return (
   <div id={styles.visualizerContainer}>
 
@@ -102,7 +113,7 @@ const Visualizer = ({ songUrl }) => {
       { hiddenAudio.current &&
       <>
         <div>
-          <input type="range" value={playTime} min={0} max={Number(hiddenAudio.current.duration)} onChange={e => setTime(e.target.value)}/>
+          <input type="range" value={ playTime } min={0} max={ maxTime } onChange={e => setTime(e.target.value)}/>
           <div>
             <TimeDisplay song={hiddenAudio.current} />
           </div>
@@ -117,7 +128,7 @@ const Visualizer = ({ songUrl }) => {
     </div>
 
 
-    <audio ref={hiddenAudio} src={url} muted={true} />
+    <audio id="hiddenAudio"ref={hiddenAudio} src={url} muted={true} />
     <input type="file" ref={hiddenFileInput} id="fileupload" accept="audio/*" onChange={ setFile } style={{ display: "none" }} />
 
     <div ref={containerRef} id={styles.container3D}>
